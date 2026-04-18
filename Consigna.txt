@@ -1,5 +1,4 @@
 - Abre el juego -> nombre de jugador
-
 - Menu
 - Jugar partida -> elegir dificultad ?¿
 - Ranking de jugadores
