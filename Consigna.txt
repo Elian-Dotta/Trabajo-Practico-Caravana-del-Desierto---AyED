@@ -1,51 +1,54 @@
-- Abre el juego -> nombre de jugador
+Elian: "Yo haria un struct juego"
+Implementacion:
 
-- Menu
-- Jugar partida -> elegir dificultad ?¿
-- Ranking de jugadores
-- Salir del juego
+	- Abre el juego -> nombre de jugador
 
-- Jugar partida:
-	- Niveles de dificultad predefinidos - No aceptar configuraciones desbalanceadas
-	- Porcentaje maximo de bandidos - Maximo 30% bandidos
+	- Menu
+	- Jugar partida -> elegir dificultad ?¿
+	- Ranking de jugadores
+	- Salir del juego
+
+	- Jugar partida:
+		- Niveles de dificultad predefinidos - No aceptar configuraciones desbalanceadas
+		- Porcentaje maximo de bandidos - Maximo 30% bandidos
 	Generar tablero en caravana.txt a partir de config.txt
-	- Struct Tablero
-	- Struct Config
-	- Struct Jugador -> int PosEnTablero, ContPuntos, CantVidas, OasisActivo, TormentaActivo
-	- 
+		- Struct Tablero
+		- Struct Config
+		- Struct Jugador -> int PosEnTablero, ContPuntos, CantVidas, OasisActivo, TormentaActivo
+		- 
 	Tablero:
-	- La salida puede estar en el medio?¿ Como afecta a tener que volver si te pasas.
-	- Tablero - Lista Circular Doblemente Enlazada
-	  Casillas vacias Si no hay mas deja de generar
-	  Nodo: Dato, tamDato, Sig, Ant.
-	- Struct Casilla - Elementos de casilla
-	  SCasilla -> NumCas. Bool J, Ini, Fin, Pre, Vid, Tor int Band
+		- La salida puede estar en el medio?¿ Como afecta a tener que volver si te pasas.
+		- Tablero - Lista Circular Doblemente Enlazada
+		  Casillas vacias Si no hay mas deja de generar
+		  Nodo: Dato, tamDato, Sig, Ant.
+		- Struct Casilla - Elementos de casilla
+		  SCasilla -> NumCas. Bool J, Ini, Fin, Pre, Vid, Tor int Band
 	Generacion tablero:
-	1.  Jugador E Inicio siempre en el primer nodo/casilla
-	2.  Fin se establece con un numero aleatorio porcentaje minimo de distancia al inicio
-		La mas dificil es en la mitad del tablero.
-		No se genera nada sobre el fin.
-	- 3. Bandidos no se pueden generar a menos de 5 casillas del inicio
-	- Maximo de bandidos en casilla -> 2
-	- 
-	- El tablero se imprime con fors fijandose cada contador dentro del struct
+		1.  Jugador E Inicio siempre en el primer nodo/casilla
+		2.  Fin se establece con un numero aleatorio porcentaje minimo de distancia al inicio
+			La mas dificil es en la mitad del tablero.
+			No se genera nada sobre el fin.
+		- 3. Bandidos no se pueden generar a menos de 5 casillas del inicio
+		- Maximo de bandidos en casilla -> 2
+		- 
+		- El tablero se imprime con fors fijandose cada contador dentro del struct
 	Movimiento:
-	- Se dibuja -> mov jugador y luego mov de los bandidos.
-	- Struct movimiento -> char 'F' 'B' int 1-6
-	- Primero el jugador tira el dado 1-6 y luego elige en base a eso
-	- El jugador elige si va a mover para adelante o para atras: 'F' - 'B'
-	- El movimiento se guarda en una cola
-	- Se calcula el movimiento de los bandidos.
-	- Primer bandido ->  Random(dado), Inteligente(Dir)
-	- Inteligente -> Ve que eligio el jugador y calcula la posicíon
-	- Segundo -> Random(Dir, Dado)
-	- 
-	- Cola movimientos -> Jugador, BandidoN
-	- Primero se mueve el jugador, obtiene premio y luego el bandido.
-	- Cola regMovJug -> Guarda los movimientos del jugador
-	- Los bandidos buscan al jugador, tiran dados y se mueven en dirección al 
-	- 1 bandido movimiento random, un bandido busca al jugador
-	- Funcion que calcule la direccion del bandido al jugador
+		- Se dibuja -> mov jugador y luego mov de los bandidos.
+		- Struct movimiento -> char 'F' 'B' int 1-6
+		- Primero el jugador tira el dado 1-6 y luego elige en base a eso
+		- El jugador elige si va a mover para adelante o para atras: 'F' - 'B'
+		- El movimiento se guarda en una cola
+		- Se calcula el movimiento de los bandidos.
+		- Primer bandido ->  Random(dado), Inteligente(Dir)
+		- Inteligente -> Ve que eligio el jugador y calcula la posicíon
+		- Segundo -> Random(Dir, Dado)
+		- 
+		- Cola movimientos -> Jugador, BandidoN
+		- Primero se mueve el jugador, obtiene premio y luego el bandido.
+		- Cola regMovJug -> Guarda los movimientos del jugador
+		- Los bandidos buscan al jugador, tiran dados y se mueven en dirección al 
+		- 1 bandido movimiento random, un bandido busca al jugador
+		- Funcion que calcule la direccion del bandido al jugador
 	
 	
 - Al finalizar la partida: 
@@ -56,23 +59,105 @@
 	Jugador | Partidas | Puntuacion | Cant_movimientos
 	
 Preguntas al profe:
-- Registro de jugadores - Con indice para el registro de jugadores.?¿
-Como funciona el indice, es para los jugadores o para el registro de partidas.
+	- Registro de jugadores - Con indice para el registro de jugadores.?¿
+	Como funciona el indice, es para los jugadores o para el registro de partidas.
 
-- Configuracion - Como manejamos configuraciones invalidas.
-En caso de invalidas establecemos un default. -> para la configuracion que se pase
-Ponemos un maximo de porcentual al tamaño de tablero
+	- Configuracion - Como manejamos configuraciones invalidas.
+	En caso de invalidas establecemos un default. -> para la configuracion que se pase
+	Ponemos un maximo de porcentual al tamaño de tablero
 
-- Dificultades? Maximo porcentual jugable -> modificado por dificultad
-Facil -> 50% MPJ
-Normal -> 70% MPJ
-Dificil -> maximo porcentual jugable
-DefinidaJugador -> que no supere el MPJ, si supera definimos el maximo:
-  o avisamos que cambie la configuracion, 
-  o avisamos que no es jugable. 
-  o darle la oportunida de cambiarla a una valida.
-Si supera casilleros -> Configuracion invalida - tablero no generable.
-Opcion volver al menu.
+	- Dificultades? Maximo porcentual jugable -> modificado por dificultad
+	Facil -> 50% MPJ
+	Normal -> 70% MPJ
+	Dificil -> maximo porcentual jugable
+	DefinidaJugador -> que no supere el MPJ, si supera definimos el maximo:
+	  o avisamos que cambie la configuracion, 
+	  o avisamos que no es jugable. 
+	  o darle la oportunida de cambiarla a una valida.
+	Si supera casilleros -> Configuracion invalida - tablero no generable.
+	Opcion volver al menu.
 
-- Jugador puede tener movimiento circular por el tablero? suponemos que si.
- 
+	- Jugador puede tener movimiento circular por el tablero? suponemos que si.
+
+Elian: "Yo haria un struct juego"
+Modulos: 
+
+	main.h
+	main.c -> Menu pide nombre
+	menu.h -> Como hay archivo de menu, podemos incluir el pedido de nombre aca dentro.
+	menu.c -> Menu llama a juego, o ranking, o salida
+	ranking.h -> Establece el modulo ranking
+	ranking.c -> Implementacion del modulo ranking
+	juego.h
+	juego.c
+	tablero.h -> genera tablero, actualiza tablero en base a movimiento, muestra tablero
+	tablero.c -> guarda tablero en cada turno al mostrarlo
+	movimiento.h -> pide movimiento, calcula movimiento
+	movimiento.c
+	config.h
+	config.c
+	consola.h
+	consola.c
+	registro.h Se encarga al final de la partida guardar la informacion
+	registro.c
+	jugador.h jugador actualizar no podes entrar en la estructura
+	jugador.c
+	
+Flujo del programa:
+	main llama a menu 
+		menu llama a juego -> llama a config y genera tablero 
+							loop while(j.corriendo)
+							  pide movimientos, los calculaS
+							  actualiza tablero, actualiza jugador, lo muestra lo guarda.
+							  checkea condicion de juego terminado y apaga el loop corriendo = 0
+							fuera del loop
+							  llama a registro para guardar los detalles
+							  termina ejecucion y vuelve a menu
+		menu llama a ranking -> Se carga ranking de los archivos.
+								en realidad, se procesa los archivos de registro.h
+								para obtener el ranking. el ranking se crea cada vez
+								
+							  
+							  
+
+Funcionalidades:
+	1: Pedir nombre del jugador
+		Ingrese su nombre:
+	2: Menu 
+		- Jugar partida - J
+		- Ranking de jugadores - R
+		- Salir del juego - S
+	Elija una opcion: 'J' - 'R' - 'S'
+
+	3: Cargar configuracion - A definir dificultad.
+		Leer archivo config.txt
+		- struct tConfig:
+		cantPosiciones
+		vidasInicio
+		maxBandidos
+		maxPremios
+		maxVidasExtra
+		maxOasis
+		maxTormentas
+		define porcenMaxBandidos -> int 30 o a definir // limitar bandidos en funcion de cantidad de posiciones
+		ej: un 30 porciento de las posiciones -> 30 posiciones -> 3 bandidos maximo
+		dificultades
+		define facil -> int 50 intermedio -> 70 dificil 100 -> porcenMaxBandidos y puntaje obtenido
+		definida por jugador -> no supere el porcenMaxBandidos
+
+	4: Tablero:
+		- La salida puede estar en el medio?¿ Como afecta a tener que volver si te pasas.
+		- Tablero - Lista Circular Doblemente Enlazada
+		  Casillas vacias Si no hay mas deja de generar
+		  Nodo: Dato, tamDato, Sig, Ant.
+		- Struct Casilla - Elementos de casilla
+		  SCasilla -> NumCas. Bool J, Ini, Fin, Pre, Vid, Tor int Band
+	5: Generacion tablero:
+		1.  Jugador E Inicio siempre en el primer nodo/casilla
+		2.  Fin se establece con un numero aleatorio porcentaje minimo de distancia al inicio
+			La mas dificil es en la mitad del tablero.
+			No se genera nada sobre el fin.
+		- 3. Bandidos no se pueden generar a menos de 5 casillas del inicio
+		- Maximo de bandidos en casilla -> 2
+		- 
+		- El tablero se imprime con fors fijandose cada contador dentro del struct
