@@ -19,19 +19,21 @@ Implementacion:
 	Tablero:
 		- La salida puede estar en el medio?¿ Como afecta a tener que volver si te pasas.
 		- Tablero - Lista Circular Doblemente Enlazada
-		  Casillas vacias Si no hay mas deja de generar
+		Casillas vacias Si no hay mas deja de generar
 		  Nodo: Dato, tamDato, Sig, Ant.
 		- Struct Casilla - Elementos de casilla
-		  SCasilla -> NumCas. Bool J, Ini, Fin, Pre, Vid, Tor int Band
+		  SCasilla -> NumCas. Bool J, Ini, Fin, int 0-1-2 Pre, Vid, Oasis , Tor, lista de bandidos Band
+		  
 	Generacion tablero:
 		1.  Jugador E Inicio siempre en el primer nodo/casilla
 		2.  Fin se establece con un numero aleatorio porcentaje minimo de distancia al inicio
 			La mas dificil es en la mitad del tablero.
-			No se genera nada sobre el fin.
+		No se genera nada sobre el fin.
 		- 3. Bandidos no se pueden generar a menos de 5 casillas del inicio
-		- Maximo de bandidos en casilla -> 2
+	- Maximo de bandidos en casilla -> 2
 		- 
 		- El tablero se imprime con fors fijandose cada contador dentro del struct
+	
 	Movimiento:
 		- Se dibuja -> mov jugador y luego mov de los bandidos.
 		- Struct movimiento -> char 'F' 'B' int 1-6
@@ -70,7 +72,7 @@ Preguntas al profe:
 	Facil -> 50% MPJ
 	Normal -> 70% MPJ
 	Dificil -> maximo porcentual jugable
-	DefinidaJugador -> que no supere el MPJ, si supera definimos el maximo:
+	SI o SI -> DefinidaJugador -> que no supere el MPJ, si supera definimos el maximo:
 	  o avisamos que cambie la configuracion, 
 	  o avisamos que no es jugable. 
 	  o darle la oportunida de cambiarla a una valida.
@@ -78,30 +80,78 @@ Preguntas al profe:
 	Opcion volver al menu.
 
 	- Jugador puede tener movimiento circular por el tablero? suponemos que si.
+	Salida siempre al final, el jugador no puede recorrer en circulos.
+	Los bandidos si.
+	
+	- Si estas en un oasis y te cae un bandido tenes invulnerabilidad hasta el siguiente turno
 
 Elian: "Yo haria un struct juego"
 Modulos: 
 
-	main.h
+	1. main.h ->
 	main.c -> Menu pide nombre
-	menu.h -> Como hay archivo de menu, podemos incluir el pedido de nombre aca dentro.
-	menu.c -> Menu llama a juego, o ranking, o salida
-	ranking.h -> Establece el modulo ranking
+	int main()
+	2. menu.h -> Como hay archivo de menu, podemos incluir el pedido de nombre aca dentro.
+		pedirNombre -> llama
+	menu.c -> Menu llama a juego, o ranking, (elegirDificultad),o salida
+	3. ranking.h -> Establece el modulo ranking
 	ranking.c -> Implementacion del modulo ranking
-	juego.h
-	juego.c
-	tablero.h -> genera tablero, actualiza tablero en base a movimiento, muestra tablero
+	4. partida.h -> carga la config para generar tablero
+		posee tConfig.
+	partida.c -> maneja el loop del juego, tablero, mov, registro 
+	5. tablero.h -> genera tablero, actualiza tablero en base a movimiento, muestra tablero
 	tablero.c -> guarda tablero en cada turno al mostrarlo
-	movimiento.h -> pide movimiento, calcula movimiento
+		genera tablero. Recorre el tablero varias para distribuir los elementos
+		1. Jugador e Inicio en primer casilla
+		2. Final en ultima casilla
+		3. Premios, Vidas Extra y Oasis son excluyentes para las casillas.
+		4. Tormenta no excluyente
+		5. Bandidos
+		La distribucion tiene que estar limitada por la configuracion
+	6. movimiento.h -> pide movimiento, calcula movimiento
+		- tMov
+		char 'B' 'F'
+		int  pos
+		- PedirMovimiento(cola)
+		- CalculaMovBandido(cola)
 	movimiento.c
-	config.h
+	7. config.h tConfig
+				• cantidad_posiciones:25
+				• vidas_inicio: 3
+				• maximo_bandidos: 2
+				• maximo_premios: 3
+				• maximo_vidas_extra: 1
+				• maximo_oasis: 2
+				• maximo_tormentas: 3
 	config.c
-	consola.h
-	consola.c
-	registro.h Se encarga al final de la partida guardar la informacion
+		- cargarConfiguracion
+	8. consola.h -> Dibujo de pedido de nombre, de menu, de tablero
+	consola.c -> todos los printf se hacen por medio de consola.
+		mostrarMenu,
+		mostrarTablero,
+		mostrarPedidoDeNombre,
+		mostrarRanking.
+		mostrarPedirMomento
+	9. registro.h Se encarga al final de la partida guardar la informacion
+	
+		guardarRegistros(struct jugador *j)
+		ArchJugadores
+		-> Nombre
+		ArchIndice -> idx para el archJugadores, optimiza la busqueda de preexistencia de jugadores.
+		-> Nombre pos
+		ArchPartida 
+		-> Nombre nroPartida Puntaje cantMovimientos
 	registro.c
-	jugador.h jugador actualizar no podes entrar en la estructura
+	10. jugador.h struct Jugador int PosEnTablero, ContPuntos, CantVidas, OasisActivo, TormentaActivo
+		jugador actualizar no podes entrar en la estructura
 	jugador.c
+	11. listaCircularDoblementeEnlazada.h -> Para la implementacion del tablero
+	listaCircularDoblementeEnlazada.c
+	12. cola.h -> Encolar los movimientos
+	cola.c
+	13. arbol.h -> Arbol de busqueda binaria para buscar indice
+	arbol.c
+
 	
 Flujo del programa:
 	main llama a menu 
@@ -121,8 +171,10 @@ Flujo del programa:
 							  
 
 Funcionalidades:
+
 	1: Pedir nombre del jugador
 		Ingrese su nombre:
+
 	2: Menu 
 		- Jugar partida - J
 		- Ranking de jugadores - R
@@ -161,3 +213,41 @@ Funcionalidades:
 		- Maximo de bandidos en casilla -> 2
 		- 
 		- El tablero se imprime con fors fijandose cada contador dentro del struct
+	6. Gameplay:
+		1. [J]
+		2. [1]
+		3.
+		4. [0]
+		5.
+		6. [1][0]
+		7.
+		8. [1]
+		9.
+		10.[S]
+
+
+
+		- Actualizar Pos Jugador
+			pedirMovimientoJ(out Movimiento)
+			calculoPosAFuturo(Movimiento, outPosAFuturo, posEnTablero)
+			RegistroMovimiento(Cola, Movimiento)
+			While()mover al jugador, eliminar posActual, poner en nuevaPos
+		- Actualizar Status Jugador
+			Actualiza Oasis, Premio, Vida, Tormenta, Bandido
+		- Actualizar Pos Bandido
+			2 loops Recorrer tablero para actualizar Bandido
+			{	While(Bandido)
+			{		
+					 si hay bandido, le resta una vida 	
+					 calcularMovimientoBandido(d, out outPosAFuturo) -> CalculoPosAFuturo(Movimiento, outPosAFuturo, nroCasilla)
+					 EncolarMov(Cola, posAFuturo)
+			}
+			}
+			
+
+		- Actualizar Vida Jugador
+			Si le cae un bandido en la misma casilla, depende de oasis
+					
+		ColaMovimientosAProcesar-> [3][1][2][4][3]
+
+		ColaRegistroMovsDeJugador-> [2F]
