@@ -31,58 +31,58 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="arbol.c">
+		<Unit filename="files/arbol.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="arbol.h" />
-		<Unit filename="cola.c">
+		<Unit filename="files/arbol.h" />
+		<Unit filename="files/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="cola.h" />
-		<Unit filename="config.c">
+		<Unit filename="files/cola.h" />
+		<Unit filename="files/config.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="config.h" />
-		<Unit filename="consola.c">
+		<Unit filename="files/config.h" />
+		<Unit filename="files/consola.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="consola.h" />
-		<Unit filename="jugador.c">
+		<Unit filename="files/consola.h" />
+		<Unit filename="files/jugador.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="jugador.h" />
-		<Unit filename="lista.c">
+		<Unit filename="files/jugador.h" />
+		<Unit filename="files/lista.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lista.h" />
-		<Unit filename="main.c">
+		<Unit filename="files/lista.h" />
+		<Unit filename="files/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="main.h" />
-		<Unit filename="menu.c">
+		<Unit filename="files/main.h" />
+		<Unit filename="files/menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="menu.h" />
-		<Unit filename="movimiento.c">
+		<Unit filename="files/menu.h" />
+		<Unit filename="files/movimiento.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="movimiento.h" />
-		<Unit filename="partida.c">
+		<Unit filename="files/movimiento.h" />
+		<Unit filename="files/partida.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="partida.h" />
-		<Unit filename="ranking.c">
+		<Unit filename="files/partida.h" />
+		<Unit filename="files/ranking.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="ranking.h" />
-		<Unit filename="registro.c">
+		<Unit filename="files/ranking.h" />
+		<Unit filename="files/registro.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="registro.h" />
-		<Unit filename="tablero.c">
+		<Unit filename="files/registro.h" />
+		<Unit filename="files/tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="tablero.h" />
+		<Unit filename="files/tablero.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
