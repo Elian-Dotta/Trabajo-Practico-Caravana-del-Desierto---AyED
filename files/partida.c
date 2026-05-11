@@ -19,7 +19,13 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
     finalizarPartida();
 }
 
-int  inicializarPartida(); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tLista* tablero)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+{
+    tConfig config = { 25, 3, 2, 3, 1, 2, 3};
+    //cargarConfiguracion();
+
+    crearTablero(tablero, config);
+}
 
 int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
 
