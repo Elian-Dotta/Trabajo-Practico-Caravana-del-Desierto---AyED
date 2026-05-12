@@ -1,6 +1,10 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct
 {
     int cant_pos;
@@ -11,5 +15,9 @@ typedef struct
     int max_oasis;
     int max_tormenta;
 }tConfig;
+
+
+int cargarConfig(tConfig*);
+
 
 #endif // CONFIG_H_

@@ -20,4 +20,5 @@ void mostrarTablero(tLista* tablero); // muestra la lista
 void mostrarTablero2(); //-> metodo
 int  cmpInt(void *a, void *b);
 
+
 #endif // TABLERO_H_

@@ -32,9 +32,11 @@ int  inicializarPartida(tLista* tablero)// VA A CARGAR TCONFIG Y GENERAR EL TABL
     crearTablero(tablero, config);
 }
 
+
 int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
 
 int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA
+
 
 int  renderizarPartida(); // DIBUJA EL TABLERO Y DESPUES EL HUD
 
