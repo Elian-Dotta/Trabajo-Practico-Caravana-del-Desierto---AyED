@@ -18,5 +18,6 @@ void crearLista(tLista *pl);
 int  insertarAlFinal(tLista *pl, void *d, unsigned tamInfo);
 int  actualizarPosLista(tLista *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum);
 void mostrarLista(tLista *pl, Mostrar mostrar);
+int  insertarEnOrden();
 
 #endif // LISTA_H_

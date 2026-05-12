@@ -10,9 +10,9 @@ int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
 int  inicializarPartida(); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
-int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR -> Lucas
+int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR -> Lucas, Devuelve la decision del jugador
 
-int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA -> Elian
+int  actualizarPartida(); // Encola movimiento del jugador y los bandidos, actualiza al jugador en base a lo que tenga la casilla con el jugador.
 
 int  renderizarPartida(); // DIBUJA EL TABLERO -> Mostrar tablero -> Lucas
 
