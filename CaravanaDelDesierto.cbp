@@ -35,6 +35,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/arbol.h" />
+		<Unit filename="files/casilla.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/casilla.h" />
 		<Unit filename="files/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -51,10 +55,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/jugador.h" />
-		<Unit filename="files/lista.c">
+		<Unit filename="files/lista_doble_enlace_circular.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="files/lista.h" />
+		<Unit filename="files/lista_doble_enlace_circular.h" />
+		<Unit filename="files/lista_simple_enlace.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/lista_simple_enlace.h" />
 		<Unit filename="files/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -67,6 +75,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/movimiento.h" />
+		<Unit filename="files/nodos.h" />
 		<Unit filename="files/partida.c">
 			<Option compilerVar="CC" />
 		</Unit>

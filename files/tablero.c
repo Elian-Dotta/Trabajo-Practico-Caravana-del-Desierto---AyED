@@ -1,8 +1,6 @@
 #include "tablero.h"
-#include "lista.h"
-#include "casilla.h"
 
-int  crearTablero(tLista* tablero, tConfig config)
+int  crearTablero(tListaDE* tablero, tConfig config)
 {
     int idElem = 0;
 
@@ -15,7 +13,7 @@ int  crearTablero(tLista* tablero, tConfig config)
     distribuirElementos(tablero, &idElem, config);
 
 }
-int  generarTablero(tLista* tablero, int *idElem, int cantPos)
+int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
 {
     tElem elem;
     int contCas = 0;
@@ -44,7 +42,7 @@ int  generarTablero(tLista* tablero, int *idElem, int cantPos)
     }
 }
 
-int  distribuirElementos(tLista* tablero, int *idElem, tConfig config)
+int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
 {
     int elemFaltantes[] = { config.max_band,
                               config.max_prem,
@@ -96,4 +94,54 @@ int  cmpInt(void *a, void *b)
     int *d = b;
 
     return c - d;
+}
+
+// ------------------------------------------------------------------------------------------------------------------
+
+void mostrarElemento(const void *elemVoid){ //muestra el struct tElem
+    tElem *elem = (tElem*)elemVoid;
+    printf(" %c ", elem->tipo_elem);
+}
+
+
+void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *)){
+/*
+    Forma provisoria de mostrar mapa (casillas no se ajustan tal que sean todos iguales en ancho).
+    Ver si conviene hacer un map y generar una cadena con los elementos de la lista de cada nodo casilla.
+*/
+    tNodoDE *auxNodo = *lista;
+    int casilla = 1;
+
+    if(NULL == auxNodo){
+        printf("\n %s", MSJ_LISTA_MAPA_VACIO);
+        return;
+    }
+
+    do{
+
+        tLista listaNodo = auxNodo->dato;
+
+        printf("\n %02d. [ ", casilla);
+
+        mapLista(&listaNodo, mostrar);
+
+        printf(" ]");
+        casilla++;
+        auxNodo = auxNodo->proxNodo;
+
+    }while(auxNodo != *lista);
+
+}
+
+int borrarMapa(tListaDE *lista){
+/*
+    Esto es un wrapper que:
+    1) Libera cada lista simple (sus nodos) de cada casilla (lista doble circular)
+    2) Libera cada nodo de la lista doblemente enlazada circular.
+    Devuelve la cantidad de elementos eliminados (casillas y elementos en lista de nodos)
+    Requiere la funcion definida:
+        - vaciarListaC : Vaciar Lista Doblemente Enlazada Circular
+*/
+    borrarListasElementosCasillas(lista);
+    return vaciarListaC(lista);
 }

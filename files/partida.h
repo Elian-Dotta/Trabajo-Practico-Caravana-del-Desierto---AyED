@@ -4,7 +4,7 @@
 #include "tablero.h"
 #include "config.h"
 
-typedef struct tLista tLista;
+//typedef struct tListaDe tLista;
 
 int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
