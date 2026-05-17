@@ -14,7 +14,7 @@ typedef struct
         JpierdeVida;
 }tEstado;
 
-typedef struct tLista tLista;
+//typedef struct tListaDe tLista;
 
 int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
