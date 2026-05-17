@@ -2,26 +2,31 @@
 
 int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
-    tLista tablero;
+    tListaDE tablero;
+    tJugador jugador;
+    tCola movimientos;
+    tEstado estado;
 
-    inicializarPartida(&tablero);
+    inicializarPartida(&tablero, &jugador, &movimientos);
 
     int corriendo = 1;
 
     while(corriendo)
     {
-        renderizarPartida() // MUESTRA LA PARTIDA EN SU ULTIMO ESTADO PARA QUE EL JUGADOR ELIJA QUE HACER Y HUD
-        procesarEntrada()   // TOMA EN CUENTA LA DECISION DEL JUGADOR
-        actualizarJugador() // ACTUALIZA EN MEMORIA LA POSICION DEL JUGADOR
-        renderizarPartida() // MUESTRA EN PANTALLA LA NUEVA POSICION DEL JUGADOR
+        dibujarEstadoDelJuego(&tablero, &jugador, &movimientos); // ESTADO PARA LA ELECCION DEL JUGADOR
 
-        actualizarBandido() // ACTUALIZA EN MEMORIA LA POSICION DE LOS BANDIDOS CALCULANDO SU NUEVA POSICION // TIMER 5 SEGUNDOS ANTES DE MOSTRAR
-        renderizarPartida() // MUESTRA EL NUEVO LUGAR DE LOS BANDIDOS
+        procesarEntrada(&movimientos, &jugador); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-        actualizarPartida() // ACTUALIZA EL ESTADO DEL JUGADOR CON LA NUEVA DISPOSICION // TIMER 2 SEGUNDOS ANTES DE MOSTRAR
+        calcularMovBandido(&tablero, &movimientos); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+
+        dibujarAnimacionMov(&tablero, &jugador, &movimientos); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
+
+        actualizarEstado(&tablero, &jugador, &estado); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
+
+        dibujarAnimacionEstado(&tablero, &jugador, &estado); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
     }
 
-    finalizarPartida();
+    finalizarPartida(); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
 }
 
 int  inicializarPartida(tLista* tablero)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
@@ -32,12 +37,16 @@ int  inicializarPartida(tLista* tablero)// VA A CARGAR TCONFIG Y GENERAR EL TABL
     crearTablero(tablero, config);
 }
 
+int  dibujarEstadoDelJuego(tListaDE *tablero, tJugador *jugador);
 
-int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
+int  procesarEntrada(tCola *movimientos, tJugador *jugador);
 
-int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA
+int  calcularMovBandido(tListaDE *tablero, tCola *movimientos);
 
+int  dibujarAnimacionMov(tListaDE *tablero, tJugador *jugador, tCola *movimientos);
 
-int  renderizarPartida(); // DIBUJA EL TABLERO Y DESPUES EL HUD
+int  actualizarEstado(tListaDE *tablero, tJugador *jugador, tEstado *estado);
 
-int  finalizarPartida(); // GUARDA EL RANKING
+int  dibujarAnimacionEstado(tListaDE *tablero, tJugador *jugador, tEstado *estado);
+
+int  finalizarPartida();

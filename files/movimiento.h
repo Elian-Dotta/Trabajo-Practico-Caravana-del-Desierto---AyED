@@ -1,7 +1,6 @@
 #ifndef MOVIMIENTO_H_
 #define MOVIMIENTO_H_
 
-
 typedef struct
 {
     char dir;

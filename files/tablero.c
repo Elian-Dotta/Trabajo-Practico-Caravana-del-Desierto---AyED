@@ -86,14 +86,15 @@ int  distribuirElementos(tLista* tablero, int *idElem, tConfig config)
             (*idElem)++;
             elem.tipo_elem = elemTipo[i];
             actualizarPosLista(tablero, &elem, sizeof(tElem), pos, insertarEnCasilla);
+            elemInsertados++;
         }
     }
 }
 
 int  cmpInt(void *a, void *b)
 {
-    int *c = a;
-    int *d = b;
+    int *n1 = a;
+    int *n2 = b;
 
-    return c - d;
+    return n1 - n2;
 }

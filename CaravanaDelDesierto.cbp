@@ -35,6 +35,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/arbol.h" />
+		<Unit filename="files/casilla.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/casilla.h" />
 		<Unit filename="files/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>

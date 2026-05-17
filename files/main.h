@@ -5,4 +5,6 @@
 
 int main();
 
+int menuPrincipal();
+
 #endif // MAIN_H_
