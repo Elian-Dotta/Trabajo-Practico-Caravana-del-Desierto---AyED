@@ -12,11 +12,11 @@
     #define TAM_BUFFER 30
 
 
-
+    // IMPORTANTE: AHORA LA LISTA DOBLEMENTE ENLAZADA TIENE ESTRUCTURA DE NOMBRE: tListaDE. Luego, tLista es el nombre de la estructura para la SE
     typedef struct tLista tLista;
     typedef struct tConfig tConfig;
 
-    int  crearTablero(tLista* tablero, tConfig config);
+    int  crearTablero(tListaDE* tablero, tConfig config);
     int  generarTablero(tLista* tablero, int *contElem, int cantPos);
     int  distribuirElementos(tLista* tablero, int *contElem, tConfig config);
     void mostrarTablero(tLista* tablero); // muestra la lista

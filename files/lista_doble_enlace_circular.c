@@ -1,5 +1,32 @@
 #include "lista_doble_enlace_circular.h"
 
+int vaciarListaC(tListaDE *lista){
+
+    tNodoDE *actualNodo = *lista;
+    int cont = 0;
+
+    if(NULL == actualNodo)
+        return 0;
+
+    actualNodo = actualNodo->proxNodo;
+
+    while(actualNodo != *lista){
+        tNodoDE *auxNodo = actualNodo;
+        free(auxNodo->dato);
+        free(auxNodo);
+        actualNodo = actualNodo->proxNodo;
+        cont++;
+    }
+
+    free(actualNodo->dato);
+    free(actualNodo);
+
+    *lista = NULL;
+
+    return ++cont;
+}
+
+
 int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
 
     tNodoDE *auxNodo;

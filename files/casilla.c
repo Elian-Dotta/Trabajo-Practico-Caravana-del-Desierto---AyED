@@ -88,6 +88,71 @@ int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla
     return 1;
 }
 
+
+int insertarElementoCasillaOrdenado(tListaDE *lista, const tElem *elem, unsigned casilla, int(*comparar)(const void*, const void*)){
+/*
+    Funcion que realiza lo mismo que "insertarElementoCasilla(), pero en este caso, inserta ordenado en la lista
+*/
+    tNodoDE *auxNodoInsercion = *lista;
+    tLista listaNodo;
+
+    if(NULL == *lista)
+        return 0;
+
+    while(--casilla)
+        auxNodoInsercion = auxNodoInsercion->proxNodo;
+
+    listaNodo = auxNodoInsercion->dato;
+
+    if(0 == insertarOrdenado(&listaNodo, elem, sizeof(tElem), comp) )
+        return 0;
+
+    auxNodoInsercion->dato = (void**)listaNodo;
+
+    return 1;
+}
+
+// Ver si se puede simplificar el recorrido de insertar en mapa elementos, al momento de la generacion, manteniendo referencia de algun "cursor" en la funcion llamadora
+// que indique el nodo actual modificado, tal que no se recorra siempre desde el inicio la lista.
+
+int moverElementoPorID(tListaDE *lista, unsigned id, char mov, int(*comparar)(const void *, const void *)){
+/*
+    Funcion que recibe la lista doblemente enlazada o mapa, un id de elemento (procurar ids distintos), el movimiento y una funcion de comparacion.
+    Mueve segun lo definido en "mov" posiciones uno a uno. Es decir, una ejecucion de esta funcion solo movera 1 posicion.
+    Ver si combiene que retorne info sobre si la casilla destino tiene un elemento I o F para manejar movimientos del jugador
+    Ver si combiene definir una variable N, tal que el movimiento sea segun esa cantidad N, tal que no se llame tantas veces a la funcion.
+*/
+
+    tNodoDE *auxNodoDE = *lista;
+    tLista  auxListaSE;
+    tNodo   *elemSEMover = NULL;
+    tElem   auxElem = {id, ' '};
+
+    if(NULL == auxNodoDE)
+        return 0; // El mapa no fue generado
+
+    if('F' != mov && 'B' != mov) //F: Adelante - B: Atras
+        return 0; // No es un movimiento valido.
+
+    do{
+        auxListaSE = (tLista)auxNodoDE->dato;
+            desenlazarNodoPorClave(&auxListaSE, &elemSEMover, &auxElem, comp);
+        auxNodoDE->dato = (void*)auxListaSE;
+        auxNodoDE = auxNodoDE->proxNodo;
+    }while(auxNodoDE != *lista && NULL == elemSEMover);
+
+    if(NULL == elemSEMover)
+        return 0; // Elemento no encontrado en el mapa.
+
+    auxNodoDE = ('F' == mov)?auxNodoDE:auxNodoDE->antNodo->antNodo;
+    auxListaSE = (tLista)auxNodoDE->dato;
+    enlazarNodoOrdenado(&auxListaSE, elemSEMover, comp);
+    auxNodoDE->dato = (void*)auxListaSE;
+
+    return 1;
+}
+
+
 /*
 tLista crearCasilla()
 {
