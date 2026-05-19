@@ -14,6 +14,7 @@
     int borrarCasillas(tListaDE *lista);
     int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla);
 
+    int compararIDsElem(const void *e1Void, const void *e2Void);
     int insertarElementoCasillaOrdenado(tListaDE *lista, const tElem *elem, unsigned casilla, int(*comparar)(const void*, const void*));
     int moverElementoPorID(tListaDE *lista, unsigned id, char mov, int(*comparar)(const void *, const void *));
 

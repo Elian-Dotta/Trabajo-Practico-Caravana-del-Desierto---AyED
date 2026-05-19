@@ -1,6 +1,5 @@
 #include "casilla.h"
 
-
 int crearCasillas(tListaDE *lista, unsigned cantCasillas){
 /*
     Esta es una funcion a la cual se le pasa por parametro la lista (mapa o tablero), y sobre la lista
@@ -89,6 +88,18 @@ int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla
 }
 
 
+int compararIDsElem(const void *e1Void, const void *e2Void){
+
+    tElem *elem1 = (tElem*)e1Void;
+    tElem *elem2 = (tElem*)e2Void;
+
+    if(elem1->id_elem > elem2->id_elem) return 1;
+    if(elem1->id_elem < elem2->id_elem) return -1;
+
+    return 0;
+}
+
+
 int insertarElementoCasillaOrdenado(tListaDE *lista, const tElem *elem, unsigned casilla, int(*comparar)(const void*, const void*)){
 /*
     Funcion que realiza lo mismo que "insertarElementoCasilla(), pero en este caso, inserta ordenado en la lista
@@ -104,7 +115,7 @@ int insertarElementoCasillaOrdenado(tListaDE *lista, const tElem *elem, unsigned
 
     listaNodo = auxNodoInsercion->dato;
 
-    if(0 == insertarOrdenado(&listaNodo, elem, sizeof(tElem), comp) )
+    if(0 == insertarOrdenado(&listaNodo, elem, sizeof(tElem), comparar) )
         return 0;
 
     auxNodoInsercion->dato = (void**)listaNodo;
@@ -136,7 +147,7 @@ int moverElementoPorID(tListaDE *lista, unsigned id, char mov, int(*comparar)(co
 
     do{
         auxListaSE = (tLista)auxNodoDE->dato;
-            desenlazarNodoPorClave(&auxListaSE, &elemSEMover, &auxElem, comp);
+            desenlazarNodoPorClave(&auxListaSE, &elemSEMover, &auxElem, comparar);
         auxNodoDE->dato = (void*)auxListaSE;
         auxNodoDE = auxNodoDE->proxNodo;
     }while(auxNodoDE != *lista && NULL == elemSEMover);
@@ -146,7 +157,7 @@ int moverElementoPorID(tListaDE *lista, unsigned id, char mov, int(*comparar)(co
 
     auxNodoDE = ('F' == mov)?auxNodoDE:auxNodoDE->antNodo->antNodo;
     auxListaSE = (tLista)auxNodoDE->dato;
-    enlazarNodoOrdenado(&auxListaSE, elemSEMover, comp);
+    enlazarNodoOrdenado(&auxListaSE, elemSEMover, comparar);
     auxNodoDE->dato = (void*)auxListaSE;
 
     return 1;
