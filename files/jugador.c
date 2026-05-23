@@ -5,7 +5,7 @@ void inicializarJugador(tJugador* j, unsigned vida)
     j->vida = vida;
     j->cantMov = 0;
     j->puntaje = 0;
-    crearCola(&j->hisMovJugador)
+    crearCola(&j->hisMovJugador);
 }
 
 void aumentarVida(tJugador* j)
@@ -48,7 +48,7 @@ void guardarMovimientoJugador(tJugador *j, tMovimiento *mov)
     ponerEnCola(&j->hisMovJugador, mov, sizeof(tMovimiento));
 }
 
-void mostrarMovimientosJugador(const tJugador *j)
+void mostrarMovimientosJugador(tJugador *j)
 {
     tMovimiento mov;
     // ACA SE MUESTRA AL FINALIZAR LA PARTIDA, HABRIA QUE VER DE QUE FORMA MOSTRAR

@@ -3,10 +3,13 @@
 
 typedef struct
 {
+    int  id;
     char dir;
     int  cant;
 }tMovimiento;
 
 int tirarDado(); // Lucas
+
+int calcularDireccion(char dir);
 
 #endif // MOVIMIENTO_H_

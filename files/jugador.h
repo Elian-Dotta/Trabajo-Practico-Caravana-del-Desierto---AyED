@@ -1,6 +1,9 @@
 #ifndef JUGADOR_H_
 #define JUGADOR_H_
 
+#include "cola.h"
+#include "movimiento.h"
+
 typedef struct sJugador
 {
     unsigned vida,
@@ -20,7 +23,7 @@ unsigned verPuntaje(const tJugador *j);
 void aumentarMovimiento(tJugador *j);
 unsigned verMovimiento(const tJugador *j);
 
-void guardarMovimientoJugador(tJugador *j, tMovimiento);
-void mostrarMovimientosJugador(const tJugador *j);
+void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
+void mostrarMovimientosJugador(tJugador *j);
 
 #endif // JUGADOR_H_

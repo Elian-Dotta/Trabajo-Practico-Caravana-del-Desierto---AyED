@@ -6,7 +6,7 @@ int  crearTablero(tListaDE* tablero, tConfig config)
 
     srand(time(NULL));
 
-    crearLista(tablero);
+    crearListaDE(tablero);
 
     generarTablero(tablero, &idElem, config.cant_pos);
 
@@ -20,23 +20,23 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
 
     while(contCas < cantPos)
     {
-        insertarAlFinal(tablero, crearCasilla(), sizeof(tLista))
+        insertarAlFinalDeListaDE(tablero, crearCasilla(), sizeof(tCasilla));
         if(contCas == 0)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = 'I';
-            actualizarPosLista(tablero, &elem, sizeof(tElem), conCas, insertarEnCasilla);
+            actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
             elem.id_elem = *idElem;
             elem.tipo_elem = 'J';
-            actualizarPosLista(tablero, &elem, sizeof(tElem), conCas, insertarEnCasilla);
+            actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
-        if(contCas = config.cant_pos - 1)
+        if(contCas == cantPos - 1)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = 'S';
-            actualizarPosLista(tablero, &elem, sizeof(tElem), conCas, insertarEnCasilla);
+            actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
     }
@@ -63,11 +63,12 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
     tLista numAleatorios;
     crearLista(&numAleatorios);
     int numAle;
+    tElem elem;
 
     while(elemInsertados < cantElem)
     {
         numAle = rand() % config.cant_pos;
-        if(insertarEnOrden(&numAleatorios, &numAle, sizeof(int), cmpInt, 0, NULL))
+        if(insertarOrdenado(&numAleatorios, &numAle, sizeof(int), cmpInt, 0, NULL))
             elemInsertados++;
     }
 
@@ -89,7 +90,18 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
     }
 }
 
-int  cmpInt(void *a, void *b)
+int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DEL ELEMENTO, Y MOV ES UN NUMERO POSITIVO PARA LA DERECHA, NEGATIVO PARA LA IZQUIERDA
+{
+    tElem elemAActualizar;
+    elemAActualizar.id_elem = id;
+
+    actualizarPorID(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
+    actualizarPosRelativaLista(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
+
+    return 1;
+}
+
+int  cmpInt(const void *a, const void *b)
 {
     int *n1 = a;
     int *n2 = b;
@@ -99,13 +111,10 @@ int  cmpInt(void *a, void *b)
 
 // ------------------------------------------------------------------------------------------------------------------
 
-void mostrarElemento(const void *elemVoid){ //muestra el struct tElem
-    tElem *elem = (tElem*)elemVoid;
-    printf(" %c ", elem->tipo_elem);
-}
 
 
-void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *)){
+
+void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *)){ // NO DEBERIAMOS PODER RECORRER POR LOS CAMPOS INTERNOS DEL TDA
 /*
     Forma provisoria de mostrar mapa (casillas no se ajustan tal que sean todos iguales en ancho).
     Ver si conviene hacer un map y generar una cadena con los elementos de la lista de cada nodo casilla.
