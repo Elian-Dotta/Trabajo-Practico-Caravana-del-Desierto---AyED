@@ -12,4 +12,6 @@ int tirarDado(); // Lucas
 
 int calcularDireccion(char dir);
 
+//int calcularMovBandido()
+
 #endif // MOVIMIENTO_H_

@@ -119,7 +119,7 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     tCasilla *casilla = (tCasilla*)pl;
     tElem  *elem = (tElem*)d;
 
-    eliminarPorId(casilla, elem, tamDato);
+    eliminarPorClave(casilla, elem, tamDato); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
 
     return 1;
 }

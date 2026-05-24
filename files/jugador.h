@@ -8,7 +8,8 @@ typedef struct sJugador
 {
     unsigned vida,
              puntaje,
-             cantMov;
+             cantMov,
+             posJug;
     tCola    hisMovJugador;
 }tJugador;
 
@@ -22,6 +23,9 @@ unsigned verPuntaje(const tJugador *j);
 
 void aumentarMovimiento(tJugador *j);
 unsigned verMovimiento(const tJugador *j);
+
+void modificarPosJug(tJugador *j, int pos);
+unsigned verPosJugador(const tJugador *j);
 
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);

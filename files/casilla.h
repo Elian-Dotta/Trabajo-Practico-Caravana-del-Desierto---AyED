@@ -13,6 +13,7 @@ typedef struct
 {
     int  id_elem;
     char tipo_elem;
+    int  nro_casilla;
 }tElem; // Se pasa aca la definicion para corregir la inclusion circular.
 
 /* // LA CASILLA NO DEBE CONOCER EL TABLERO

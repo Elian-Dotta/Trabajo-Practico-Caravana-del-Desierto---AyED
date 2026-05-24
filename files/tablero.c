@@ -13,6 +13,7 @@ int  crearTablero(tListaDE* tablero, tConfig config)
     distribuirElementos(tablero, &idElem, config);
 
 }
+
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
 {
     tElem elem;
@@ -25,10 +26,12 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = 'I';
+            elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
             elem.id_elem = *idElem;
             elem.tipo_elem = 'J';
+            elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
@@ -36,6 +39,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = 'S';
+            elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
@@ -67,7 +71,7 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
 
     while(elemInsertados < cantElem)
     {
-        numAle = rand() % config.cant_pos;
+        numAle = (rand() % config.cant_pos - 1 ) + 1;
         if(insertarOrdenado(&numAleatorios, &numAle, sizeof(int), cmpInt, 0, NULL))
             elemInsertados++;
     }
@@ -76,7 +80,7 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
 
     while(elemInsertados < cantElem)
     {
-        sacarDelInicio(&numAleatorios, &pos, sizeof(int));
+        sacarDeCola(&numAleatorios, &pos, sizeof(int));
         i = rand() % 5;
         if(elemFaltantes[i])
         {
@@ -84,6 +88,7 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
             elem.id_elem = *idElem;
             (*idElem)++;
             elem.tipo_elem = elemTipo[i];
+            elem.nro_casilla = pos;
             actualizarPosLista(tablero, &elem, sizeof(tElem), pos, insertarEnCasilla);
             elemInsertados++;
         }
@@ -95,10 +100,16 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DE
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorID(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
-    actualizarPosRelativaLista(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
+    elemAActualizar.nro_casilla+=mov;
+    actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;
+}
+
+int  generarMovBandido(tTablero* tablero, tCola *mov)
+{
+    //recorrerListaDE()
 }
 
 int  cmpInt(const void *a, const void *b)
@@ -107,51 +118,4 @@ int  cmpInt(const void *a, const void *b)
     int *n2 = b;
 
     return n1 - n2;
-}
-
-// ------------------------------------------------------------------------------------------------------------------
-
-
-
-
-void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *)){ // NO DEBERIAMOS PODER RECORRER POR LOS CAMPOS INTERNOS DEL TDA
-/*
-    Forma provisoria de mostrar mapa (casillas no se ajustan tal que sean todos iguales en ancho).
-    Ver si conviene hacer un map y generar una cadena con los elementos de la lista de cada nodo casilla.
-*/
-    tNodoDE *auxNodo = *lista;
-    int casilla = 1;
-
-    if(NULL == auxNodo){
-        printf("\n %s", MSJ_LISTA_MAPA_VACIO);
-        return;
-    }
-
-    do{
-
-        tLista listaNodo = auxNodo->dato;
-
-        printf("\n %02d. [ ", casilla);
-
-        mapLista(&listaNodo, mostrar);
-
-        printf(" ]");
-        casilla++;
-        auxNodo = auxNodo->proxNodo;
-
-    }while(auxNodo != *lista);
-
-}
-
-int borrarMapa(tListaDE *lista){
-/*
-    Esto es un wrapper que:
-    1) Libera cada lista simple (sus nodos) de cada casilla (lista doble circular)
-    2) Libera cada nodo de la lista doblemente enlazada circular.
-    Devuelve la cantidad de elementos eliminados (casillas y elementos en lista de nodos)
-    Requiere la funcion definida:
-        - vaciarListaC : Vaciar Lista Doblemente Enlazada Circular
-*/
-    borrarListasElementosCasillas(lista);
-    return vaciarListaC(lista);
 }

@@ -5,7 +5,7 @@ typedef struct
 {
     int Oobtenido,
         Operdido,
-        Bdesaparece,
+        IDBandDesaparecido,
         Jpierde,
         JganaVida,
         JpierdeVida;

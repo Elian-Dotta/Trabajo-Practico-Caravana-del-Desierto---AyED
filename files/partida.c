@@ -53,12 +53,21 @@ int  dibujarEstadoDelJuego(tTablero *tablero, tJugador *jugador, tEstado *estado
 
 int  procesarEntrada(tCola *movimientos, tJugador *jugador)
 {
+    // PEDIR INPUT O SCANF VERIFICAR DATO VALIDO F O B
+    // CREAR VARIABLE MOV Y ASIGNARLE LOS VALORES INGRESADOS
+    // ENCOLAR
 
 }
 
 int  calcularMovBandido(tTablero *tablero, tCola *movimientos)
 {
-
+    // LLAMAR A RECORRER DESDE UNA FUNCION DE TABLERO
+    // RECORRER PARA CALCULAR PARA BANDIDO
+    // LA ACCION VA A VERIFICAR SI ES BANDIDO -> CALCULARBANDIDO
+    // SI ES BANDIDO GENERA UN MOV ALEATORIO CON EL ID DEL BANDIDO // 50 PORCIENTO SER INTELIGENTE
+    // LO ENCOLA EN LA COLA ENVIADA POR CONTEXTO
+    // ENVIAMOS POSICION DEL JUGADOR POR CONTEXTO
+    // POR MEDIO DE RECORRERLISTADE
 }
 
 int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimientos, tEstado *estado)
@@ -66,7 +75,6 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     // HAY QUE DESENCOLAR LOS MOVIMIENTOS, E IR RESTANDOLES UNO PARA PROCESAR MOVIMIENTO POR MOVIMIENTO EN CADA FRAME
     // SE PUEDE USAR LA CANTIDAD DE BANDIDOS PARA IR CALCULANDO EL MOMENTO DONDE APARECE EL JUGADOR
     // O CAMBIAR LA ESTRUCTURA TMOV PARA AÑADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
-    int elemHastaJugador = 0;
     tMovimiento movActual;
     int movRelativo;
 
@@ -75,8 +83,10 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     while(!colaVacia(movimientos))
     {
         sacarDeCola(movimientos, &movActual, sizeof(movActual));
+
         // movRelativo = mov.dir == 'F'? 1 : -1; // ESTA FORMA UTILIZA EL CAMPO DE LA ESTRUCTURA Y DEJA EL CODIGO MEDIO CRIPTICO AL USAR EL OPERADOR TERNARIO
         movRelativo = PASO * calcularDireccion(movActual.dir); // DEVUELVE 1 O -1 PARA MULTIPLICAR EL NUMERO DE CASILLAS POR LA DIRECCION
+
         moverElementoPorId(tablero, movActual.id, movRelativo);
         movActual.cant-= PASO;
 
@@ -89,12 +99,21 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
 
 int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
-
+    // DENTRO DE TABLERO.H RECORRE TABLERO, PARA CADA CASILLA ACTUALIZA ESTADO
+    // TOMA EN CUENTA EL PREMIO, OASIS, TORMENTA Y BANDIDO EN LA POSICION FINAL
 }
 
 int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
-
+    // RESOLVER PRIMITIVAS NUEVAS
+    // MATRIZ DE ANIMACIONES PREDEFINIDA
+    // OASIS OBTENIDO (J) J (J) J (J)
+    // OASIS DESOBTENIDO
+    // JUGADO OBTUVO PREMIO *J* -> * J * -> J
+//    IF(OASIS OBTENIDO)
+//        FOR ANIMACION OASIS
+//        DIBUJAR
+    //
 }
 
 int  finalizarPartida();

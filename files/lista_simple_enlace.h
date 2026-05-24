@@ -26,7 +26,7 @@ int sacarPrimeroLista(tLista *lista, void *dest, unsigned tamDest);
 int sacarUltimoLista(tLista *lista, void *dest, unsigned tamDest);
 
 int insertarAlFinal(tLista *lista, const void *d, unsigned tamDato);
-int eliminarPorId(tLista *lista, void *d, unsigned tamDato);
+int eliminarPorClave(tLista *lista, void *d, unsigned tamDato);
 
 //Definidas:
 void mapLista(const tLista *lista, void (*accion)(const void *));
