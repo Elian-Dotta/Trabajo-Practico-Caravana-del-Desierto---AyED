@@ -3,12 +3,18 @@
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
     mostrarTitulo();
+
     mostrarSeparador();
+
     mostrarTablero(tablero);
+
     mostrarSeparador();
+
     mostrarHud(jugador, estado);
+
     mostrarSeparador();
-    //MOSTRARLOG();
+
+    mostrarLog();
 }
 
 void mostrarTitulo()
@@ -26,3 +32,5 @@ void mostrarHud(tJugador* jugador, tEstado *estado)
 {
 
 }
+
+

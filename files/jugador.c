@@ -5,7 +5,7 @@ void inicializarJugador(tJugador* j, unsigned vida)
     j->vida = vida;
     j->cantMov = 0;
     j->puntaje = 0;
-    j->posJug =;
+    j->posJug = 0;
     crearCola(&j->hisMovJugador);
 }
 

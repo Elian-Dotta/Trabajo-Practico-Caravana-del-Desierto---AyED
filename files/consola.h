@@ -11,7 +11,7 @@ void mostrarTitulo();
 void mostrarSeparador();
 void mostrarHud(tJugador* jugador, tEstado *estado); // HAY QUE AGREGAR COMO PARAMETRO LAS VARIABLES A IMPRIMIR, HAY QUE DEFINIR TAMBIEN LAS VARIABLES A IMPRIMIR.
 
-void mostrar(const char *msj, FILE *output);
+void mostrar(const char *msj); // NO ES NECESARIO ESPECIFICAR EL OUTPUT YA QUE ESTE MODULO DEBE IMPRIMIR SIEMPRE EN CONSOLA
 
 
 

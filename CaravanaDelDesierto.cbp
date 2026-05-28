@@ -51,6 +51,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/consola.h" />
+		<Unit filename="files/estado.h" />
 		<Unit filename="files/jugador.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -63,6 +64,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/lista_simple_enlace.h" />
+		<Unit filename="files/log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/log.h" />
 		<Unit filename="files/main.c">
 			<Option compilerVar="CC" />
 		</Unit>

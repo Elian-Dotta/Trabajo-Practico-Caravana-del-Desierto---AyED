@@ -20,13 +20,13 @@ int listaLlena(const tLista *lista, unsigned tamDato); //No se requiere el dato 
 int vaciarLista(tLista *lista);
 int ponerAlFinal(tLista *lista, const void *dato, unsigned tamDato);
 
-
-int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum);
+int insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum);
 int sacarPrimeroLista(tLista *lista, void *dest, unsigned tamDest);
 int sacarUltimoLista(tLista *lista, void *dest, unsigned tamDest);
 
-int insertarAlFinal(tLista *lista, const void *d, unsigned tamDato);
-int eliminarPorClave(tLista *lista, void *d, unsigned tamDato);
+int insertarAlInicio(tLista *lista, void *d, unsigned tamDato);
+int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato);
+int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato);
 
 //Definidas:
 void mapLista(const tLista *lista, void (*accion)(const void *));
