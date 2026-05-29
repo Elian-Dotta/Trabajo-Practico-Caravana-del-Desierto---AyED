@@ -68,10 +68,11 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
     return 1;
 }
 
-
-void mapLista(const tLista *lista, void (*accion)(const void*)){
+void mapLista(const tLista *lista, void (*accion)(const void*))
+{
     tNodo *aux = *lista;
-    while(aux){
+    while(aux)
+    {
         accion(aux->dato);
         aux = aux->proxNodo;
     }

@@ -59,4 +59,5 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
     }
 
     return 1;
+
 }

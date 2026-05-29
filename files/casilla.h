@@ -1,26 +1,33 @@
 #ifndef CASILLA_H_
 #define CASILLA_H_
 
-    #include "lista_doble_enlace_circular.h"
+// SE ENCARGA DE CREAR, MODIFICAR, MOSTRAR Y DESTRUIR LAS CASILLAS DEL TABLERO DE JUEGO
+// A CASILLA.H LE LLEGAN LOS PUNTEROS A LISTA QUE REPRESENTAN CADA CASILLA
 
-    typedef struct
-    {
-        int  id_elem;
-        char tipo_elem;
-    }tElem; // Se pasa aca la definicio para corregir la inclusion circular.
 
-    int crearCasillas(tListaDE *lista, unsigned cantCasillas);
-    int borrarListasElementosCasillas(tListaDE *lista);
-    int borrarCasillas(tListaDE *lista);
-    int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla);
+#include "lista_simple_enlace.h"
 
-    int compararIDsElem(const void *e1Void, const void *e2Void);
-    int insertarElementoCasillaOrdenado(tListaDE *lista, const tElem *elem, unsigned casilla, int(*comparar)(const void*, const void*));
-    int moverElementoPorID(tListaDE *lista, unsigned id, char mov, int(*comparar)(const void *, const void *));
+typedef tLista tCasilla;
 
-    /*
-    int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
-    void mostrarCasillaV();
-    */
+typedef struct
+{
+    int  id_elem;
+    char tipo_elem;
+    int  nro_casilla;
+}tElem; // Se pasa aca la definicion para corregir la inclusion circular.
+
+/* // LA CASILLA NO DEBE CONOCER EL TABLERO
+int crearCasillas(tListaDE *lista, unsigned cantCasillas);
+int borrarListasElementosCasillas(tListaDE *lista);
+int borrarCasillas(tListaDE *lista);
+int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla);
+*/
+
+tCasilla crearCasilla();
+int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI A�ADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+
+void mostrarCasilla(void *pl);
+void mostrarElemento(const void *elemVoid);
 
 #endif // CASILLA_H_
