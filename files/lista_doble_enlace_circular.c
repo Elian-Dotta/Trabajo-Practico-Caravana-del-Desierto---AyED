@@ -61,3 +61,29 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
     return 1;
 
 }
+
+void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
+
+    tNodoDE *nodoActual = *pl;
+
+    if(NULL == *pl)
+        return;
+
+    do{
+        accion(nodoActual->dato,contexto);
+        nodoActual = nodoActual->proxNodo;
+    }while(nodoActual != *pl);
+}
+
+void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
+
+    tNodoDE *nodoActual = *pl;
+
+    if(NULL == *pl)
+        return;
+
+    do{
+        mostrar(nodoActual->dato);
+        nodoActual = nodoActual->proxNodo;
+    }while(nodoActual != *pl);
+}

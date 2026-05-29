@@ -2,14 +2,14 @@
 #define LISTA_SIMPLE_ENLACE_H
 
 #include <stdio.h>
-#include <string.h> // Para funciones MEM
-#include <stdlib.h> // Para uso de memoria dinamica y null
+#include <string.h>
+#include <stdlib.h>
 #include "nodos.h"
 
-typedef tNodo* tLista; // La lista sera un puntero a Nodo. Es decir, la lista
-// tendr� la direcci�n de memoria de un nodo, no datos. As� ocupara solo 8 Bytes (tam de puntero).
+typedef tNodo* tLista;
 
 typedef void (*Mostrar) (const void*);
+typedef void (*Accion) (const *, const *);
 typedef int (*tCompararFn)(const void*, const void*);
 typedef int (*Acumular) (void **, unsigned *, void *, unsigned);
 
@@ -28,8 +28,7 @@ int insertarAlInicio(tLista *lista, void *d, unsigned tamDato);
 int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato);
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato);
 
-//Definidas:
-void mapLista(const tLista *lista, void (*accion)(const void *));
+void recorrerLista(tLista *lista, Accion accion, void *contexto);
 int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*));
 int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*));
 void mostrarLista(const tLista *lista, Mostrar mostrar);

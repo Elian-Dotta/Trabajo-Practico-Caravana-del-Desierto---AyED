@@ -16,18 +16,11 @@ typedef struct
     int  nro_casilla;
 }tElem; // Se pasa aca la definicion para corregir la inclusion circular.
 
-/* // LA CASILLA NO DEBE CONOCER EL TABLERO
-int crearCasillas(tListaDE *lista, unsigned cantCasillas);
-int borrarListasElementosCasillas(tListaDE *lista);
-int borrarCasillas(tListaDE *lista);
-int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla);
-*/
-
 tCasilla crearCasilla();
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI A�ADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 
-void mostrarCasilla(void *pl);
+void mostrarCasilla(const void *pl);
 void mostrarElemento(const void *elemVoid);
 
 #endif // CASILLA_H_

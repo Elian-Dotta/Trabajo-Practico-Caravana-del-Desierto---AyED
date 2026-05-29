@@ -12,7 +12,7 @@
 #include "lista_doble_enlace_circular.h"
 #include "lista_simple_enlace.h"
 
-#define MSJ_LISTA_MAPA_VACIO "EL MAPA NO FUE GENERADO"
+#define MSJ_LISTA_MAPA_VACIO "EL TABLERO NO FUE GENERADO"
 #define TAM_BUFFER 30
 
 typedef tListaDE tTablero;
@@ -27,9 +27,5 @@ int  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);
 
-// Definidas:
-
-void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
-int borrarMapa(tListaDE *lista);
 
 #endif // TABLERO_H_

@@ -1,6 +1,8 @@
 #ifndef MOVIMIENTO_H_
 #define MOVIMIENTO_H_
 
+#include <stdlib.h>
+
 typedef struct
 {
     int  id;
@@ -8,8 +10,7 @@ typedef struct
     int  cant;
 }tMovimiento;
 
-int tirarDado(); // Lucas
-
+int tirarDado(unsigned minNro, unsigned maxNro);
 int calcularDireccion(char dir);
 
 //int calcularMovBandido()

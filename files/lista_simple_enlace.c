@@ -68,12 +68,21 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
     return 1;
 }
 
-void mapLista(const tLista *lista, void (*accion)(const void*))
-{
+void recorrerLista(tLista *lista, Accion accion, void *contexto){ //Nombre anterior, mapLista
     tNodo *aux = *lista;
     while(aux)
     {
-        accion(aux->dato);
+        accion(aux->dato, contexto);
+        aux = aux->proxNodo;
+    }
+}
+
+void mostrarLista(const tLista *lista, Mostrar mostrar){
+
+    tNodo *aux = *lista;
+    while(aux)
+    {
+        mostrar(aux->dato);
         aux = aux->proxNodo;
     }
 }
