@@ -23,4 +23,6 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 void mostrarCasilla(const void *pl);
 void mostrarElemento(const void *elemVoid);
 
+void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
+
 #endif // CASILLA_H_

@@ -41,3 +41,8 @@ void mostrarElemento(const void *elemVoid){
     tElem *elem = (tElem*)elemVoid;
     printf(" %c ", elem->tipo_elem);
 }
+
+void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq){
+    *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas;
+    *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas;
+}
