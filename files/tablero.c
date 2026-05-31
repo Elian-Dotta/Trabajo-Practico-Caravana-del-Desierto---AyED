@@ -1,6 +1,6 @@
 #include "tablero.h"
 
-int  crearTablero(tListaDE* tablero, tConfig config)
+int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligentes)
 {
     int idElem = 0;
 
@@ -11,7 +11,6 @@ int  crearTablero(tListaDE* tablero, tConfig config)
     generarTablero(tablero, &idElem, config.cant_pos);
 
     distribuirElementos(tablero, &idElem, config);
-
 }
 
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
@@ -25,12 +24,12 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         if(contCas == 0)
         {
             elem.id_elem = *idElem;
-            elem.tipo_elem = 'I';
+            elem.tipo_elem = INICIO;
             elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
             elem.id_elem = *idElem;
-            elem.tipo_elem = 'J';
+            elem.tipo_elem = JUGADOR;
             elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
@@ -38,15 +37,16 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         if(contCas == cantPos - 1)
         {
             elem.id_elem = *idElem;
-            elem.tipo_elem = 'S';
+            elem.tipo_elem = SALIDA;
             elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
+        contCas++;
     }
 }
 
-int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
+int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLista bandidosInteligentes)
 {
     int elemFaltantes[] = { config.max_band,
                               config.max_prem,
@@ -54,14 +54,16 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
                               config.max_oasis,
                               config.max_tormenta };
 
-    char elemTipo[] = { 'B', 'P', 'V', 'O', 'T'};
+    char elemTipo[] = { BANDIDO, PREMIO, VIDAEXTRA, OASIS, TORMENTA};
     int cantElem = 0,
         elemInsertados = 0,
-        i,
-        pos;
-    for(i = 0; i < 5; i++)
+        indiceElem,
+        posInsercion,
+        nroCasilla = 0;
+
+    for(indiceElem = 0; indiceElem < 5; indiceElem++)
     {
-        cantElem += elemFaltantes[i];
+        cantElem += elemFaltantes[indiceElem];
     }
 
     tLista numAleatorios;
@@ -69,6 +71,37 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
     int numAle;
     tElem elem;
 
+     while(elemInsertados < cantElem)
+    {
+        posInsercion = rand() % config.cant_pos;
+        indiceElem = rand() % 5;
+        if(elemFaltantes[indiceElem])
+        {
+            elem.id_elem = *idElem;
+            elem.tipo_elem = elemTipo[indiceElem];
+            if(actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), posInsercion, insertarSinDupCasilla)) // SI SE PUDO INSERTAR, ACTUALIZAMOS LOS INDICADORES DE FALTANTE
+            {
+                if(elem.tipo_elem == BANDIDO && // SI EL ELEMENTO INSERTADO ES UN BANDIDO
+                   elemFaltantes[indiceElem] % 2 == 0) // SI EL BANDIDO ES UN BANDIDO PAR INGRESADO. FALTAN 4 -> PAR, FALTAN 3 -> IMPAR.
+                    insertarAlFinalLista(bandidosInteligentes, &elem.id_elem, sizeof(int));
+
+                elemFaltantes[indiceElem]--; // RESTAMOS UN ELEMENTO FALTANTE
+                (*idElem)++;                 // AVANZAMOS EL INDICE DE LOS ELEMENTOS
+                elemInsertados++;            // SUMAMOS UN ELEMENTO INSERTADO
+            }
+        }
+    }
+
+    elem.tipo_elem = INICIO;
+    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpElem);
+    recorrerListaDE(tablero, asignarNroCasilla, &nroCasilla);
+
+    return 1;
+
+/* // VERSION ANTERIOR, CON UNICO ELEMENTO POR CASILLA
+     CON NUMEROS ALEATORIOS PREDEFINIDOS PARA LA POSICION
+     CON ACCESO POR INDICE SIMIL VECTOR
+     CON LOGICA ANCLADA A LA FUNCION DE GENERACION
     while(elemInsertados < cantElem)
     {
         numAle = (rand() % config.cant_pos - 1 ) + 1;
@@ -88,11 +121,16 @@ int  distribuirElementos(tListaDE* tablero, int *idElem, tConfig config)
             elem.id_elem = *idElem;
             (*idElem)++;
             elem.tipo_elem = elemTipo[i];
-            elem.nro_casilla = pos;
             actualizarPosLista(tablero, &elem, sizeof(tElem), pos, insertarEnCasilla);
             elemInsertados++;
         }
+        else
+        {
+            ponerEnCola(&numAleatorios, &pos, sizeof(int));
+        }
     }
+*/
+
 }
 
 int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DEL ELEMENTO, Y MOV ES UN NUMERO POSITIVO PARA LA DERECHA, NEGATIVO PARA LA IZQUIERDA

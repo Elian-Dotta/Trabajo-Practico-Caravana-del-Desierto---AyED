@@ -11,4 +11,6 @@ typedef struct
         JpierdeVida;
 }tEstado;
 
+void inicializarEstado(tEstado *estado);
+
 #endif // ESTADO_H_

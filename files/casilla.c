@@ -124,6 +124,49 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     return 1;
 }
 
+int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = (tCasilla*)pl;
+    tElem *elem = (tElem*)d;
+    int ret;
+
+    ret = insertarOrdenadoLista(casilla, elem, tamDato, cmpRestriccionCasilla, 0, NULL);
+    // LA UTILIZAMOS PARA EVITAR DUPLICADOS NO PARA ORDENAR. LA FUNCION DE CMP DEVUELVE -1 SIEMPRE EXCEPTO DUPLICADOS QUE DEVUELVE 0
+
+    return ret;
+}
+
+int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGLAS NUEVAS DESDE ACA
+{
+    tElem *elemAct = (tElem*)a;
+    tElem *elemNue = (tElem*)b;
+
+    if(elemAct->tipo_elem == INICIO && elemNue->tipo_elem == BANDIDO) // EVITAMOS QUE APAREZCAN BANDIDOS EN EL INICIO
+       return 0;
+
+    if(elemAct->tipo_elem == elemNue->tipo_elem && elemNue->tipo_elem != BANDIDO) // EVITAMOS QUE APAREZCAN TIPOS REPETIDOS EXCEPTUANDO EL BANDIDO
+        return 0;
+
+    return -1;
+}
+
+void asignarNroCasilla(void *a, void *contexto)
+{
+    tCasilla *casilla = (tCasilla*)a;
+    int *nroCasilla = (int*)contexto;
+
+    recorrerLista(casilla, asignarNroCasElem,nroCasilla);
+    (*nroCasilla)++;
+}
+
+void asignarNroCasElem(void *a, void *contexto)
+{
+    tElem *elem = (tElem*)a;
+    int *nroCasilla = (int*)contexto;
+
+    elem->nro_casilla = *nroCasilla;
+}
+
 void mostrarCasilla(void *pl)
 {
     tLista *casilla = pl;

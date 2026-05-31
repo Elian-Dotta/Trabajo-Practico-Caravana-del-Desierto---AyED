@@ -7,8 +7,9 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
     tJugador jugador;
     tCola movimientos;
     tEstado estado;
+    tLista bandidosInteligentes; // LISTA DE ENTEROS, IDS
 
-    inicializarPartida(&tablero, &jugador, &movimientos, &estado);
+    inicializarPartida(&tablero, &jugador, &movimientos, &estado, &bandidosInteligentes);
 
     int corriendo = 1;
 
@@ -18,11 +19,11 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
         procesarEntrada(&movimientos, &jugador); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-        calcularMovBandido(&tablero, &movimientos); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+        calcularMovBandido(&tablero, &movimientos, &bandidosInteligentes); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
         dibujarAnimacionMov(&tablero, &jugador, &movimientos, &estado); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
 
-        actualizarEstado(&tablero, &jugador, &estado); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
+        actualizarEstado(&tablero, &jugador, &estado, &bandidosInteligentes); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
 
         dibujarAnimacionEstado(&tablero, &jugador, &estado); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
     }
@@ -32,18 +33,21 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
-int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado, tLista *bandidosInteligentes)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 {
     tConfig config = { 25, 3, 2, 3, 1, 2, 3};
     //cargarConfiguracion();
 
-    crearTablero(tablero, config);
+    crearLista(bandidosInteligentes);
+
+    crearTablero(tablero, config, bandidosInteligentes);
 
     inicializarEstado(estado, config.max_band);
 
     inicializarJugador(jugador, config.vidas_ini);
 
     crearCola(movimientos);
+
 }
 
 int  dibujarEstadoDelJuego(tTablero *tablero, tJugador *jugador, tEstado *estado)
@@ -97,7 +101,7 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     }
 }
 
-int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
+int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado, tLista *bandidosInteligentes)
 {
     // DENTRO DE TABLERO.H RECORRE TABLERO, PARA CADA CASILLA ACTUALIZA ESTADO
     // TOMA EN CUENTA EL PREMIO, OASIS, TORMENTA Y BANDIDO EN LA POSICION FINAL

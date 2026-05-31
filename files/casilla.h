@@ -7,6 +7,15 @@
 
 #include "lista_simple_enlace.h"
 
+#define INICIO 'I'
+#define JUGADOR 'J'
+#define SALIDA 'S'
+#define BANDIDO 'B'
+#define TORMENTA 'T'
+#define PREMIO 'P'
+#define OASIS 'O'
+#define VIDAEXTRA 'V'
+
 typedef tLista tCasilla;
 
 typedef struct
@@ -26,8 +35,14 @@ int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla
 tCasilla crearCasilla();
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI AÑADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
 void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);
+void asignarNroCasilla(void *a, void *contexto);
+void asignarNroCasElem(void *a, void *contexto);
+
+int  cmpRestriccionCasilla(const void *a, const void *b);
+int  cmpElem(const void *a, const void *b);
 
 #endif // CASILLA_H_
