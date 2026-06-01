@@ -1,5 +1,6 @@
 #include "consola.h"
 
+
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
     mostrarTitulo();

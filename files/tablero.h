@@ -22,7 +22,9 @@ int  generarTablero(tTablero* tablero, int *contElem, int cantPos);
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLista bandidosInteligentes);
 int  moverElementoPorId(tTablero* tablero, int id, int mov);
 int  generarMovBandido(tTablero* tablero, tCola *mov);
-int  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
+
+void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, tLista *bandinteligentes);
+
 
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);

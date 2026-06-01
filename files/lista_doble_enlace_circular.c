@@ -34,3 +34,49 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
     return 1;
 
 }
+
+
+
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, tEstado* estado)
+{
+    tListaDE *act = lista,
+             *ini = lista;
+
+    if (act==NULL)
+    {
+        return 0;
+    }
+    int comp = cmp((*act)->dato,clave);
+    if (comp < 0)
+        {
+            act=&(*act)->proxNodo;
+            comp = cmp((*act)->dato,clave);
+        }
+        else
+            {
+                act=&(*act)->antNodo;
+                comp = cmp((*act)->dato,clave);
+            }
+
+    while((comp!=0)&&(act!=ini))
+    {
+        if (comp < 0)
+        {
+            act=&(*act)->proxNodo;
+            comp = cmp((*act)->dato,clave);
+        }
+        else
+            {
+                act=&(*act)->antNodo;
+                comp = cmp((*act)->dato,clave);
+            }
+    }
+    if(comp==0)
+    {
+        accion(act,estado);
+        return 1;
+    }
+
+    return 0;
+}
+

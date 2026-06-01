@@ -4,13 +4,22 @@
 typedef struct
 {
     int Oobtenido,
+        //Oactivo,
         Operdido,
+        //Tobtenida,
+        Tactiva,
+        Tfinalizada,
         IDBandDesaparecido,
-        Jpierde,
+        JganaPuntos,
         JganaVida,
-        JpierdeVida;
+        JpierdeVida,
+        Jgana;
 }tEstado;
 
 void inicializarEstado(tEstado *estado);
+
+
+
+
 
 #endif // ESTADO_H_

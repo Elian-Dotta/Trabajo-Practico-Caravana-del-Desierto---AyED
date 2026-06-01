@@ -114,6 +114,7 @@ int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     return 1;
 }
 
+
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
     tCasilla *casilla = (tCasilla*)pl;
@@ -178,3 +179,63 @@ void mostrarElemento(const void *elemVoid){ //muestra el struct tElem
     tElem *elem = (tElem*)elemVoid;
     printf(" %c ", elem->tipo_elem);
 }
+
+
+void cambiarEstado(void **pl, tEstado* estado)
+{
+    static int tieneoasis = 0, tienetormenta = 0;
+    recorrerLista(pl,modEstado,estado);
+
+    if ((tieneoasis == 1) && (estado->Oobtenido==0))
+    {
+        tieneoasis = 0;
+        estado->Operdido = 1;
+    }
+    if ((tienetormenta=1) && (estado->Tactiva==0))
+    {
+        tienetormenta=0;
+        estado->Tfinalizada=1;
+    }
+
+}
+
+void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
+{
+    tLista* puntero = pl;
+    while (puntero!=NULL)
+    {
+        modEstado(estado,puntero);
+        puntero=&(*puntero)->proxNodo;
+    }
+}
+
+void modEstado(tEstado* estado, const tElem* casilla)
+{
+    if (strcmp(&(casilla)->tipo_elem,"B")==0)
+    {
+        estado->JpierdeVida=1;
+        estado->IDBandDesaparecido=(casilla)->id_elem;
+    }
+    if (strcmp(&(casilla)->tipo_elem,"O")==0)
+    {
+        estado->Oobtenido=1;
+    }
+    if (strcmp(&(casilla)->tipo_elem,"P")==0)
+    {
+        estado->JganaPuntos=1;
+    }
+    if (strcmp(&(casilla)->tipo_elem,"V")==0)
+    {
+        estado->JganaVida=1;
+    }
+    if (strcmp(&(casilla)->tipo_elem,"T")==0)
+    {
+        estado->Tactiva=1;
+    }
+    if (strcmp(&(casilla)->tipo_elem,"S")==0)
+    {
+        estado->Jgana=1;
+    }
+
+}
+

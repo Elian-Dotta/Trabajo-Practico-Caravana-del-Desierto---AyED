@@ -4,7 +4,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include "nodos.h"
-
+/*
+=======
+#include "estado.h"
+>>>>>>> origin/manuel
+*/
 typedef tNodoDE* tListaDE;
 
 //  - LA LISTA DOBLEMENTE ENLAZADA SIEMPRE QUEDA APUNTANDO AL ULTIMO ELEMENTO QUE PROCESO, SEA AÑADIRLO, ACTUALIZARLO O ELIMINARLO(EN ESTE CASO QUEDA AL LADO DEL ELIMINADO)
@@ -21,8 +25,11 @@ typedef tNodoDE* tListaDE;
 
 typedef int  (*Acumular)(void **, unsigned *, void *, unsigned);
 typedef void (*Mostrar)(const void *);
-typedef int  (*Cmp)(void *, void *);
+
+
 typedef void (*Accion)(void *, void *);
+typedef int  (*Cmp)(const void *, const void *);
+//typedef void (*Accion)(tNodoDE **, tEstado*);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
 int  actualizarPosLista(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum); // ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO
@@ -33,6 +40,9 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
 int  listaVaciaDE(tListaDE *lista);
+
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, tEstado* estado);
+
 
 // ESTA FUNCION PODRIA DEVOLVER LA POSICION PERO DENUEVO, ES CIRCULAR Y DE ASI QUE QUEDA APUNTANDO AL ULTIMO ELEMENTO PROCESADO
 // A LO MEJOR PODEMOS ACTUALIZAR UNA POSICION DEL TABLERO POR ID DE ELEMENTO, ESO ES UNA BUSQUEDA Y UNA ACTUALIZACION EN LA MISMA PRIMITIVA

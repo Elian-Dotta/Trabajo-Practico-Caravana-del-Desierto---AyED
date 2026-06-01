@@ -30,6 +30,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
             (*idElem)++;
             elem.id_elem = *idElem;
             elem.tipo_elem = JUGADOR;
+
             elem.nro_casilla = contCas;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
@@ -121,6 +122,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLis
             elem.id_elem = *idElem;
             (*idElem)++;
             elem.tipo_elem = elemTipo[i];
+
             actualizarPosLista(tablero, &elem, sizeof(tElem), pos, insertarEnCasilla);
             elemInsertados++;
         }
@@ -148,12 +150,24 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DE
 int  generarMovBandido(tTablero* tablero, tCola *mov)
 {
     //recorrerListaDE()
+
+    return 0;
+}
+
+void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
+{
+    tElem jugador;
+    jugador.id_elem=1;
+    buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem),cmpElem,cambiarEstado,estado);
+    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
+
 }
 
 int  cmpInt(const void *a, const void *b)
 {
-    int *n1 = a;
-    int *n2 = b;
+   const int * n1 = a;
+   const int * n2 = b;
 
-    return n1 - n2;
+   return n1 - n2;
 }
+

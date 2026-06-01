@@ -1,11 +1,13 @@
 #include "jugador.h"
 
+
+
 void inicializarJugador(tJugador* j, unsigned vida)
 {
     j->vida = vida;
     j->cantMov = 0;
     j->puntaje = 0;
-    j->posJug = 0;
+    j->posJug = 1;
     crearCola(&j->hisMovJugador);
 }
 
@@ -60,3 +62,4 @@ void mostrarMovimientosJugador(tJugador *j)
         // MOSTRARLO -> A LO MEJOR UNA FUNCION DE CONSOLA.H, NUEVA O EXISTENTE
     }
 }
+

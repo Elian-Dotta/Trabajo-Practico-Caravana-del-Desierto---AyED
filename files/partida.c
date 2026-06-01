@@ -33,6 +33,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
+
 int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado, tLista *bandidosInteligentes)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 {
     tConfig config = { 25, 3, 2, 3, 1, 2, 3};
@@ -101,11 +102,15 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     }
 }
 
+
 int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado, tLista *bandidosInteligentes)
 {
     // DENTRO DE TABLERO.H RECORRE TABLERO, PARA CADA CASILLA ACTUALIZA ESTADO
     // TOMA EN CUENTA EL PREMIO, OASIS, TORMENTA Y BANDIDO EN LA POSICION FINAL
 }
+
+
+
 
 int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {

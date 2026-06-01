@@ -12,6 +12,8 @@ typedef tNodo* tLista; // La lista sera un puntero a Nodo. Es decir, la lista
 typedef void (*Mostrar) (const void*);
 typedef int (*tCompararFn)(const void*, const void*);
 typedef int (*Acumular) (void **, unsigned *, void *, unsigned);
+typedef int  (*Cmp)(const void *, const void *);
+typedef void  (*Accion)(const void *, const void *);
 
 void crearLista(tLista *lista);
 int listaVacia(const tLista *lista);
@@ -27,6 +29,7 @@ int sacarUltimoLista(tLista *lista, void *dest, unsigned tamDest);
 int insertarAlInicio(tLista *lista, void *d, unsigned tamDato);
 int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato);
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato);
+
 
 //Definidas:
 void mapLista(const tLista *lista, void (*accion)(const void *));

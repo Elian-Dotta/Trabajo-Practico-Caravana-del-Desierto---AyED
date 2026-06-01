@@ -30,4 +30,5 @@ unsigned verPosJugador(const tJugador *j);
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);
 
+
 #endif // JUGADOR_H_
