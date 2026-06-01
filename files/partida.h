@@ -1,13 +1,8 @@
 #ifndef PARTIDA_H_
 #define PARTIDA_H_
 
-typedef struct tLista tLista;
+// ENGLOBA LOS MODULOS PARA EL FUNCIONAMIENTO DE LA PARTIDA
 
-<<<<<<< Updated upstream
-//int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
-
-//int  inicializarPartida(); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
-=======
 #include "tablero.h"
 #include "cola.h"
 #include "movimiento.h"
@@ -15,28 +10,18 @@ typedef struct tLista tLista;
 #include "jugador.h"
 #include "estado.h"
 #include "consola.h"
-#include "menu.h"
 
 #define PASO 1
-#define ID_JUGADOR 1
 
-#define MENU_DIR    "\nIngrese direccion (F = Adelante / B = Atras): "
-#define OPC_DIR     "FB"
-#define MSJ_ERR_DIR "Direccion invalida. Use F (adelante) o B (atras).\n"
->>>>>>> Stashed changes
+//typedef struct tListaDe tLista;
 
-//int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
+int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
-//int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA
+int  inicializarPartida(tTablero *tablero, tJugador *jugador, tCola *movimientos, tEstado *estado); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
-//int  renderizarPartida(); // DIBUJA EL TABLERO
+int  dibujarEstadoDelJuego(tTablero *tablero, tJugador *jugador, tEstado *estado);
 
-<<<<<<< Updated upstream
-//int  finalizarPartida(); // GUARDA EL RANKING
-=======
-void dibujarEstadoDelJuego(tListaDE *tablero, tJugador *jugador);
-
-void procesarEntrada(tCola *movimientos, tJugador *jugador);   // Pide un ENTER para tirar el dado por menu
+int  procesarEntrada(tCola *movimientos, tJugador *jugador);   // Pide un ENTER para tirar el dado por menu
                                                                // Pide la direccion por medio de la funcion de menu -> Nada mas dice: "Ingrese direccion (Adelante - 'F' o Atras 'B'): ",
                                                                // el resto del HUD se encarga la funcion anterior
 
@@ -52,6 +37,5 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
 int  finalizarPartida(); // GUARDA EL RANKING ->
 
 int  inicializarEstado(tEstado *est, int cantBandidos);
->>>>>>> Stashed changes
 
 #endif // PARTIDA_H_

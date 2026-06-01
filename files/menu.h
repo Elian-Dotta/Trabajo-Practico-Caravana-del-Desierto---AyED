@@ -21,5 +21,11 @@ void ingresarDato(const char* msj, char *out);
 
 >>>>>>> Stashed changes
 
+char menu(const char* msj, const char *opc, int conErr, const char *msjErr);
+
+void ingresarDato(const char* msj, char *out);
+
+
+
 
 #endif // MENU_H_

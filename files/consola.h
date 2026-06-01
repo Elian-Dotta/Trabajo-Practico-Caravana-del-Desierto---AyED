@@ -1,20 +1,16 @@
 #ifndef CONSOLA_H_
 #define CONSOLA_H_
 
+#include "tablero.h"
+#include "estado.h"
+#include "jugador.h"
 
-<<<<<<< Updated upstream
-=======
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado);
 
 void mostrarTitulo();
 void mostrarSeparador();
-void mostrarHud(tJugador* jugador, tEstado *estado); // HAY QUE AGREGAR COMO PARAMETRO LAS VARIABLES A IMPRIMIR, HAY QUE DEFINIR TAMBIEN LAS VARIABLES A IMPRIMIR.
-void limpiarBuffer(void);
-void mostrar(const char *msj, FILE *output);
+void mostrarHud(tJugador* jugador, tEstado *estado);
 
-
-
-//void mostrarTablero(void *casilla);
->>>>>>> Stashed changes
+void mostrar(const char *msj);
 
 #endif // CONSOLA_H_

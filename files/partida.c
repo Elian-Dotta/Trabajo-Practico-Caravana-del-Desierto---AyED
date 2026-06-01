@@ -1,40 +1,29 @@
 #include "partida.h"
 
-//int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
-//{
-//    //tLista tablero;
-//
-//    //inicializarPartida(&tablero);
-//
-//    int corriendo = 1;
-//
-//    while(corriendo)
-//    {
-//        renderizarPartida();
-//        procesarEntrada();
-//        actualizarPartida();
-//        renderizarPartida();
-//    }
-//
-//    finalizarPartida();
-//}
+// INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
+int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+{
+    tTablero tablero;
+    tJugador jugador;
+    tCola movimientos;
+    tEstado estado;
+    tLista bandidosInteligentes; // LISTA DE ENTEROS, IDS
 
-int  inicializarPartida(); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+    inicializarPartida(&tablero, &jugador, &movimientos, &estado, &bandidosInteligentes);
 
-int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
+    int corriendo = 1;
 
-int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA
+    while(corriendo)
+    {
+        dibujarEstadoDelJuego(&tablero, &jugador, &estado); // ESTADO PARA LA ELECCION DEL JUGADOR
 
-int  renderizarPartida(); // DIBUJA EL TABLERO
+        procesarEntrada(&movimientos, &jugador); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-<<<<<<< Updated upstream
-int  finalizarPartida(); // GUARDA EL RANKING
-=======
-        calcularMovBandido(&tablero, &movimientos); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+        calcularMovBandido(&tablero, &movimientos, &bandidosInteligentes); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
         dibujarAnimacionMov(&tablero, &jugador, &movimientos, &estado); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
 
-        actualizarEstado(&tablero, &jugador, &estado); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
+        actualizarEstado(&tablero, &jugador, &estado, &bandidosInteligentes); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
 
         dibujarAnimacionEstado(&tablero, &jugador, &estado); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
     }
@@ -44,48 +33,34 @@ int  finalizarPartida(); // GUARDA EL RANKING
 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
-int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado, tLista *bandidosInteligentes)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 {
     tConfig config = { 25, 3, 2, 3, 1, 2, 3};
     //cargarConfiguracion();
 
-    crearTablero(tablero, config);
+    crearLista(bandidosInteligentes);
+
+    crearTablero(tablero, config, bandidosInteligentes);
 
     inicializarEstado(estado, config.max_band);
 
     inicializarJugador(jugador, config.vidas_ini);
 
     crearCola(movimientos);
+
 }
 
-void dibujarEstadoDelJuego(tListaDE *tablero, tJugador *jugador)
+int  dibujarEstadoDelJuego(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
-    tEstado estadoVacio = {0};
 
-    dibujarEscena(tablero, jugador, &estadoVacio);
-
-    mostrar("\nEs tu turno. Vas a tirar el dado (valor entre 1 y 6).\n", stdout);
-    mostrar("\n", stdout);
 }
 
-void procesarEntrada(tCola *movimientos, tJugador *jugador)
+int  procesarEntrada(tCola *movimientos, tJugador *jugador)
 {
-    tMovimiento mov;
-    char buffer[64];
-    int dado;
+    // PEDIR INPUT O SCANF VERIFICAR DATO VALIDO F O B
+    // CREAR VARIABLE MOV Y ASIGNARLE LOS VALORES INGRESADOS
+    // ENCOLAR
 
-    dado = tirarDado();
-
-    sprintf(buffer, "\nSe tiro el dado y salio: %d\n", dado);
-    mostrar(buffer, stdout);
-
-    mov.id   = ID_JUGADOR;
-    mov.dir  = menu(MENU_DIR, OPC_DIR, 0, MSJ_ERR_DIR);
-    mov.cant = dado;
-
-    ponerEnCola(movimientos, &mov, sizeof(tMovimiento));
-    guardarMovimientoJugador(jugador, &mov);
-    aumentarMovimiento(jugador);
 }
 
 int  calcularMovBandido(tTablero *tablero, tCola *movimientos)
@@ -103,7 +78,7 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
 {
     // HAY QUE DESENCOLAR LOS MOVIMIENTOS, E IR RESTANDOLES UNO PARA PROCESAR MOVIMIENTO POR MOVIMIENTO EN CADA FRAME
     // SE PUEDE USAR LA CANTIDAD DE BANDIDOS PARA IR CALCULANDO EL MOMENTO DONDE APARECE EL JUGADOR
-    // O CAMBIAR LA ESTRUCTURA TMOV PARA A�ADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
+    // O CAMBIAR LA ESTRUCTURA TMOV PARA AÑADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
     tMovimiento movActual;
     int movRelativo;
 
@@ -126,7 +101,7 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     }
 }
 
-int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
+int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado, tLista *bandidosInteligentes)
 {
     // DENTRO DE TABLERO.H RECORRE TABLERO, PARA CADA CASILLA ACTUALIZA ESTADO
     // TOMA EN CUENTA EL PREMIO, OASIS, TORMENTA Y BANDIDO EN LA POSICION FINAL
@@ -151,4 +126,3 @@ int  inicializarEstado(tEstado *est, int cantBandidos)
 {
 
 }
->>>>>>> Stashed changes
