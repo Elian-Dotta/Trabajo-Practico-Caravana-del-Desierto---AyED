@@ -19,7 +19,7 @@ typedef tNodoDE* tListaDE;
 
 typedef int  (*Acumular)(void **, unsigned *, void *, unsigned);
 typedef void (*Mostrar)(const void *);
-typedef int  (*Cmp)(void *, void *);
+typedef int  (*Cmp)(const void *, const void *);
 typedef void (*Accion)(void *, void *);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
@@ -48,20 +48,6 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto);
 // SE BUSCA EL ID DEL BANDIDO Y SE CALCULA EL MOV QUE VA A TENER. PODRIAMOS TENER EL ID DE LOS BANDIDOS INTELIGENTES Y DE LOS NO INTELIGENTES ANOTADOS.
 // PERO ESO REQUIERE UNA VARIABLE GLOBAL YA QUE LOS BANDIDOS SE ASIGNAN EN GENERAR TABLERO
 
-
-//Definidas:
-int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato);
-/*
-        Implementacion a Priori:
-            - El head apuntara siempre al primer elemento insertado en la lista.
-            - Considerar si vale la pena crear una estructura de forma; tListaC con referencias a nodo ultimo insertado y nodo primero insertado
-                - Considerar si esa estructura debe generarse en el stack o en el heap.
-            - Si se implementa la forma original de lista doblemente enlazada, donde head apunta al ultimo insertado. En lista circular, se complica
-              definir cual es el primero y cual es el ultimo, al no existir CTEs NULL de identificacion.
-                - Particularmente si se hacen inserciones al comienzo luego de inserciones iniciales y sucesivas el final.
-                - p.ej.: una insercion al inicio, entonces head apunta al inicio. Luego insertar al final no podria realizarse a partir de head de forma generica.
-                - tal vez con varios ifs¿¿ idk
-            - Entiendase head como referencia a la lista en el main.
-    */
+tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar);
 
 #endif // LISTA_DOBLE_ENLACE_CIRCULAR_H

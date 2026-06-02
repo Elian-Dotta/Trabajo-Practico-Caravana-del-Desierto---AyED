@@ -26,6 +26,5 @@ int  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
 
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);
-
-
+tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
 #endif // TABLERO_H_

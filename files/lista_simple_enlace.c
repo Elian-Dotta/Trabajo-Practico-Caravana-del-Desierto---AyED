@@ -10,7 +10,7 @@ int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompara
 
     if( NULL==(nuevoNodo=(tNodo*)malloc(sizeof(tNodo))) || NULL==(nuevoNodo->dato=(void*)malloc(tamDato)) ){
         free(nuevoNodo);
-        return 0; //No hay memoria suficiente
+        return 0;
     } //CREAR_NODO(nuevoNodo,tamDato); // Usando Macro
 
     memcpy(nuevoNodo->dato, dato, tamDato);
@@ -28,7 +28,6 @@ int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, i
     puntero local de la funcion llamadora.
     Retorna 0 si no encuentra nada, o 1 si encuentra algo. (Ver si combiene que sea void)
 */
-
     if(NULL == *lista){
         *destNodo = NULL;
         return 0;
@@ -52,7 +51,6 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
     Inserta el nodo ya creado (con memoria dinamica asignada) ordenadamente en la lista.
     Retorna 1 si la insercion se completa.
 */
-
     if (lista == NULL || nodo == NULL)
         return 0;
 
@@ -66,6 +64,17 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
         *lista = nodo;
 
     return 1;
+}
+
+void* buscarNodoPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
+
+      tNodo *auxNodo = *lista;
+      while(auxNodo){
+            if(0  == comparar(auxNodo->dato, clave))
+                return auxNodo; //Encontrado
+        auxNodo = auxNodo->proxNodo;
+      }
+      return NULL; //No encontrado
 }
 
 void recorrerLista(tLista *lista, Accion accion, void *contexto){ //Nombre anterior, mapLista

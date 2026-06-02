@@ -7,7 +7,7 @@
 
 #include "lista_simple_enlace.h"
 
-typedef tLista tCasilla;
+typedef tLista tCasilla; //tcasilla es tNodo*
 
 typedef struct
 {
@@ -23,6 +23,10 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 void mostrarCasilla(const void *pl);
 void mostrarElemento(const void *elemVoid);
 
+// -----------
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
+int compararIDtElem(const void *voidE1, const void *voidE2);
+int elementoEnCasilla(const void *voidCasilla, int IDElemento);
+// -----------
 
 #endif // CASILLA_H_
