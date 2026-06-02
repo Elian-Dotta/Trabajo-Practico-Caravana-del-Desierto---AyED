@@ -10,6 +10,7 @@ void mostrarTablero(tLista *);
 void mostrarEstadisticas();
 void mostrarPedirNombre();
 int mostrarPedirMov();
+void mostrarHUD(tJugador*, tEstado*);
 
 
 #endif // CONSOLAH
