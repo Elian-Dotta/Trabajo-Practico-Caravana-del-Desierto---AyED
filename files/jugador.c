@@ -1,5 +1,4 @@
 
-<<<<<<< Updated upstream
 =======
 void inicializarJugador(tJugador* j, unsigned vida)
 {

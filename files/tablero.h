@@ -1,7 +1,5 @@
 #ifndef TABLERO_H_
 #define TABLERO_H_
-<<<<<<< Updated upstream
-=======
 
 // SE ENCARGA DE CREAR, MODIFICAR, MOSTRAR Y DESTRUIR EL TABLERO DE JUEGO
 
@@ -12,13 +10,13 @@
 #include "casilla.h"
 #include "cola.h"
 #include "estado.h"
->>>>>>> Stashed changes
+
 #include "config.h"
 
 int  crearTablero(tLista* tablero, tConfig config);
 int  distruibuirElementos(tLista* tablero, tConfig config); // Puede no ser necesaria
 
-<<<<<<< Updated upstream
+
 int  agregarElemento();
 =======
 

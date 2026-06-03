@@ -139,29 +139,50 @@ void mostrarElemento(const void *elemVoid){ //muestra el struct tElem
 void cambiarEstado(void **pl, tEstado* estado)
 {
     static int tieneoasis = 0, tienetormenta = 0;
-    recorrerLista(pl,modEstado,estado);
+    int bandidos = recorrerLista(pl,modEstado,estado);
 
-    if ((tieneoasis == 1) && (estado->Oobtenido==0))
+    if ((tieneoasis == 1) && ((*estado)->Oobtenido==0))
     {
         tieneoasis = 0;
-        estado->Operdido = 1;
+        (*estado)->Operdido = 1;
     }
-    if ((tienetormenta=1) && (estado->Tactiva==0))
+    else if ((*estado)->Oobtenido==1)
+    {
+        tieneoasis=1;
+    }
+    if ((tienetormenta=1) && ((*estado)->Tactiva==0))
     {
         tienetormenta=0;
-        estado->Tfinalizada=1;
+        (*estado)->Tfinalizada=1;
     }
-
+    else if ((*estado)->Tactiva==1)
+    {
+        tienetormenta=1;
+    }
+    if (((*estado)->JpierdeVida==1)&&((*estado)->tieneoasis==1))
+    {
+        if (bandidos==1)
+        {
+            (*estado)->JpierdeVida=0;
+        }
+    }
 }
 
-void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
+int recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
 {
     tLista* puntero = pl;
+    int cantbandidos=0;
     while (puntero!=NULL)
     {
         modEstado(estado,puntero);
+        if ((*estado)->JpierdeVida==1)
+        {
+            cantbandidos++;
+        }
         puntero=&(*puntero)->proxNodo;
     }
+    return cantbandidos;
+
 }
 
 void modEstado(tEstado* estado, const tElem* casilla)

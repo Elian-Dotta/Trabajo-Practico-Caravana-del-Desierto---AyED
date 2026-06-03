@@ -32,7 +32,7 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato, 
 
 void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);
-void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado);
+int recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado);
 
 void cambiarEstado(void **pl, tEstado* estado);
 void modEstado(tEstado* estado, const tElem* casilla);
