@@ -2,6 +2,8 @@
 #define CONSOLAH
 #include <stdio.h>
 #include <stdlib.h>
+#include "jugador.h"
+#include "estado.h""
 
 typedef struct tLista tLista;
 

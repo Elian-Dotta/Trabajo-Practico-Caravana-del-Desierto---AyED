@@ -18,7 +18,7 @@ int  distruibuirElementos(tLista* tablero, tConfig config); // Puede no ser nece
 
 
 int  agregarElemento();
-=======
+
 
 
 typedef tListaDE tTablero;

@@ -141,21 +141,21 @@ void cambiarEstado(void **pl, tEstado* estado)
     static int tieneoasis = 0, tienetormenta = 0;
     int bandidos = recorrerLista(pl,modEstado,estado);
 
-    if ((tieneoasis == 1) && ((*estado)->Oobtenido==0))
+    if ((tieneoasis == 1) && (estado->Oobtenido==0))
     {
         tieneoasis = 0;
-        (*estado)->Operdido = 1;
+        estado->Operdido = 1;
     }
-    else if ((*estado)->Oobtenido==1)
+    else if (estado->Oobtenido==1)
     {
         tieneoasis=1;
     }
-    if ((tienetormenta=1) && ((*estado)->Tactiva==0))
+    if ((tienetormenta=1) && (estado->Tactiva==0))
     {
         tienetormenta=0;
-        (*estado)->Tfinalizada=1;
+        estado->Tfinalizada=1;
     }
-    else if ((*estado)->Tactiva==1)
+    else if (estado->Tactiva==1)
     {
         tienetormenta=1;
     }
@@ -163,7 +163,7 @@ void cambiarEstado(void **pl, tEstado* estado)
     {
         if (bandidos==1)
         {
-            (*estado)->JpierdeVida=0;
+            estado->JpierdeVida=0;
         }
     }
 }
@@ -175,7 +175,7 @@ int recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
     while (puntero!=NULL)
     {
         modEstado(estado,puntero);
-        if ((*estado)->JpierdeVida==1)
+        if (estado->JpierdeVida==1)
         {
             cantbandidos++;
         }
