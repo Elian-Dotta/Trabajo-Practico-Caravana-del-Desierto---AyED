@@ -66,17 +66,6 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
     return 1;
 }
 
-void* buscarNodoPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
-
-      tNodo *auxNodo = *lista;
-      while(auxNodo){
-            if(0  == comparar(auxNodo->dato, clave))
-                return auxNodo; //Encontrado
-        auxNodo = auxNodo->proxNodo;
-      }
-      return NULL; //No encontrado
-}
-
 void recorrerLista(tLista *lista, Accion accion, void *contexto){ //Nombre anterior, mapLista
     tNodo *aux = *lista;
     while(aux)
@@ -94,4 +83,24 @@ void mostrarLista(const tLista *lista, Mostrar mostrar){
         mostrar(aux->dato);
         aux = aux->proxNodo;
     }
+}
+
+void* buscarPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
+    tNodo *aux = *lista;
+    while(aux){
+        if(0 == comparar(aux->dato, clave))
+            return aux->dato;
+        aux = aux->proxNodo;
+    }
+    return NULL;
+}
+
+void* buscarNodoPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
+      tNodo *auxNodo = *lista;
+      while(auxNodo){
+            if(0  == comparar(auxNodo->dato, clave))
+                return auxNodo;
+        auxNodo = auxNodo->proxNodo;
+      }
+      return NULL;
 }

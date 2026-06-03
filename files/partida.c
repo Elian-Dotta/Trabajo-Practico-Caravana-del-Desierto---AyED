@@ -7,6 +7,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
     tJugador jugador;
     tCola movimientos;
     tEstado estado;
+    tLista bandidosInteligentes; // LISTA DE ENTEROS, IDS
 
     inicializarPartida(&tablero, &jugador, &movimientos, &estado);
 
@@ -59,15 +60,37 @@ int  procesarEntrada(tCola *movimientos, tJugador *jugador)
 
 }
 
-int  calcularMovBandido(tTablero *tablero, tCola *movimientos)
+int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int posJugador, int cantCasillaTablero, tCola *movimientos)
 {
-    // LLAMAR A RECORRER DESDE UNA FUNCION DE TABLERO
-    // RECORRER PARA CALCULAR PARA BANDIDO
-    // LA ACCION VA A VERIFICAR SI ES BANDIDO -> CALCULARBANDIDO
-    // SI ES BANDIDO GENERA UN MOV ALEATORIO CON EL ID DEL BANDIDO // 50 PORCIENTO SER INTELIGENTE
-    // LO ENCOLA EN LA COLA ENVIADA POR CONTEXTO
-    // ENVIAMOS POSICION DEL JUGADOR POR CONTEXTO
-    // POR MEDIO DE RECORRERLISTADE
+    tTablero     tableroInicio     = NULL;
+    const tElem *bandidoEncontrado = NULL;
+    tMovimiento  movimientoBandido;
+
+    if(NULL == *tablero)
+        return 0;
+
+    tableroInicio = posicionarTablero(tablero, 0);
+    recorrerListaDE(&tableroInicio, devolverPrimerBandido, &bandidoEncontrado);
+
+    if(NULL == bandidoEncontrado)
+        return 0; //No hay bandidos en el tablero
+
+    movimientoBandido.id    = bandidoEncontrado->id_elem;
+    movimientoBandido.cant  = tirarDado(1,6); //srand(...) -> semilla debe inicializarse al momento de inicializar el juego...
+
+    if(NULL == buscarPorClaveEnLista(bandidosInteligentes, bandidoEncontrado->id_elem, compararEnteros)){
+        movimientoBandido.dir = tirarDado(0,1)?'F':'B';
+    }else{
+        int distDer = 0, distIzq = 0;
+        distanciasEntreElementos(bandidoEncontrado->nro_casilla, posJugador, cantCasillaTablero, &distDer, &distIzq);
+        distDer = abs(distDer - movimientoBandido.cant);
+        distIzq = abs(distIzq - movimientoBandido.cant);
+        movimientoBandido.dir = distDer<distIzq?'F':'B';
+    }
+
+    ponerEnCola(movimientos, &movimientoBandido, sizeof(tMovimiento));
+
+    return 1;
 }
 
 int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimientos, tEstado *estado)

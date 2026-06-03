@@ -2,7 +2,7 @@
 #define PARTIDA_H_
 
 // ENGLOBA LOS MODULOS PARA EL FUNCIONAMIENTO DE LA PARTIDA
-
+#include <stdlib.h>
 #include "tablero.h"
 #include "cola.h"
 #include "movimiento.h"
@@ -25,8 +25,9 @@ int  procesarEntrada(tCola *movimientos, tJugador *jugador);   // Pide un ENTER 
                                                                // Pide la direccion por medio de la funcion de menu -> Nada mas dice: "Ingrese direccion (Adelante - 'F' o Atras 'B'): ",
                                                                // el resto del HUD se encarga la funcion anterior
 
-int  calcularMovBandido(tTablero *tablero, tCola *movimientos); // Se puede usar verPrimero para los bandidos inteligentes y calcular en base al mov del jugador
-                                                                // Funcion para calcular movimientos de bandidos
+int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int posJugador, int cantCasillaTablero, tCola *movimientos);
+// Se puede usar verPrimero para los bandidos inteligentes y calcular en base al mov del jugador
+// Funcion para calcular movimientos de bandidos
 
 int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimientos, tEstado *estado); // debe dibujar el HUD al mismo tiempo por eso necesita tJugador
                                                                 //Funcion para animar el movimiento del jugador y los bandidos, consume la informacion guardada en la cola de movimientos

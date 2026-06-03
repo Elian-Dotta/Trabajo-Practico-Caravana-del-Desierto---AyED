@@ -112,7 +112,7 @@ int  generarMovBandido(tTablero* tablero, tCola *mov)
     //recorrerListaDE()
 }
 
-int  cmpInt(const void *a, const void *b)
+int  compararEnteros(const void *a, const void *b)
 {
     int *n1 = a;
     int *n2 = b;

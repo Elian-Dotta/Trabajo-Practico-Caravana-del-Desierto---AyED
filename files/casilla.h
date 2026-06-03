@@ -5,6 +5,7 @@
 // A CASILLA.H LE LLEGAN LOS PUNTEROS A LISTA QUE REPRESENTAN CADA CASILLA
 
 
+#include <string.h>
 #include "lista_simple_enlace.h"
 
 typedef tLista tCasilla; //tcasilla es tNodo*
@@ -26,7 +27,9 @@ void mostrarElemento(const void *elemVoid);
 // -----------
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
 int compararIDtElem(const void *voidE1, const void *voidE2);
+int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, int IDElemento);
+void devolverPrimerBandido(void *voidCasilla, void *contexto);
 // -----------
 
 #endif // CASILLA_H_

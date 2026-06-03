@@ -53,6 +53,13 @@ int compararIDtElem(const void *voidE1, const void *voidE2){
     return E1->id_elem - E2->id_elem; //Funciona, si. Pero para nros muy grandes puede causar OF.
 }
 
+int compararTipotElem(const void *voidE1, const void *voidE2){
+    tElem *E1 = (tElem*)voidE1;
+    tElem *E2 = (tElem*)voidE2;
+    return E1->tipo_elem == E2->tipo_elem;
+}
+
+
 int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
 /* Funcion que recibe dirección de una casilla (campo dato de nodoDE) y un la dirección de memoria de un INT que guarda un ID de tElem
    La funcion crea un tElem auxiliar a partir del ID del elemento y la usa para buscar en la lista/casilla, la existencia de un nodo
@@ -64,4 +71,12 @@ int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
     if(NULL != buscarNodoPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,compararIDtElem))
         return 0; //Cero porque es el indicador de iguales o se encontro en una funcion de recorrido
     return 1;
+}
+void devolverPrimerBandido(void *voidCasilla, void *contexto){
+    tCasilla*      casilla        = (tCasilla*)voidCasilla;
+    const tElem**  dirElemDestino = (tElem**)contexto;
+    tElem          elementoClave  = {0,'B',0};
+
+    if(NULL == *dirElemDestino)
+        *dirElemDestino = (tElem*)buscarPorClaveEnLista(casilla,&elementoClave, compararTipotElem);
 }
