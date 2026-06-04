@@ -26,7 +26,6 @@ int vaciarListaC(tListaDE *lista){
     return ++cont;
 }
 
-
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
 
     tNodoDE *nodoActual = *pl;
@@ -40,7 +39,6 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
     }while(nodoActual != *pl);
 }
 
-
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
 
     tNodoDE *nodoActual = *pl;
@@ -53,7 +51,6 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
         nodoActual = nodoActual->proxNodo;
     }while(nodoActual != *pl);
 }
-
 
 tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
 

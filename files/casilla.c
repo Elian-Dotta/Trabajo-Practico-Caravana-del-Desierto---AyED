@@ -59,7 +59,6 @@ int compararTipotElem(const void *voidE1, const void *voidE2){
     return E1->tipo_elem == E2->tipo_elem;
 }
 
-
 int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
 /* Funcion que recibe dirección de una casilla (campo dato de nodoDE) y un la dirección de memoria de un INT que guarda un ID de tElem
    La funcion crea un tElem auxiliar a partir del ID del elemento y la usa para buscar en la lista/casilla, la existencia de un nodo
@@ -68,15 +67,14 @@ int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
    Se diseña para ser usada como una funcion de comparacion para una funcion de recorrido generica
 */
     tElem auxElem = { *((int*)voidIDElemento), '\0', 0 };
-    if(NULL != buscarNodoPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,compararIDtElem))
-        return 0; //Cero porque es el indicador de iguales o se encontro en una funcion de recorrido
-    return 1;
+    return !buscarPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,NULL,compararIDtElem);
 }
+
 void devolverPrimerBandido(void *voidCasilla, void *contexto){
     tCasilla*      casilla        = (tCasilla*)voidCasilla;
-    const tElem**  dirElemDestino = (tElem**)contexto;
+    tElem*         dirElemDestino = (tElem*)contexto;
     tElem          elementoClave  = {0,'B',0};
 
-    if(NULL == *dirElemDestino)
-        *dirElemDestino = (tElem*)buscarPorClaveEnLista(casilla,&elementoClave, compararTipotElem);
+    if(0 == dirElemDestino->id_elem)
+        buscarPorClaveEnLista(casilla,&elementoClave, dirElemDestino, compararTipotElem);
 }

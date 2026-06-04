@@ -63,7 +63,7 @@ int  procesarEntrada(tCola *movimientos, tJugador *jugador)
 int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int posJugador, int cantCasillaTablero, tCola *movimientos)
 {
     tTablero     tableroInicio     = NULL;
-    const tElem *bandidoEncontrado = NULL;
+    tElem        bandidoEncontrado = {0,'\0',0};
     tMovimiento  movimientoBandido;
 
     if(NULL == *tablero)
@@ -72,17 +72,17 @@ int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int pos
     tableroInicio = posicionarTablero(tablero, 0);
     recorrerListaDE(&tableroInicio, devolverPrimerBandido, &bandidoEncontrado);
 
-    if(NULL == bandidoEncontrado)
+    if(0 == bandidoEncontrado.id_elem)
         return 0; //No hay bandidos en el tablero
 
-    movimientoBandido.id    = bandidoEncontrado->id_elem;
+    movimientoBandido.id    = bandidoEncontrado.id_elem;
     movimientoBandido.cant  = tirarDado(1,6); //srand(...) -> semilla debe inicializarse al momento de inicializar el juego...
 
-    if(NULL == buscarPorClaveEnLista(bandidosInteligentes, bandidoEncontrado->id_elem, compararEnteros)){
+    if(0 == buscarPorClaveEnLista(bandidosInteligentes, bandidoEncontrado.id_elem, NULL, compararEnteros)){
         movimientoBandido.dir = tirarDado(0,1)?'F':'B';
     }else{
         int distDer = 0, distIzq = 0;
-        distanciasEntreElementos(bandidoEncontrado->nro_casilla, posJugador, cantCasillaTablero, &distDer, &distIzq);
+        distanciasEntreElementos(bandidoEncontrado.nro_casilla, posJugador, cantCasillaTablero, &distDer, &distIzq);
         distDer = abs(distDer - movimientoBandido.cant);
         distIzq = abs(distIzq - movimientoBandido.cant);
         movimientoBandido.dir = distDer<distIzq?'F':'B';

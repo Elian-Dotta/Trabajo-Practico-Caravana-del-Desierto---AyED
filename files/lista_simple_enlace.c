@@ -20,7 +20,6 @@ int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompara
     return 1;
 }
 
-
 int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*)){
 /*
     Esta es una funcion que recibe una lista, recibe la direccion de memoria de un puntero a nodo de destino y una funcion de comparacion.
@@ -43,7 +42,6 @@ int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, i
 
     return NULL == *destNodo?0:1;
 }
-
 
 int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*)){
 /*
@@ -85,22 +83,15 @@ void mostrarLista(const tLista *lista, Mostrar mostrar){
     }
 }
 
-void* buscarPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, tCompararFn comparar){
     tNodo *aux = *lista;
     while(aux){
-        if(0 == comparar(aux->dato, clave))
-            return aux->dato;
+        if(0 == comparar(aux->dato, clave)){
+            if(destDato)
+                memcpy(destDato, aux->dato, aux->tamDato);
+            return 1;
+        }
         aux = aux->proxNodo;
     }
-    return NULL;
-}
-
-void* buscarNodoPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar){
-      tNodo *auxNodo = *lista;
-      while(auxNodo){
-            if(0  == comparar(auxNodo->dato, clave))
-                return auxNodo;
-        auxNodo = auxNodo->proxNodo;
-      }
-      return NULL;
+    return 0;
 }

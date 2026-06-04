@@ -28,13 +28,11 @@ int insertarAlInicio(tLista *lista, void *d, unsigned tamDato);
 int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato);
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato);
 
-// -----------
 void recorrerLista(tLista *lista, Accion accion, void *contexto);
-void* buscarPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar);
-void* buscarNodoPorClaveEnLista(const tLista *lista, const void* clave, tCompararFn comparar);
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, tCompararFn comparar);
+
 int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*));
 int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*));
 void mostrarLista(const tLista *lista, Mostrar mostrar);
-// -----------
 
 #endif // LISTA_SIMPLE_ENLACE_H
