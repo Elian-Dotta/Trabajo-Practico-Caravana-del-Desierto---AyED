@@ -6,6 +6,8 @@
 
 
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include "lista_simple_enlace.h"
 
 typedef tLista tCasilla; //tcasilla es tNodo*
@@ -29,5 +31,12 @@ int compararIDtElem(const void *voidE1, const void *voidE2);
 int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, int IDElemento);
 void devolverPrimerBandido(void *voidCasilla, void *contexto);
+
+void accionCasillaACadena(void *e1, void *voidBuffer);
+void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);
+void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer);
+void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer);
+void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer);
+void corregirCadenadeMapaConIndice(char *buffer);
 
 #endif // CASILLA_H_

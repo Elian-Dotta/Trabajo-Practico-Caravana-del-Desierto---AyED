@@ -27,4 +27,7 @@ int  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  compararEnteros(const void *a, const void *b);
 tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
+
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice);
+
 #endif // TABLERO_H_

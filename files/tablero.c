@@ -142,3 +142,40 @@ void mostrarTablero(tTablero* tablero){
     tableroInicio = posicionarTablero(tablero, 0);
     mostrarListaDE(&tableroInicio, mostrarCasilla);
 }
+
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
+/*
+    Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
+    para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
+    Tiene los valores de parametros:
+    -> Valores de Orientacion: 0 (Vertical) - 1 (Horizontal)
+    -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
+    El buffer debe ser el adecuado en tam.
+*/
+    if(NULL == *tablero || NULL == buffer)
+        return;
+    if(0 != indice && 1 != indice)
+        return;
+    if(0 != orientacion && 1 != orientacion)
+        return;
+
+    switch(orientacion){
+        case 0: { // Vertical
+            if(!indice){
+                recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalSinIndice);
+                return;
+            }
+            recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalConIndice);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+
+        case 1: { // Horizontal
+            if(!indice){
+                recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalSinIndice);
+                return;
+            }
+            recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalConIndice);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+    }
+}

@@ -78,3 +78,119 @@ void devolverPrimerBandido(void *voidCasilla, void *contexto){
     if(0 == dirElemDestino->id_elem)
         buscarPorClaveEnLista(casilla,&elementoClave, dirElemDestino, compararTipotElem);
 }
+
+//Accion para recorrido de listaSE
+void accionCasillaACadena(void *e1, void *voidBuffer){ //Funcion de accion en recorrido de tLista, e1 es un nodo->dato
+    tElem   *auxElem = (tElem*)e1;
+    char    *buffer  = (char*)voidBuffer;
+    unsigned longCad =  strlen(buffer);
+
+    if(!longCad || '\n' == buffer[longCad - 1] || ' ' == buffer[longCad - 1])
+        sprintf(buffer + longCad,"%c",auxElem->tipo_elem);
+    else
+        sprintf(buffer + longCad," %c",auxElem->tipo_elem);
+}
+
+//Accion para recorrido de ListaDE
+void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer){
+    tCasilla  *auxCasilla = (tCasilla*)e1;
+    char      *buffer     = (char*)voidBuffer;
+    recorrerLista(auxCasilla, accionCasillaACadena, buffer);
+    sprintf(buffer + strlen(buffer),"%c", '\n'); //pone el salto de linea
+}
+
+//Accion para recorrido de ListaDE
+void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer){
+
+    tCasilla  *auxCasilla = (tCasilla*)e1;
+    char      *buffer     = (char*)voidBuffer;
+    unsigned   longCad    =  strlen(buffer);
+    unsigned   indice     = 1;
+
+    if(!longCad) //la cadena no tiene nada inicaliza el indice
+        sprintf(buffer, "%02d. ", 1);
+    else{
+        char *auxIni   = buffer + longCad - 1;
+        int  auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
+
+        while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
+            auxIni--;
+            auxIndice--;
+        }
+
+        auxIni++; //porque al salir del while queda desplazado a una direccion sin digitos o fuera del area de control
+        indice = (unsigned)atoi(auxIni);
+        sprintf(buffer + strlen(buffer),"%s", ". ");
+    }
+
+    recorrerLista(auxCasilla, accionCasillaACadena, buffer);
+    sprintf(buffer + strlen(buffer),"%c", '\n'); //pone el salto de linea
+    sprintf(buffer + strlen(buffer), "%02d",indice + 1);
+        //pone el proximo valor de indice sin el punto para no agregar condiciones de exclusion
+        //cuando se llegue al final de la lista, creara un indicador "n" que no se usa, se debera borrar.
+}
+
+//Accion para recorrido de ListaDE
+void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer){
+
+    tCasilla  *auxCasilla = (tCasilla*)e1;
+    char      *buffer     = (char*)voidBuffer;
+    unsigned   longCadena =  strlen(buffer);
+
+    if(0 == longCadena)
+        sprintf(buffer + strlen(buffer), "%s", "[");
+    else
+        sprintf(buffer + strlen(buffer), "%s", " [");
+
+    recorrerLista(auxCasilla, accionCasillaACadena, buffer);
+    sprintf(buffer + strlen(buffer), "%s", " ]");
+}
+
+//Accion para recorrido de ListaDE
+void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer){
+
+    tCasilla  *auxCasilla = (tCasilla*)e1;
+    char      *buffer     = (char*)voidBuffer;
+    unsigned   longCad    =  strlen(buffer);
+    unsigned   indice     = 1;
+
+    if(!longCad) //la cadena no tiene nada inicaliza el indice
+        sprintf(buffer, "%02d.[ ", 1);
+    else{
+        char *auxIni   = buffer + longCad - 1;
+        int  auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
+
+        while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
+            auxIni--;
+            auxIndice--;
+        }
+
+        auxIni++; //porque al salir del while queda desplazado a una direccion sin digitos o fuera del area de control
+        indice = (unsigned)atoi(auxIni);
+        sprintf(buffer + strlen(buffer),"%s", ".[");
+    }
+
+    recorrerLista(auxCasilla, accionCasillaACadena, buffer);
+    sprintf(buffer + strlen(buffer),"%s", " ]");
+    sprintf(buffer + strlen(buffer), " %02d",indice + 1);
+        //pone el proximo valor de indice sin el punto para no agregar condiciones de exclusion
+        //cuando se llegue al final de la lista, creara un indicador "n" que no se usa, se debera borrar.
+}
+
+void corregirCadenadeMapaConIndice(char *buffer){
+
+    unsigned longCad   = strlen(buffer);
+    char    *auxIni    = buffer + longCad - 1;
+    int      auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
+
+    if(!longCad)
+        return;
+
+    while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
+        auxIni--;
+        auxIndice--;
+    }
+
+    auxIni++; // apunta al inicio del numero sobrante
+    *auxIni = '\0'; // corta la cadena
+}
