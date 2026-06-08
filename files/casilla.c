@@ -136,10 +136,10 @@ void mostrarElemento(const void *elemVoid){ //muestra el struct tElem
     printf(" %c ", elem->tipo_elem);
 }
 
-int cambiarEstado(void **pl, unsigned* tamLista, void* estado, unsigned tamDato)
+int cambiarEstado(void **pl, void* estado)
 {
     static int tieneoasis = 0, tienetormenta = 0;
-    int bandidos = recorrerLista(pl,modEstado,estado);
+    recorrerLista(pl,modEstado,estado);
 
     if ((tieneoasis == 1) && (estado->Oobtenido==0))
     {
@@ -159,9 +159,9 @@ int cambiarEstado(void **pl, unsigned* tamLista, void* estado, unsigned tamDato)
     {
         tienetormenta=1;
     }
-    if (((*estado)->JpierdeVida==1)&&((*estado)->tieneoasis==1))
+    if ((estado->JpierdeVida==1)&&(estado->tieneoasis==1))
     {
-        if (bandidos==1)
+        if (estado->Bandidos==1)
         {
             estado->JpierdeVida=0;
         }
@@ -176,6 +176,7 @@ void modEstado(tEstado* estado, const tElem* casilla)
     {
         estado->JpierdeVida=1;
         estado->IDBandDesaparecido=(casilla)->id_elem;
+        estado->Bandidos++;
     }
     if (casilla->tipo_elem==OASIS)
     {

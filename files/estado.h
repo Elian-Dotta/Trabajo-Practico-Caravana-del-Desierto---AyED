@@ -4,11 +4,10 @@
 typedef struct
 {
     int Oobtenido,
-        //Oactivo,
         Operdido,
-        //Tobtenida,
         Tactiva,
         Tfinalizada,
+        Bandidos,
         IDBandDesaparecido,
         JganaPuntos,
         JganaVida,

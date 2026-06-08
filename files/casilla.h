@@ -33,7 +33,7 @@ void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);
 
 
-int cambiarEstado(void **pl, unsigned *tamLista, void* estado, unsigned tamDato);
-void modEstado(tEstado* estado, const tElem* casilla);
+int cambiarEstado(void **pl, void* estado);
+void modEstado(void* estado, void* casilla);
 
 #endif // CASILLA_H_
