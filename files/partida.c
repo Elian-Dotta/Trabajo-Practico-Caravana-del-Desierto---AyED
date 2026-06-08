@@ -135,4 +135,3 @@ int  inicializarEstado(tEstado *est, int cantBandidos)
 {
 
 }
->>>>>>> Stashed changes

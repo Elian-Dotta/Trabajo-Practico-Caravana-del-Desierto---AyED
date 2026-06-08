@@ -34,7 +34,7 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
 int  listaVaciaDE(tListaDE *lista);
-int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, tEstado* estado);
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* estado);
 
 // ESTA FUNCION PODRIA DEVOLVER LA POSICION PERO DENUEVO, ES CIRCULAR Y DE ASI QUE QUEDA APUNTANDO AL ULTIMO ELEMENTO PROCESADO
 // A LO MEJOR PODEMOS ACTUALIZAR UNA POSICION DEL TABLERO POR ID DE ELEMENTO, ESO ES UNA BUSQUEDA Y UNA ACTUALIZACION EN LA MISMA PRIMITIVA
