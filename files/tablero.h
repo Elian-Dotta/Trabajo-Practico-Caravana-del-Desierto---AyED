@@ -28,7 +28,7 @@ int  generarTablero(tTablero* tablero, int *contElem, int cantPos);
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config);
 int  moverElementoPorId(tTablero* tablero, int id, int mov);
 int  generarMovBandido(tTablero* tablero, tCola *mov);
-void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes);
+void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
 
 
 void mostrarTablero(tTablero* tablero); // muestra la lista
@@ -38,6 +38,5 @@ int  cmpElem (const void* a, const void* b);
 
 void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
 int borrarMapa(tListaDE *lista);
->>>>>>> Stashed changes
 
 #endif // TABLERO_H_

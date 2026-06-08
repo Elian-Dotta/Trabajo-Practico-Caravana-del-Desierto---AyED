@@ -34,5 +34,6 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 void mapLista(const tLista *lista, void (*accion)(const void *));
 
 void mostrarLista(const tLista *lista, Mostrar mostrar);
+int recorrerLista(void **pl, Accion modEstado,void* estado);
 
 #endif // LISTA_SIMPLE_ENLACE_H

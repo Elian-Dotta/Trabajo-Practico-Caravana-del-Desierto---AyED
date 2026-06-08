@@ -17,7 +17,6 @@ typedef struct
     int  nro_casilla;
 }tElem; // Se pasa aca la definicion para corregir la inclusion circular.
 
-typedef void (*ModificarEstado) (tEstado*,const tElem*);
 
 /* // LA CASILLA NO DEBE CONOCER EL TABLERO
 int crearCasillas(tListaDE *lista, unsigned cantCasillas);
@@ -32,9 +31,9 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato, 
 
 void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);
-int recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado);
 
-void cambiarEstado(void **pl, tEstado* estado);
+
+int cambiarEstado(void **pl, unsigned *tamLista, void* estado, unsigned tamDato);
 void modEstado(tEstado* estado, const tElem* casilla);
 
 #endif // CASILLA_H_

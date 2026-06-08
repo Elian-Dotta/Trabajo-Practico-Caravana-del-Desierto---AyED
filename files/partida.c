@@ -27,9 +27,8 @@ int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN D
 
 int  renderizarPartida(); // DIBUJA EL TABLERO
 
-<<<<<<< Updated upstream
 int  finalizarPartida(); // GUARDA EL RANKING
-=======
+
         calcularMovBandido(&tablero, &movimientos); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
         dibujarAnimacionMov(&tablero, &jugador, &movimientos, &estado); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO

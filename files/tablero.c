@@ -113,12 +113,11 @@ int  generarMovBandido(tTablero* tablero, tCola *mov)
     return 0;
 }
 
-void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
+void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado)
 {
     tElem jugador;
     jugador.id_elem=1;
     buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem),cmpElem,cambiarEstado,estado);
-    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 }
 
 int  cmpInt(const void *a, const void *b)

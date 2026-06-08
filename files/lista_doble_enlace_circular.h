@@ -23,7 +23,7 @@ typedef tNodoDE* tListaDE;
 typedef int  (*Acumular)(void **, unsigned *, void *, unsigned);
 typedef void (*Mostrar)(const void *);
 typedef int  (*Cmp)(const void *, const void *);
-typedef void (*Accion)(tNodoDE **, tEstado*);
+typedef void (*Accion)(void *, void*);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
 int  actualizarPosLista(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum); // ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO

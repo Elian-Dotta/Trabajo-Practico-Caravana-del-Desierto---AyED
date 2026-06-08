@@ -37,3 +37,20 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
     return 0;
 
 }
+
+int recorrerLista(void **pl, Accion modEstado,void* estado)
+{
+    tLista* puntero = pl;
+    int cantbandidos=0;
+    while (puntero!=NULL)
+    {
+        modEstado(estado,puntero);
+        if (estado->JpierdeVida==1)
+        {
+            cantbandidos++;
+        }
+        puntero=&(*puntero)->proxNodo;
+    }
+    return cantbandidos;
+
+}
