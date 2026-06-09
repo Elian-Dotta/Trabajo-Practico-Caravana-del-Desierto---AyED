@@ -8,6 +8,7 @@ typedef struct
         Tactiva,
         Tfinalizada,
         Bandidos,
+        Bandidoataca,
         IDBandDesaparecido,
         JganaPuntos,
         JganaVida,

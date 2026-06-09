@@ -141,15 +141,6 @@ int cambiarEstado(void **pl, void* estado)
     static int tieneoasis = 0, tienetormenta = 0;
     recorrerLista(pl,modEstado,estado);
 
-    if ((tieneoasis == 1) && (estado->Oobtenido==0))
-    {
-        tieneoasis = 0;
-        estado->Operdido = 1;
-    }
-    else if (estado->Oobtenido==1)
-    {
-        tieneoasis=1;
-    }
     if ((tienetormenta=1) && (estado->Tactiva==0))
     {
         tienetormenta=0;
@@ -159,12 +150,24 @@ int cambiarEstado(void **pl, void* estado)
     {
         tienetormenta=1;
     }
-    if ((estado->JpierdeVida==1)&&(estado->tieneoasis==1))
+    if ((estado->JpierdeVida==1)&&(tieneoasis==1))
     {
         if (estado->Bandidos==1)
         {
             estado->JpierdeVida=0;
+
         }
+        tieneoasis=0;
+        estado->Operdido=1;
+    }
+    if ((tieneoasis == 1) && (estado->Oobtenido==0))
+    {
+        tieneoasis = 0;
+        estado->Operdido = 1;
+    }
+    if (estado->Oobtenido==1)
+    {
+        tieneoasis=1;
     }
 }
 
@@ -177,6 +180,7 @@ void modEstado(tEstado* estado, const tElem* casilla)
         estado->JpierdeVida=1;
         estado->IDBandDesaparecido=(casilla)->id_elem;
         estado->Bandidos++;
+        estado->Bandidoataca=1;
     }
     if (casilla->tipo_elem==OASIS)
     {
