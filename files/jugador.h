@@ -13,6 +13,12 @@ typedef struct sJugador
     tCola    hisMovJugador;
 }tJugador;
 
+typedef struct
+{
+    char nombre[31];
+    char nickname[11];
+} regJugador;
+
 void inicializarJugador(tJugador* j, unsigned vida);
 void aumentarVida(tJugador* j);
 void disminuirVida(tJugador* j);
