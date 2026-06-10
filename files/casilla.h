@@ -16,6 +16,8 @@
 #define OASIS 'O'
 #define VIDAEXTRA 'V'
 
+#define JUGADORID 1
+
 typedef tLista tCasilla;
 
 typedef struct
@@ -36,9 +38,16 @@ int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla
 */
 
 tCasilla crearCasilla();
+
+// FUNCIONES DE INSERCION EN CASILLA
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI AÑADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+
+// FUNCIONES DE MOFICACION DE ELEMENTOS EN CASILLA
+int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
 void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);
@@ -46,7 +55,9 @@ void asignarNroCasilla(void *a, void *contexto);
 void asignarNroCasElem(void *a, void *contexto);
 
 int  cmpRestriccionCasilla(const void *a, const void *b);
-int  cmpElem(const void *a, const void *b);
+int  cmpIdElem(const void *a, const void *b);
+int  cmpTipoElem(const void *a, const void *b);
+
 
 void mostrarCasilla(void *pl);
 void mostrarElemento(const void *elemVoid);

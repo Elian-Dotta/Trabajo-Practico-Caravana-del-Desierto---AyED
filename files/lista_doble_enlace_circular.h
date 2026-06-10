@@ -32,7 +32,8 @@ typedef int  (*Cmp)(const void *, const void *);
 //typedef void (*Accion)(tNodoDE **, tEstado*);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
-int  actualizarPosLista(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum); // ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO
+// int  actualizarPosListaDE(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum);
+// ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO
 // PERO NO FUNCIONA ASI, LA PLANTIE ANTES DE SABER COMO FUNCIONABA LA DE. MEJOR UTILIZAR ACTUALIZAR POR ID Y POR POS RELATIVA
 // COMO REEMPLAZO SE PUEDE JUSTO LUEGO DE AÑADIR UNA CASILLA A LA LISTA UTILIZAR ACTUALIZAR POR POS RELATIVA
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
@@ -41,7 +42,8 @@ void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
 int  listaVaciaDE(tListaDE *lista);
 
-int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, tEstado* estado);
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp);
+//int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto);
 
 
 // ESTA FUNCION PODRIA DEVOLVER LA POSICION PERO DENUEVO, ES CIRCULAR Y DE ASI QUE QUEDA APUNTANDO AL ULTIMO ELEMENTO PROCESADO

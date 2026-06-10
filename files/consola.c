@@ -1,7 +1,7 @@
 #include "consola.h"
 
 
-void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado)
+void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log)
 {
     mostrarTitulo();
 
@@ -15,7 +15,7 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado)
 
     mostrarSeparador();
 
-    mostrarLog();
+    mostrarLog(log);
 }
 
 void mostrarTitulo()

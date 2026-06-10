@@ -10,7 +10,7 @@ int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligente
 
     generarTablero(tablero, &idElem, config.cant_pos);
 
-    distribuirElementos(tablero, &idElem, config);
+    distribuirElementos(tablero, &idElem, config, bandidosInteligentes);
 }
 
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
@@ -47,7 +47,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
     }
 }
 
-int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLista bandidosInteligentes)
+int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tLista *bandidosInteligentes)
 {
     int elemFaltantes[] = { config.max_band,
                               config.max_prem,
@@ -78,7 +78,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLis
         indiceElem = rand() % 5;
         if(elemFaltantes[indiceElem])
         {
-            elem.id_elem = *idElem;
+            elem.id_elem = *contElem;
             elem.tipo_elem = elemTipo[indiceElem];
             if(actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), posInsercion, insertarSinDupCasilla)) // SI SE PUDO INSERTAR, ACTUALIZAMOS LOS INDICADORES DE FALTANTE
             {
@@ -87,14 +87,14 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, *tLis
                     insertarAlFinalLista(bandidosInteligentes, &elem.id_elem, sizeof(int));
 
                 elemFaltantes[indiceElem]--; // RESTAMOS UN ELEMENTO FALTANTE
-                (*idElem)++;                 // AVANZAMOS EL INDICE DE LOS ELEMENTOS
+                (*contElem)++;                 // AVANZAMOS EL INDICE DE LOS ELEMENTOS
                 elemInsertados++;            // SUMAMOS UN ELEMENTO INSERTADO
             }
         }
     }
 
     elem.tipo_elem = INICIO;
-    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpElem);
+    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpTipoElem);
     recorrerListaDE(tablero, asignarNroCasilla, &nroCasilla);
 
     return 1;
@@ -140,11 +140,49 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DE
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpIdElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;
+}
+
+void posicionarTablero(tTablero* tablero, int idElem)
+{
+    tElem elem;
+    elem.id_elem = idElem;
+
+    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpIdElem);
+}
+
+int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, char elemNue, int id)
+{
+    tElem ctxElem[2];
+    ctxElem[0].id_elem = id;
+    ctxElem[0].tipo_elem = elemNue;
+    ctxElem[1].tipo_elem = elemRef;
+
+    if(direccion == IZQ)
+        actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarIzqDeElemento);
+    else
+        actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarDerDeElemento);
+
+}
+
+int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
+{
+    tElem ctxElem[2];
+    ctxElem[0].tipo_elem = elemNue;
+    ctxElem[1].tipo_elem = elemRef;
+
+    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
+}
+
+int  eliminarElemento(tTablero *tablero, char elemAct)
+{
+    tElem elim;
+    elim.tipo_elem = elemAct;
+    actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasilla);
 }
 
 int  generarMovBandido(tTablero* tablero, tCola *mov)

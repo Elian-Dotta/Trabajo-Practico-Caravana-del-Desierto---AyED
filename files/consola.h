@@ -4,8 +4,9 @@
 #include "tablero.h"
 #include "estado.h"
 #include "jugador.h"
+#include "log.h"
 
-void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado);
+void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log);
 
 void mostrarTitulo();
 void mostrarSeparador();
