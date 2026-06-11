@@ -94,7 +94,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
     }
 
     elem.tipo_elem = INICIO;
-    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpTipoElem);
+    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpCasTipoElem);
     recorrerListaDE(tablero, asignarNroCasilla, &nroCasilla);
 
     return 1;
@@ -140,7 +140,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DE
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpIdElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
@@ -151,7 +151,7 @@ int  obtenerIdElementoPorTipo(tTablero* tablero, char tipoElem)
 {
     tElem elem;
     elem.tipo_elem = tipoElem;
-    if(buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpTipoElem))
+    if(buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpCasTipoElem))
         return elem.id_elem;
     else
         return -1;
@@ -162,7 +162,7 @@ void posicionarTablero(tTablero* tablero, int idElem)
     tElem elem;
     elem.id_elem = idElem;
 
-    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpIdElem);
+    buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpCasIdElem);
 }
 
 int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, char elemNue)

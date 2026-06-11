@@ -55,6 +55,8 @@ void asignarNroCasilla(void *a, void *contexto);
 void asignarNroCasElem(void *a, void *contexto);
 
 int  cmpRestriccionCasilla(const void *a, const void *b);
+int  cmpCasIdElem(const void *a, const void *b)
+int  cmpCasTipoElem(const void *a, const void *b);
 int  cmpIdElem(const void *a, const void *b);
 int  cmpTipoElem(const void *a, const void *b);
 

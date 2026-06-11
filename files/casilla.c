@@ -209,16 +209,41 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     return -1;
 }
 
+int  cmpCasIdElem(const void *a, const void *b)
+{
+    tCasilla *cas = (tCasilla*)a;
+    tElem *elem = (tElem*)b;
+
+    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpIdElem);
+
+    return ret;
+}
+
+int  cmpCasTipoElem(const void *a, const void *b)
+{
+    tCasilla *cas = (tCasilla*)a;
+    tElem *elem = (tElem*)b;
+
+    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpTipoElem);
+
+    return ret;
+}
+
 int  cmpIdElem(const void *a, const void *b)
 {
+    tElem *e1 = (tElem*)a;
+    tElem *e2 = (tElem*)b;
 
+    return e1->id_elem - e2->id_elem;
 }
 
 int  cmpTipoElem(const void *a, const void *b)
 {
+    tElem *e1 = (tElem*)a;
+    tElem *e2 = (tElem*)b;
 
+    return e1->tipo_elem == e2->tipo_elem;
 }
-
 
 void asignarNroCasilla(void *a, void *contexto)
 {

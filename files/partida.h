@@ -58,6 +58,4 @@ int  dibujarAnimacionEstado(tPartida *partida);
 
 int  finalizarPartida(tPartida *partida); // GUARDA EL RANKING ->
 
-int  inicializarEstado(tEstado *est, int cantBandidos);
-
 #endif // PARTIDA_H_
