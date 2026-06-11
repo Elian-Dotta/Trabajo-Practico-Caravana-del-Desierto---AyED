@@ -18,4 +18,7 @@ int  sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes);
 int  mostrarLista(const tLista *p, void (*mostrar)(const void *, FILE *), FILE *fp);
 int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
+void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void *contexto);
+int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
+
 #endif // LISTA_SIMPLE_ENLACE_H

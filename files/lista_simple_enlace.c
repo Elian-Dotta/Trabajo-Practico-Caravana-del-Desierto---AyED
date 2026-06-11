@@ -105,3 +105,31 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
     return 0;
 
 }
+
+
+void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void *contexto)
+{
+    tNodo *aux = *lista;
+
+    while(aux)
+    {
+        accion(aux->info, aux->tamInfo, contexto);
+        aux = aux->sig;
+    }
+}
+
+
+int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
+{
+    tNodo *aux = *lista;
+
+    while(pos > 0 && aux)
+    {
+        aux = aux->sig;
+        pos--;
+    }
+    if(aux == NULL)
+        return 0;
+    memcpy(dest, aux->info, minimo(tam, aux->tamInfo));
+    return 1;
+}
