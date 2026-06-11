@@ -80,6 +80,15 @@ int  dibujarAnimacionMov(tPartida *p)
     tMovimiento movActual;
     int movRelativo;
 
+    int idEscudoIzq,
+        idEscudoDer;
+
+    if(p->estado.Oactivo)
+    {
+        idEscudoIzq = obtenerIdElementoPorTipo(&p->tablero, ESCUDOIZQ);
+        idEscudoDer = obtenerIdElementoPorTipo(&p->tablero, ESCUDODER);
+    }
+
     // PENSE EN DIBUJAR UNA SECUENCIA ENTERA DE PASOS, OSEA CUANDO TODOS ELEMENTOS DEN UN PASO, DIBUJAR, PERO AHORA PENSE QUE ESTARIA BUENO DIBUJAR CADA PASO INDIVIDUALMENTE
 
     while(!colaVacia(&p->movimientos))
@@ -89,7 +98,18 @@ int  dibujarAnimacionMov(tPartida *p)
         // movRelativo = mov.dir == 'F'? 1 : -1; // ESTA FORMA UTILIZA EL CAMPO DE LA ESTRUCTURA Y DEJA EL CODIGO MEDIO CRIPTICO AL USAR EL OPERADOR TERNARIO
         movRelativo = PASO * calcularDireccion(movActual.dir); // DEVUELVE 1 O -1 PARA MULTIPLICAR EL NUMERO DE CASILLAS POR LA DIRECCION
 
-        moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+        if(movActual.id == JUGADORID && p->estado.Oactivo &&
+           idEscudoIzq != -1 && idEscudoDer != -1)
+        {
+            moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo);
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+            moverElementoPorId(&p->tablero, idEscudoDer, movRelativo);
+        }
+        else
+        {
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+        }
+
         movActual.cant-= PASO;
 
         if(movActual.cant > 0)
@@ -110,6 +130,10 @@ int  actualizarEstado(tPartida *p)
 
 int  dibujarAnimacionEstado(tPartida *p)
 {
+    int mov;
+
+    int idFlechaIzq,
+        idFlechaDer;
     if(p->estado.JganaPuntos)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio);
@@ -134,6 +158,8 @@ int  dibujarAnimacionEstado(tPartida *p)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorActiva);
         escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
+        idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
+        idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
     }
 
     if(p->estado.Tfinalizada)
@@ -156,7 +182,13 @@ int  dibujarAnimacionEstado(tPartida *p)
 
     if(p->estado.JpierdeVida)
     {
-        moverElementoPorId(t, JUGADORID, (j->posJug - 1) * - 1);
+        mov = (j->posJug - 1) * - 1;
+        moverElementoPorId(&p->tablero, JUGADORID, mov);
+        if(p->estado.Tactiva)
+        {
+            moverElementoPorId(&p->tablero, idFlechaIzq, mov);
+            moverElementoPorId(&p->tablero, idFlechaDer, mov);
+        }
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado);
         disminuirVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_JUGADORDANIADO);

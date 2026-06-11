@@ -147,6 +147,16 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DE
     return 1;
 }
 
+int  obtenerIdElementoPorTipo(tTablero* tablero, char tipoElem)
+{
+    tElem elem;
+    elem.tipo_elem = tipoElem;
+    if(buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpTipoElem))
+        return elem.id_elem;
+    else
+        return -1;
+}
+
 void posicionarTablero(tTablero* tablero, int idElem)
 {
     tElem elem;
@@ -155,8 +165,9 @@ void posicionarTablero(tTablero* tablero, int idElem)
     buscarPorClaveListaDE(tablero, &elem, sizeof(tElem), cmpIdElem);
 }
 
-int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, char elemNue, int id)
+int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, char elemNue)
 {
+    static int id = 1000; // IDs RESERVADOS PARA EFECTOS TEMPORALES
     tElem ctxElem[2];
     ctxElem[0].id_elem = id;
     ctxElem[0].tipo_elem = elemNue;
@@ -166,7 +177,7 @@ int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, ch
         actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarIzqDeElemento);
     else
         actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarDerDeElemento);
-
+    id++;
 }
 
 int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)

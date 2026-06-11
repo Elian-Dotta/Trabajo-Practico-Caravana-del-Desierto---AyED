@@ -23,6 +23,7 @@ int  generarTablero(tTablero* tablero, int *contElem, int cantPos);
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tLista *bandidosInteligentes);
 
 int  moverElementoPorId(tTablero* tablero, int id, int mov);
+int  obtenerIdElementoPorTipo(tTablero* tablero, char tipoElem);
 int  generarMovBandido(tTablero* tablero, tCola *mov);
 
 void posicionarTablero(tTablero* tablero, int idElem);
