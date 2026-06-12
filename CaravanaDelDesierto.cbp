@@ -55,6 +55,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/consola.h" />
+		<Unit filename="files/estado.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="files/estado.h" />
 		<Unit filename="files/jugador.c">
 			<Option compilerVar="CC" />

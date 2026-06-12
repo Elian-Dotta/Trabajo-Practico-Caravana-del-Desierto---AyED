@@ -245,6 +245,22 @@ int  cmpTipoElem(const void *a, const void *b)
     return e1->tipo_elem == e2->tipo_elem;
 }
 
+int  cmpCasTipos(const void *a, const void *b)
+{
+    tCasilla* cas = (tCasilla*)a;
+    char* tipos = (char*)b;
+    tElem elem;
+    int tiene1,
+        tiene2;
+
+    elem.tipo_elem = tipos[0];
+    tiene1 = buscarPorClaveLista(cas, &elem, sizeof(tElem), cmpTipoElem);
+    elem.tipo_elem = tipos[1];
+    tiene2 = buscarPorClaveLista(cas, &elem, sizeof(tElem), cmpTipoElem);
+
+    return tiene1 && tiene2;
+}
+
 void asignarNroCasilla(void *a, void *contexto)
 {
     tCasilla *casilla = (tCasilla*)a;

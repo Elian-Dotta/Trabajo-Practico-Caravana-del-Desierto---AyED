@@ -11,7 +11,8 @@ typedef struct
 
 int tirarDado(); // Lucas
 
-int calcularDireccion(char dir);
+int  calcularDireccion(char dir);
+void cambiarDireccion(tMovimiento *mov);
 
 //int calcularMovBandido()
 

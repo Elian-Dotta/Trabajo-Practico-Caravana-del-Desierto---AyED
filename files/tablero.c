@@ -203,6 +203,15 @@ int  generarMovBandido(tTablero* tablero, tCola *mov)
     return 0;
 }
 
+int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
+{
+    char tipos[2];
+    tipos[0] = tipo1;
+    tipos[1] = tipo2;
+
+    return buscarPorClaveListaDE(tablero, tipos, sizeof(tipos), cmpCasTipos);
+}
+
 void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
 {
     tElem jugador;

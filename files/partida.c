@@ -113,7 +113,15 @@ int  dibujarAnimacionMov(tPartida *p)
         movActual.cant-= PASO;
 
         if(movActual.cant > 0)
+        {
+            if(movActual.id == JUGADORID && (elementosJuntos(&p->tablero, JUGADOR, INICIO) ||
+                                             elementosJuntos(&p->tablero, JUGADOR, SALIDA)))
+            {
+                cambiarDireccion(&movActual);
+            }
             ponerEnCola(&p->movimientos, &movActual, sizeof(movActual));
+        }
+
 
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
     }
@@ -211,7 +219,3 @@ int  dibujarAnimacionEstado(tPartida *p)
 
 int  finalizarPartida(tPartida *p);
 
-int  inicializarEstado(tEstado *est, int cantBandidos)
-{
-
-}

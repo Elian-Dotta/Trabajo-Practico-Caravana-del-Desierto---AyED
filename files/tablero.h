@@ -34,6 +34,7 @@ int  eliminarElemento(tTablero *tablero, char elemAct);
 
 void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, tLista *bandinteligentes);
 
+int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2);
 
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);

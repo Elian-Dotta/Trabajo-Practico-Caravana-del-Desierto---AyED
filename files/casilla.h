@@ -59,6 +59,7 @@ int  cmpCasIdElem(const void *a, const void *b)
 int  cmpCasTipoElem(const void *a, const void *b);
 int  cmpIdElem(const void *a, const void *b);
 int  cmpTipoElem(const void *a, const void *b);
+int  cmpCasTipos(const void *a, const void *b);
 
 
 void mostrarCasilla(void *pl);
