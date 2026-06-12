@@ -62,8 +62,6 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
 
 }
 
-
-
 int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto)
 {
     tListaDE *act = lista,

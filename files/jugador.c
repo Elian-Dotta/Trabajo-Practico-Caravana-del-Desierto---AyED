@@ -1,7 +1,6 @@
 #include "jugador.h"
 
 
-
 void inicializarJugador(tJugador* j, unsigned vida)
 {
     j->vida = vida;

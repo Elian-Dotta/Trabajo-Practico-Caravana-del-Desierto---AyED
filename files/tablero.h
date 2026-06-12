@@ -7,7 +7,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "casilla.h"
+#include "estado.h"
 #include "config.h"
 #include "lista_doble_enlace_circular.h"
 #include "lista_simple_enlace.h"
@@ -16,11 +18,21 @@
 #define MSJ_LISTA_MAPA_VACIO "EL TABLERO NO FUE GENERADO"
 #define TAM_BUFFER 30
 
+int  crearTablero(tLista* tablero, tConfig config);
+int  distruibuirElementos(tLista* tablero, tConfig config); // Puede no ser necesaria
+
+
+int  agregarElemento();
+
+
 typedef tListaDE tTablero;
 
 int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligentes);
 int  generarTablero(tTablero* tablero, int *contElem, int cantPos);
+
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tLista *bandidosInteligentes);
+
+
 
 int  moverElementoPorId(tTablero* tablero, int id, int mov);
 int  obtenerIdElementoPorTipo(tTablero* tablero, char tipoElem);
@@ -32,12 +44,16 @@ int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, ch
 int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue);
 int  eliminarElemento(tTablero *tablero, char elemAct);
 
+//void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado);
 void actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, tLista *bandinteligentes);
 
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2);
 
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);
+
+void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
+int borrarMapa(tListaDE *lista);
 
 
 #endif // TABLERO_H_

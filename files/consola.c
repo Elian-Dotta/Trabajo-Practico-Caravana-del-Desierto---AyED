@@ -29,9 +29,21 @@ void mostrarSeparador()
     printf("\n-------------------------------------------\n");
 }
 
-void mostrarHud(tJugador* jugador, tEstado *estado)
+
+void mostrarHUD(tJugador* jugador, tEstado* estado)
 {
-
+    //vidas, puntaje, cant mov, oasis si/no
+    printf("Vidas: %d\t",jugador->vida);
+    printf("\tPuntaje: %d\n",jugador->puntaje);
+    printf("Cantidad de movimientos: %d/n",jugador->cantMov);
+    printf("Protección de oasis: ");
+    if(estado->Oobtenido==1)
+    {
+        printf("SI\n");
+    }
+    else
+    {
+        printf("NO\n");
+    }
 }
-
 

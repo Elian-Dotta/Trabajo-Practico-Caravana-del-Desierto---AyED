@@ -136,6 +136,7 @@ int  actualizarEstado(tPartida *p)
 
 
 
+
 int  dibujarAnimacionEstado(tPartida *p)
 {
     int mov;
@@ -218,4 +219,5 @@ int  dibujarAnimacionEstado(tPartida *p)
 }
 
 int  finalizarPartida(tPartida *p);
+
 

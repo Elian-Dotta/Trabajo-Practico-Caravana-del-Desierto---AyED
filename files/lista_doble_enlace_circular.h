@@ -27,7 +27,11 @@ typedef void (*Mostrar)(const void *);
 
 typedef void (*Accion)(void *, void *);
 typedef int  (*Cmp)(const void *, const void *);
+<<<<<<< HEAD
 //typedef void (*Accion)(tNodoDE **, tEstado*);
+=======
+typedef void (*Accion)(void *, void*);
+>>>>>>> origin/manuel
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
 // int  actualizarPosListaDE(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum);
@@ -38,10 +42,14 @@ int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
 void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
 int  listaVaciaDE(tListaDE *lista);
+<<<<<<< HEAD
 
 int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp);
 //int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto);
 
+=======
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* estado);
+>>>>>>> origin/manuel
 
 // ESTA FUNCION PODRIA DEVOLVER LA POSICION PERO DENUEVO, ES CIRCULAR Y DE ASI QUE QUEDA APUNTANDO AL ULTIMO ELEMENTO PROCESADO
 // A LO MEJOR PODEMOS ACTUALIZAR UNA POSICION DEL TABLERO POR ID DE ELEMENTO, ESO ES UNA BUSQUEDA Y UNA ACTUALIZACION EN LA MISMA PRIMITIVA

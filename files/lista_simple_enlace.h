@@ -36,5 +36,6 @@ void recorrerLista(tLista *lista, Accion accion, void *contexto);
 int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*));
 int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*));
 void mostrarLista(const tLista *lista, Mostrar mostrar);
+void recorrerLista(void **pl, Accion accion,void* estado);
 
 #endif // LISTA_SIMPLE_ENLACE_H

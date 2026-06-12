@@ -198,59 +198,70 @@ void mostrarElemento(const void *elemVoid){
 }
 
 
-
-void cambiarEstado(void **pl, tEstado* estado)
+int cambiarEstado(void **pl, void* estado)
 {
     static int tieneoasis = 0, tienetormenta = 0;
     recorrerLista(pl,modEstado,estado);
 
-    if ((tieneoasis == 1) && (estado->Oobtenido==0))
-    {
-        tieneoasis = 0;
-        estado->Operdido = 1;
-    }
     if ((tienetormenta=1) && (estado->Tactiva==0))
     {
         tienetormenta=0;
         estado->Tfinalizada=1;
     }
-
-}
-
-void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
-{
-    tLista* puntero = pl;
-    while (puntero!=NULL)
+    else if (estado->Tactiva==1)
     {
-        modEstado(estado,puntero);
-        puntero=&(*puntero)->proxNodo;
+        tienetormenta=1;
+    }
+    if ((estado->JpierdeVida==1)&&(tieneoasis==1))
+    {
+        if (estado->Bandidos==1)
+        {
+            estado->JpierdeVida=0;
+
+        }
+        tieneoasis=0;
+        estado->Operdido=1;
+    }
+    if ((tieneoasis == 1) && (estado->Oobtenido==0))
+    {
+        tieneoasis = 0;
+        estado->Operdido = 1;
+    }
+    if (estado->Oobtenido==1)
+    {
+        tieneoasis=1;
     }
 }
+
+
 
 void modEstado(tEstado* estado, const tElem* casilla)
 {
-    if (strcmp(&(casilla)->tipo_elem,"B")==0) // if(elem->tipo_elem == BANDIDO)
+
+    if (casilla->tipo_elem == BANDIDO)
     {
-        estado->JpierdeVida=1;
+        estado->JpierdeVida = 1;
         estado->IDBandDesaparecido=(casilla)->id_elem;
+        estado->Bandidos++;
+        estado->BandAtaca = 1;
     }
-    if (strcmp(&(casilla)->tipo_elem,"O")==0)
+    if (casilla->tipo_elem == OASIS)
     {
         estado->Oobtenido=1;
     }
-    if (strcmp(&(casilla)->tipo_elem,"P")==0)
+    if (casilla->tipo_elem == PREMIO)
     {
         estado->JganaPuntos=1;
     }
-    if (strcmp(&(casilla)->tipo_elem,"V")==0)
+    if (casilla->tipo_elem == VIDAEXTRA)
     {
         estado->JganaVida=1;
     }
-    if (strcmp(&(casilla)->tipo_elem,"T")==0)
+    if (casilla->tipo_elem == TORMENTA)
     {
         estado->Tactiva=1;
     }
-    if (strcmp(&(casilla)->tipo_elem,"S")==0)
+    if (casilla->tipo_elem == SALIDA)
     {
         estado->Jgana=1;
     }

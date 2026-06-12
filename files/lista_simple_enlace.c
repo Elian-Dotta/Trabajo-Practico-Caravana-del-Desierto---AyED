@@ -116,3 +116,15 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 
 }
 
+
+void recorrerLista(void **pl, Accion accion,void* contexto)
+{
+    tLista* puntero = pl;
+    while (puntero!=NULL)
+    {
+        accion(contexto,puntero);
+        puntero=&(*puntero)->proxNodo;
+    }
+    return;
+
+}
