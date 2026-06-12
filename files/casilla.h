@@ -41,6 +41,7 @@ tCasilla crearCasilla();
 
 // FUNCIONES DE INSERCION EN CASILLA
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI AÑADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
@@ -49,7 +50,7 @@ int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
-void mostrarCasilla(void *pl);
+void mostrarCasilla(const void *pl);
 void mostrarElemento(const void *elemVoid);
 void asignarNroCasilla(void *a, void *contexto);
 void asignarNroCasElem(void *a, void *contexto);
@@ -68,5 +69,7 @@ void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado);
 
 void cambiarEstado(void **pl, tEstado* estado);
 void modEstado(tEstado* estado, const tElem* casilla);
+
+void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
 
 #endif // CASILLA_H_

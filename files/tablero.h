@@ -13,7 +13,7 @@
 #include "lista_simple_enlace.h"
 #include "cola.h"
 
-#define MSJ_LISTA_MAPA_VACIO "EL MAPA NO FUE GENERADO"
+#define MSJ_LISTA_MAPA_VACIO "EL TABLERO NO FUE GENERADO"
 #define TAM_BUFFER 30
 
 typedef tListaDE tTablero;
@@ -39,9 +39,5 @@ int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2);
 void mostrarTablero(tTablero* tablero); // muestra la lista
 int  cmpInt(const void *a, const void *b);
 
-// Definidas:
-
-void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
-int borrarMapa(tListaDE *lista);
 
 #endif // TABLERO_H_

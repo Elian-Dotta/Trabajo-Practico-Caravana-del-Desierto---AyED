@@ -21,8 +21,6 @@ typedef tNodoDE* tListaDE;
 // TABLERO DEBE LLAMAR A FUNCIONES DE CASILLA POR MEDIO DE LISTADE, CASILLA VAN A SER FUNCIONES PARA MANEJAR LA CASILLA
 // Y CASILLA VA A LLAMAR A FUNCIONES DE LISTASE
 
-
-
 typedef int  (*Acumular)(void **, unsigned *, void *, unsigned);
 typedef void (*Mostrar)(const void *);
 
@@ -36,7 +34,6 @@ int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
 // ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO
 // PERO NO FUNCIONA ASI, LA PLANTIE ANTES DE SABER COMO FUNCIONABA LA DE. MEJOR UTILIZAR ACTUALIZAR POR ID Y POR POS RELATIVA
 // COMO REEMPLAZO SE PUEDE JUSTO LUEGO DE AÑADIR UNA CASILLA A LA LISTA UTILIZAR ACTUALIZAR POR POS RELATIVA
-void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 
 void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
@@ -53,6 +50,7 @@ int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp 
 int  actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum);                  // PARA ACTUALIZAR POR ID
 int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int pos, Acumular acum);  // PARA ACTUALIZAR RELATIVO A LA ULTIMA POSICION DE PUNTERO
 
+void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto);
 
 // PARA CHECKEAR POR EL INICIO Y EL FIN SE PUEDE BUSCAR POR ID Y DEVOLVER LA POSICION O DEJAR APUNTADO AL ULTIMO ELEMENTO

@@ -18,7 +18,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
     tElem elem;
     int contCas = 0;
 
-    while(contCas < cantPos)
+    while(contCas < cantPos) //bucle infinito
     {
         insertarAlFinalDeListaDE(tablero, crearCasilla(), sizeof(tCasilla));
         if(contCas == 0)
@@ -227,5 +227,18 @@ int  cmpInt(const void *a, const void *b)
    const int * n2 = b;
 
    return n1 - n2;
+}
+
+void mostrarTablero(tTablero* tablero){
+// (1) Podria recorrer la listaDE (tTablero) y devolver por contexto direccion de nodoDE con tElem de ID 0 (Inicio) para ver inicio
+// (2) Se recorre, en este caso, como si "tablero" (tLista*) apuntase al ultimo nodo insertado. Necesariamente a derecha se llegaria al primer nodo.
+    // Pasar de (2) a (1) es sencillo
+
+    if(NULL == *tablero){
+        printf("\n [ %s ]", MSJ_LISTA_MAPA_VACIO);
+        return;
+    }
+
+    mostrarListaDE(tablero, mostrarCasilla);
 }
 
