@@ -11,8 +11,8 @@ typedef struct
 }tMovimiento;
 
 int tirarDado(unsigned minNro, unsigned maxNro);
-int calcularDireccion(char dir);
 
-//int calcularMovBandido()
+int  calcularDireccion(char dir);
+void cambiarDireccion(tMovimiento *mov);
 
 #endif // MOVIMIENTO_H_

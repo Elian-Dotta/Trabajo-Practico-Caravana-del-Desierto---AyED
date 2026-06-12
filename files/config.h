@@ -17,6 +17,7 @@ typedef struct
 }tConfig;
 
 
+
 int cargarConfig(tConfig*);
 
 

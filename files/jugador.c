@@ -1,11 +1,12 @@
 #include "jugador.h"
 
+
 void inicializarJugador(tJugador* j, unsigned vida)
 {
     j->vida = vida;
     j->cantMov = 0;
     j->puntaje = 0;
-    j->posJug = 0;
+    j->posJug = 1;
     crearCola(&j->hisMovJugador);
 }
 
@@ -44,6 +45,32 @@ unsigned verMovimiento(const tJugador *j)
     return j->cantMov;
 }
 
+void modificarPosJug(tJugador *j, int pos)
+{
+    j->posJug = pos;
+}
+
+unsigned verPosJugador(const tJugador *j)
+{
+    return j->posJug;
+}
+
+void guardarNombreYNick(tJugador *j, const char *nombre, const char* nick)
+{
+    strcpy(j->nombre, nombre);
+    strcpy(j->nickname, nick);
+}
+
+const char* verNombre(const tJugador *j)
+{
+    return j->nombre;
+}
+
+const char* verNick(const tJugador *j)
+{
+    return j->nickname;
+}
+
 void guardarMovimientoJugador(tJugador *j, tMovimiento *mov)
 {
     ponerEnCola(&j->hisMovJugador, mov, sizeof(tMovimiento));
@@ -60,3 +87,5 @@ void mostrarMovimientosJugador(tJugador *j)
         // MOSTRARLO -> A LO MEJOR UNA FUNCION DE CONSOLA.H, NUEVA O EXISTENTE
     }
 }
+
+
