@@ -88,3 +88,4 @@ void mostrarMovimientosJugador(tJugador *j)
     }
 }
 
+

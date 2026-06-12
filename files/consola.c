@@ -47,3 +47,9 @@ void mostrarHUD(tJugador* jugador, tEstado* estado)
     }
 }
 
+
+void limpiarBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+

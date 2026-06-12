@@ -46,7 +46,6 @@
 		<Unit filename="files/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="files/cola.h" />
 		<Unit filename="files/config.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -63,18 +62,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/jugador.h" />
-		<Unit filename="files/lista_doble_enlace_circular.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="files/lista_doble_enlace_circular.h" />
-		<Unit filename="files/lista_simple_enlace.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="files/lista_simple_enlace.h" />
-		<Unit filename="files/log.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="files/log.h" />
+		<Unit filename="files/lista.h" />
 		<Unit filename="files/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -87,23 +75,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/movimiento.h" />
-		<Unit filename="files/nodos.h" />
 		<Unit filename="files/partida.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/partida.h" />
-		<Unit filename="files/ranking.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="files/ranking.h" />
-		<Unit filename="files/registro.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="files/registro.h" />
 		<Unit filename="files/tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/tablero.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

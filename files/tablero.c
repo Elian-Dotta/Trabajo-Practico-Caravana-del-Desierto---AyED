@@ -72,7 +72,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
     int numAle;
     tElem elem;
 
-     while(elemInsertados < cantElem)
+    while(elemInsertados < cantElem)
     {
         posInsercion = rand() % config.cant_pos;
         indiceElem = rand() % 5;
@@ -103,6 +103,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
      CON NUMEROS ALEATORIOS PREDEFINIDOS PARA LA POSICION
      CON ACCESO POR INDICE SIMIL VECTOR
      CON LOGICA ANCLADA A LA FUNCION DE GENERACION
+
     while(elemInsertados < cantElem)
     {
         numAle = (rand() % config.cant_pos - 1 ) + 1;
@@ -135,7 +136,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
 
 }
 
-int  moverElementoPorId(tListaDE* tablero, int id, int mov) // EL ID ES EL ID DEL ELEMENTO, Y MOV ES UN NUMERO POSITIVO PARA LA DERECHA, NEGATIVO PARA LA IZQUIERDA
+int  moverElementoPorId(tListaDE* tablero, int id, int mov)
 {
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
@@ -227,6 +228,7 @@ int  cmpInt(const void *a, const void *b)
    const int * n2 = b;
 
    return n1 - n2;
+
 }
 
 void mostrarTablero(tTablero* tablero){
@@ -241,4 +243,5 @@ void mostrarTablero(tTablero* tablero){
 
     mostrarListaDE(tablero, mostrarCasilla);
 }
+
 

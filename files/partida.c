@@ -29,6 +29,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
 
 int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+
 {
     //tConfig config = { 25, 3, 2, 3, 1, 2, 3};
     cargarConfig(&p->config);
@@ -76,7 +77,7 @@ int  dibujarAnimacionMov(tPartida *p)
 {
     // HAY QUE DESENCOLAR LOS MOVIMIENTOS, E IR RESTANDOLES UNO PARA PROCESAR MOVIMIENTO POR MOVIMIENTO EN CADA FRAME
     // SE PUEDE USAR LA CANTIDAD DE BANDIDOS PARA IR CALCULANDO EL MOMENTO DONDE APARECE EL JUGADOR
-    // O CAMBIAR LA ESTRUCTURA TMOV PARA AÑADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
+    // O CAMBIAR LA ESTRUCTURA TMOV PARA AÃ‘ADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
     tMovimiento movActual;
     int movRelativo;
 
@@ -128,13 +129,11 @@ int  dibujarAnimacionMov(tPartida *p)
 }
 
 
+
 int  actualizarEstado(tPartida *p)
 {
 
 }
-
-
-
 
 
 int  dibujarAnimacionEstado(tPartida *p)

@@ -8,19 +8,28 @@
 // NODO DE ENLACE SIMPLE:
 typedef struct sNodo
 {
-    void            *dato;
-    unsigned        tamDato;
-    struct sNodo    *proxNodo;
+    void            *info;
+    unsigned         tamInfo;
+    struct sNodo    *sig;
 } tNodo;
 
 // NODO DE ENLACE DOBLE
 typedef struct sNodoDE
 {
-    void            *dato;
-    unsigned         tamDato;
-    struct sNodoDE    *proxNodo,
-               *antNodo;
+    void            *info;
+    unsigned         tamInfo;
+    struct sNodoDE  *sig,
+                    *ant;
 } tNodoDE;
+
+// NODO DE ARBOL BINARIO DE BUSQUEDA
+typedef struct sNodoArbol
+{
+    void               *info;
+    unsigned            tamInfo;
+    struct sNodoArbol  *izq,
+                       *der;
+} tNodoArbol;
 
 
 

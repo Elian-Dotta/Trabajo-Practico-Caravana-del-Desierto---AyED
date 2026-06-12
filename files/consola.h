@@ -16,8 +16,7 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *
 void mostrarTitulo();
 void mostrarSeparador();
 
-void mostrar(const char *msj); // NO ES NECESARIO ESPECIFICAR EL OUTPUT YA QUE ESTE MODULO DEBE IMPRIMIR SIEMPRE EN CONSOLA
-
+void mostrar(const char *msj);
 
 void mostrarHUD(tJugador*, tEstado*); // HAY QUE AGREGAR COMO PARAMETRO LAS VARIABLES A IMPRIMIR, HAY QUE DEFINIR TAMBIEN LAS VARIABLES A IMPRIMIR.
 
