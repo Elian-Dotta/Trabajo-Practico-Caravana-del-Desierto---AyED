@@ -1,35 +1,53 @@
 #ifndef INDICE_H_
 #define INDICE_H_
 
-#include "arbol.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "arbol.h"
 
 typedef struct
 {
     char     nombre[31];
     unsigned indiceRegistro;
-} tIndiceNombre;     // TIPO DEL INDICE (clave: nombre, valor: indice de registro en jugadores)
+} tIndiceNombre;     // clave de busqueda: nombre ; valor: indice de registro en jugadores
 
 typedef struct
 {
-    char nickname[11];
+    char     nickname[11];
     unsigned indiceRegistro;
-} tIndiceNickname;
+} tIndiceNickname;   // clave de busqueda: nickname (unico) ; valor: indice de registro
 
+// Construye una entrada de indice a partir de un registro de jugador + su nro de registro.
 typedef void (*Asignacion)(void *, const void *, unsigned long);
-// EN LA BUSQUEDA NO NECESITA EL NUMERO DE REGISTRO PERO PARA LA IDEXACION SI.
-// PARA UTILIZAR LA MISMA FUNCION EN BUSQUEDA QUE EN INDICE SE PUEDE ASIGNAR TAMBIEN EL REGISTRO
-// YA QUE EN LA BUSQUEDA SE PISA EL DATO CON EL QUE DEVUELVA EL ARBOL, PARA QUE LA VARIABLE ESTE INICIADA AL USAR LA ASIGNACION MANDAR UN 0 DESDE LA BUSQUEDA.
 
-int indexarArchivoJugadores(const char *nombreArchivoJugadores, tArbolBinBusq *p, void *aux, unsigned tamDatoAux, void *indice, unsigned tamDatoIndice, Asignacion asig, Cmp cmp);
-int guardarArchivoIndice(tArbolBinBusq *pa, const char* nombreArchivoIndice);
-int cargarIndiceDesdeArchivo(tArbolBinBusq *pa, const char* nombreArchivoIndice, void *indice, unsigned tamDatoIdx);
-// LE LLEGA EL ARCHIVO INDEXADO, LE LLEGA EL INDICE, LLEGA LA VARIABLE CON LA CLAVE A BUSCAR CARGADA
-int buscarEnArchivoConIndice(FILE *fp, const tArbolBinBusq *pa, void *aux, unsigned tamDatoAux, void *indice, unsigned tamDatoIdx, Asignacion asig, Cmp cmp); // MANDAR UN CERO A LA ASIGNACION
+// --- Asignaciones (regJugador -> entrada de indice) ---
+void asigJugNombre(void *idx, const void *reg, unsigned long nroReg);
+void asigJugNick(void *idx, const void *reg, unsigned long nroReg);
 
-// ENTRA NUEVA PERSONA.
-// LO DAMOS DE ALTA, VOLVEMOS A CREAR LOS INDICE, GUARDAMOS EN ARCHIVO
+// --- Comparadores ---
+int cmpClaveNombre(const void *a, const void *b);     // (nombre, nroReg): inserta y permite homonimos
+int cmpSoloNombre(const void *a, const void *b);       // solo nombre: para buscar existencia por nombre
+int cmpClaveNickname(const void *a, const void *b);    // nickname (unico)
+
+// --- Operaciones ---
+// Recorre el archivo de jugadores, arma cada entrada con 'asig' y la inserta en el arbol con 'cmp'.
+int indexarArchivoJugadores(const char *pathJugadores, tArbolBinBusq *p,
+                            void *aux, unsigned tamAux,
+                            void *indice, unsigned tamIdx,
+                            Asignacion asig, Cmp cmp);
+
+// Guarda el arbol al archivo de indice con recorrido in-order (queda ORDENADO).
+int guardarArchivoIndice(tArbolBinBusq *pa, const char *pathIndice, unsigned tamIdx);
+
+// Carga el indice (archivo ordenado) reconstruyendo un arbol balanceado.
+int cargarIndiceDesdeArchivo(tArbolBinBusq *pa, const char *pathIndice,
+                             void *indice, unsigned tamIdx);
+
+// 'aux' entra con la clave cargada (un registro con el campo clave puesto) y, si encuentra,
+// sale pisado con el registro hallado. Devuelve 1 si encontro, 0 si no.
+int buscarEnArchivoConIndice(FILE *fp, const tArbolBinBusq *pa,
+                             void *aux, unsigned tamAux,
+                             void *indice, unsigned tamIdx,
+                             Asignacion asig, Cmp cmp);
 
 #endif // INDICE_H_
-

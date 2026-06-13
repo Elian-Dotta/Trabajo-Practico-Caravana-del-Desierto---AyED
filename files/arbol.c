@@ -48,6 +48,32 @@ void recorrerEnOrdenSimpleArbolBinBusq(const tArbolBinBusq *p, void *params,
 }
 
 
+static tNodoArbol **buscarNodoArbolBinBusq(const tArbolBinBusq *p, const void *d, Cmp cmp)
+{
+    int rc;
+
+    while(*p && (rc = cmp(d, (*p)->info)))
+    {
+        if(rc < 0)
+            p = &(*p)->izq;
+        else
+            p = &(*p)->der;
+    }
+    if(!*p)
+        return NULL;
+    return (tNodoArbol **)p;
+}
+
+
+int buscarElemArbolBinBusq(const tArbolBinBusq *p, void *d, unsigned tam, Cmp cmp)
+{
+    if(!(p = buscarNodoArbolBinBusq(p, d, cmp)))
+        return 0;                                  // NO_EXISTE
+    memcpy(d, (*p)->info, MINIMO(tam, (*p)->tamInfo));
+    return 1;
+}
+
+
 static unsigned leerDesdeArchivoBin(void **d, void *pf, unsigned pos, void *params)
 {
     unsigned tam = *((unsigned *)params);
