@@ -31,11 +31,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="files/animacion.c">
 			<Option compilerVar="CC" />
 		</Unit>
-<<<<<<< Updated upstream
-=======
+		<Unit filename="files/animacion.h" />
+		<Unit filename="files/arbol.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="files/arbol.h" />
 		<Unit filename="files/casilla.c">
 			<Option compilerVar="CC" />
@@ -53,7 +55,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/consola.h" />
+		<Unit filename="files/estado.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="files/estado.h" />
+		<Unit filename="files/indice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/indice.h" />
 		<Unit filename="files/jugador.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -66,6 +75,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/lista_simple_enlace.h" />
+		<Unit filename="files/log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/log.h" />
 		<Unit filename="files/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -95,7 +108,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/tablero.h" />
->>>>>>> Stashed changes
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

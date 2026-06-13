@@ -60,4 +60,10 @@ void mostrarMovimientosJugador(tJugador *j)
         // MOSTRARLO -> A LO MEJOR UNA FUNCION DE CONSOLA.H, NUEVA O EXISTENTE
     }
 }
->>>>>>> Stashed changes
+
+void armarMensaje(void *jugador, void *msjBuffer)
+{
+    static int contador=0;
+    sprintf(msjBuffer, "%d. %s %s\n", contador+1, ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
+}
+

@@ -1,18 +1,62 @@
 #ifndef PARTIDA_H_
 #define PARTIDA_H_
 
-typedef struct tLista tLista;
+// ENGLOBA LOS MODULOS PARA EL FUNCIONAMIENTO DE LA PARTIDA
 
-//int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+#include "tablero.h"
+#include "cola.h"
+#include "movimiento.h"
+#include "config.h"
+#include "jugador.h"
+#include "estado.h"
+#include "consola.h"
+#include "animacion.h"
 
-//int  inicializarPartida(); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
-//int  procesarEntrada(); // DETECTA MOVIMIENTO DEL JUGADOR
+#define PASO 1
 
-//int  actualizarPartida(); // ACTUALIZA LOS BANDIDOS Y LOS PREMIOS, CHECKEA FIN DE PARTIDA
+#define MSJ_PUNTOS              "El jugador ha obtenido un premio\n"
+#define MSJ_VIDA                "El jugador ha obtenido una vida extra\n"
+#define MSJ_OASISOBTENIDO       "El jugador ha conseguido la proteccion del Oasis\n"
+#define MSJ_OASISPERDIDO        "El jugador ha perdido la proteccion del Oasis\n"
+#define MSJ_TORMENTAACTIVA      "El jugador ha sido aturdido por una Tormenta de Arena"
+#define MSJ_TORMENTAFINALIZADA  "El jugador se ha recuperado de la Tormenta de Arena"
+#define MSJ_BANDIDOATACA        "Un bandido ataco al jugador\n"
+#define MSJ_JUGADORDANIADO      "El jugador ha perdido una vida\n"
+#define MSJ_BANDIDODESAPARECE   "Un bandido ha desaparecido\n"
+#define MSJ_JUGADORGANA         "FELICITACIONES, GANASTE LA PARTIDA\n"
 
-//int  renderizarPartida(); // DIBUJA EL TABLERO
+typedef struct
+{
+    tTablero tablero;
+    tJugador jugador;
+    tCola    movimientos;
+    tEstado  estado;
+    tLista   bandInteligentes; // LISTA DE ENTEROS, IDS
+    tLog     log;
+    tConfig  config;
+    int      corriendo;
+}tPartida;
 
-//int  finalizarPartida(); // GUARDA EL RANKING
+int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+
+int  inicializarPartida(tPartida *partida); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+
+int  dibujarEstadoDelJuego(tPartida *partida);
+
+int  procesarEntrada(tPartida *partida);   // Pide un ENTER para tirar el dado por menu
+                                                               // Pide la direccion por medio de la funcion de menu -> Nada mas dice: "Ingrese direccion (Adelante - 'F' o Atras 'B'): ",
+                                                               // el resto del HUD se encarga la funcion anterior
+
+int  calcularMovBandido(tPartida *partida); // Se puede usar verPrimero para los bandidos inteligentes y calcular en base al mov del jugador
+                                                                // Funcion para calcular movimientos de bandidos
+
+int  dibujarAnimacionMov(tPartida *partida); // debe dibujar el HUD al mismo tiempo por eso necesita tJugador
+                                                                //Funcion para animar el movimiento del jugador y los bandidos, consume la informacion guardada en la cola de movimientos
+int  actualizarEstado(tPartida *partida);
+
+int  dibujarAnimacionEstado(tPartida *partida);
+
+int  finalizarPartida(tPartida *partida); // GUARDA EL RANKING ->
 
 #endif // PARTIDA_H_
