@@ -45,5 +45,7 @@ void enlistarNickNames(void *idxNombre, void *contexto);
 // Firma exigida por recorrerLista: (void *info, unsigned tamInfo, void *params)
 void armarMensaje(void *info, void *params);
 
+void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro); // ASIGNACION PARA EL INDICE
+int cmpNickname(const void*, const void*);
 
 #endif // REGISTRO_H_

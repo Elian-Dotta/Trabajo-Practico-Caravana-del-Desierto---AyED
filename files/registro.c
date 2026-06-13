@@ -47,7 +47,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     sprintf(buffer + strlen(buffer), "%d. NINGUNO\n", contador);
 
     // 3) mostrar el menu y leer la eleccion
-    op = menuNumerico(buffer, contador, 1, "Opcion invalida\n");
+    op = menuNum(buffer, contador, 1, "Opcion invalida\n");
 
     // 4) interpretar la respuesta
     if(op == contador)                       // eligio NINGUNO
@@ -58,4 +58,22 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     buscarPorPosicionLista(&nicknames, sel, sizeof(regJugador), op - 1);
     vaciarLista(&nicknames);
     return 1;                                // -> jugador existente, *sel cargado
+}
+
+
+void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro) // EN LA BUSQUEDA NO NECESITO EL NRO DE REGISTRO.
+{
+    tIndiceNickname *i = (tIndiceNickname*)idx;
+    regJugador *j = (regJugador*)jug;
+
+    strcpy(i->nickname, j->nickname);
+    i->indiceRegistro = nroRegistro;
+}
+
+int cmpClaveNickname(const void*a, const void*b)
+{
+    tIndiceNickname *i1 = (tIndiceNickname*)a;
+    tIndiceNickname *i2 = (tIndiceNickname*)b;
+
+    return strcmp(i1->nickname, i2->nickname);
 }
