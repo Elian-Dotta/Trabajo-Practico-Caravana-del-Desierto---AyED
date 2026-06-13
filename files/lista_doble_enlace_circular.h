@@ -23,7 +23,7 @@ int  listaVaciaDE(const tListaDE *pl);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo);
 int  vaciarListaDE(tListaDE *pl);
-
+        
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 
 int  insertarAlFinalDeListaDE(tListaDE *pl, void *d, unsigned tamInfo);
