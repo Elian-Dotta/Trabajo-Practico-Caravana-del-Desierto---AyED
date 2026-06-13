@@ -23,6 +23,8 @@ void ingresarDato(const char* msj, char *out);
 
 char menu(const char* msj, const char *opc, int conErr, const char *msjErr);
 
+int  menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr);
+
 void ingresarDato(const char* msj, char *out);
 
 

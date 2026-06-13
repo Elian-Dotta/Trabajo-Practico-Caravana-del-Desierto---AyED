@@ -109,7 +109,7 @@ int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     tCasilla *casilla = (tCasilla*)pl;
     tElem  *elem = (tElem*)d;
 
-    insertarAlFinal(casilla, elem, tamDato);
+    insertarAlFinalLista(casilla, elem, tamDato);
 
     return 1;
 }
@@ -120,14 +120,14 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     tCasilla *casilla = (tCasilla*)pl;
     tElem  *elem = (tElem*)d;
 
-    eliminarPorClave(casilla, elem, tamDato); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
+    eliminarPorClaveLista(casilla, elem, tamDato, cmpIdElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
 
     return 1;
 }
 
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem *elem = (tElem*)d;
     int ret;
 
@@ -135,6 +135,64 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     // LA UTILIZAMOS PARA EVITAR DUPLICADOS NO PARA ORDENAR. LA FUNCION DE CMP DEVUELVE -1 SIEMPRE EXCEPTO DUPLICADOS QUE DEVUELVE 0
 
     return ret;
+}
+
+int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = (tCasilla*)pl;
+    tElem *ctxElem = (tElem*)d;
+
+    tElem *nue = ctxElem;
+    tElem *ref = ctxElem + sizeof(tElem);
+
+    int ret;
+    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+
+    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos);
+
+    return ret;
+}
+
+int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = (tCasilla*)pl;
+    tElem *ctxElem = (tElem*)d;
+
+    tElem *nue = ctxElem;
+    tElem *ref = ctxElem + sizeof(tElem);
+
+    int ret;
+    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+
+    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos + 1);
+
+    return ret;
+}
+
+int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = (tCasilla*)pl;
+    tElem *ctxElem = (tElem*)d;
+
+    tElem *nue = ctxElem;
+    tElem *ref = ctxElem + sizeof(tElem);
+
+    int ret;
+    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+
+    ret = actualizarPosLista(casilla, nue, sizeof(tElem), pos, cambiarTipo);
+
+    return ret;
+}
+
+int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
+{
+    tElem *elemAct = act;
+    tElem *elemNue = d;
+
+    elemAct->tipo_elem = elemNue->tipo_elem;
+
+    return 1;
 }
 
 int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGLAS NUEVAS DESDE ACA
@@ -149,6 +207,42 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
         return 0;
 
     return -1;
+}
+
+int  cmpCasIdElem(const void *a, const void *b)
+{
+    tCasilla *cas = (tCasilla*)a;
+    tElem *elem = (tElem*)b;
+
+    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpIdElem);
+
+    return ret;
+}
+
+int  cmpCasTipoElem(const void *a, const void *b)
+{
+    tCasilla *cas = (tCasilla*)a;
+    tElem *elem = (tElem*)b;
+
+    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpTipoElem);
+
+    return ret;
+}
+
+int  cmpIdElem(const void *a, const void *b)
+{
+    tElem *e1 = (tElem*)a;
+    tElem *e2 = (tElem*)b;
+
+    return e1->id_elem - e2->id_elem;
+}
+
+int  cmpTipoElem(const void *a, const void *b)
+{
+    tElem *e1 = (tElem*)a;
+    tElem *e2 = (tElem*)b;
+
+    return e1->tipo_elem == e2->tipo_elem;
 }
 
 void asignarNroCasilla(void *a, void *contexto)
@@ -211,7 +305,7 @@ void recorrerLista(void **pl, ModificarEstado modEstado,tEstado* estado)
 
 void modEstado(tEstado* estado, const tElem* casilla)
 {
-    if (strcmp(&(casilla)->tipo_elem,"B")==0)
+    if (strcmp(&(casilla)->tipo_elem,"B")==0) // if(elem->tipo_elem == BANDIDO)
     {
         estado->JpierdeVida=1;
         estado->IDBandDesaparecido=(casilla)->id_elem;

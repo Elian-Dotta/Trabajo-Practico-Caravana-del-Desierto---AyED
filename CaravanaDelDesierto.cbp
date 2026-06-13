@@ -31,6 +31,19 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="files/animacion.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/animacion.h" />
+		<Unit filename="files/arbol.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/arbol.h" />
+		<Unit filename="files/casilla.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/casilla.h" />
+
 		<Unit filename="files/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -10,8 +10,16 @@ typedef struct sJugador
              puntaje,
              cantMov,
              posJug;
+    char     nombre[31],
+             nickname[11];
     tCola    hisMovJugador;
 }tJugador;
+
+typedef struct
+{
+    char nombre[31];
+    char nickname[11];
+} regJugador;
 
 void inicializarJugador(tJugador* j, unsigned vida);
 void aumentarVida(tJugador* j);
@@ -26,6 +34,10 @@ unsigned verMovimiento(const tJugador *j);
 
 void modificarPosJug(tJugador *j, int pos);
 unsigned verPosJugador(const tJugador *j);
+
+void guardarNombreYNick(tJugador *j, const char *nombre, const char* nick);
+const char* verNombre(const tJugador *j);
+const char* verNick(const tJugador *j);
 
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);

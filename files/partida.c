@@ -3,59 +3,58 @@
 // INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
 int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
-    tTablero tablero;
-    tJugador jugador;
-    tCola movimientos;
-    tEstado estado;
-    tLista bandidosInteligentes; // LISTA DE ENTEROS, IDS
+    tPartida partida;
 
-    inicializarPartida(&tablero, &jugador, &movimientos, &estado, &bandidosInteligentes);
+    inicializarPartida(&partida);
 
-    int corriendo = 1;
-
-    while(corriendo)
+    while(partida->corriendo)
     {
-        dibujarEstadoDelJuego(&tablero, &jugador, &estado); // ESTADO PARA LA ELECCION DEL JUGADOR
+        dibujarEstadoDelJuego(&partida); // ESTADO PARA LA ELECCION DEL JUGADOR
 
-        procesarEntrada(&movimientos, &jugador); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
+        procesarEntrada(&partida); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-        calcularMovBandido(&tablero, &movimientos, &bandidosInteligentes); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+        calcularMovBandido(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
-        dibujarAnimacionMov(&tablero, &jugador, &movimientos, &estado); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
+        dibujarAnimacionMov(&partida); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
 
-        actualizarEstado(&tablero, &jugador, &estado, &bandidosInteligentes); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
+        actualizarEstado(&partida); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
 
-        dibujarAnimacionEstado(&tablero, &jugador, &estado); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
+        dibujarAnimacionEstado(&partida); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
     }
 
-    finalizarPartida(); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
+    finalizarPartida(&partida); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
 }
 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
-int  inicializarPartida(tTablero* tablero, tJugador *jugador, tCola *movimientos, tEstado *estado, tLista *bandidosInteligentes)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+
+int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+
 {
-    tConfig config = { 25, 3, 2, 3, 1, 2, 3};
-    //cargarConfiguracion();
+    //tConfig config = { 25, 3, 2, 3, 1, 2, 3};
+    cargarConfig(&p->config);
 
-    crearLista(bandidosInteligentes);
+    crearLista(&p->bandInteligentes);
 
-    crearTablero(tablero, config, bandidosInteligentes);
+    crearLog(&p->log)
 
-    inicializarEstado(estado, config.max_band);
+    crearTablero(&p->tablero, p->config, &p->bandidosInteligentes);
 
-    inicializarJugador(jugador, config.vidas_ini);
+    inicializarEstado(&p->estado, p->config.max_band);
 
-    crearCola(movimientos);
+    inicializarJugador(&p->jugador, p->config.vidas_ini);
+
+    crearCola(&p->movimientos);
+
+    p->corriendo = 1;
+}
+
+int  dibujarEstadoDelJuego(tPartida *p)
+{
 
 }
 
-int  dibujarEstadoDelJuego(tTablero *tablero, tJugador *jugador, tEstado *estado)
-{
-
-}
-
-int  procesarEntrada(tCola *movimientos, tJugador *jugador)
+int  procesarEntrada(tPartida *p)
 {
     // PEDIR INPUT O SCANF VERIFICAR DATO VALIDO F O B
     // CREAR VARIABLE MOV Y ASIGNARLE LOS VALORES INGRESADOS
@@ -63,7 +62,7 @@ int  procesarEntrada(tCola *movimientos, tJugador *jugador)
 
 }
 
-int  calcularMovBandido(tTablero *tablero, tCola *movimientos)
+int  calcularMovBandido(tPartida *p)
 {
     // LLAMAR A RECORRER DESDE UNA FUNCION DE TABLERO
     // RECORRER PARA CALCULAR PARA BANDIDO
@@ -74,7 +73,7 @@ int  calcularMovBandido(tTablero *tablero, tCola *movimientos)
     // POR MEDIO DE RECORRERLISTADE
 }
 
-int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimientos, tEstado *estado)
+int  dibujarAnimacionMov(tPartida *p)
 {
     // HAY QUE DESENCOLAR LOS MOVIMIENTOS, E IR RESTANDOLES UNO PARA PROCESAR MOVIMIENTO POR MOVIMIENTO EN CADA FRAME
     // SE PUEDE USAR LA CANTIDAD DE BANDIDOS PARA IR CALCULANDO EL MOMENTO DONDE APARECE EL JUGADOR
@@ -82,45 +81,132 @@ int  dibujarAnimacionMov(tTablero *tablero, tJugador *jugador, tCola *movimiento
     tMovimiento movActual;
     int movRelativo;
 
+    int idEscudoIzq,
+        idEscudoDer;
+
+    if(p->estado.Oactivo)
+    {
+        idEscudoIzq = obtenerIdElementoPorTipo(&p->tablero, ESCUDOIZQ);
+        idEscudoDer = obtenerIdElementoPorTipo(&p->tablero, ESCUDODER);
+    }
+
     // PENSE EN DIBUJAR UNA SECUENCIA ENTERA DE PASOS, OSEA CUANDO TODOS ELEMENTOS DEN UN PASO, DIBUJAR, PERO AHORA PENSE QUE ESTARIA BUENO DIBUJAR CADA PASO INDIVIDUALMENTE
 
-    while(!colaVacia(movimientos))
+    while(!colaVacia(&p->movimientos))
     {
-        sacarDeCola(movimientos, &movActual, sizeof(movActual));
+        sacarDeCola(&p->movimientos, &movActual, sizeof(movActual));
 
         // movRelativo = mov.dir == 'F'? 1 : -1; // ESTA FORMA UTILIZA EL CAMPO DE LA ESTRUCTURA Y DEJA EL CODIGO MEDIO CRIPTICO AL USAR EL OPERADOR TERNARIO
         movRelativo = PASO * calcularDireccion(movActual.dir); // DEVUELVE 1 O -1 PARA MULTIPLICAR EL NUMERO DE CASILLAS POR LA DIRECCION
 
-        moverElementoPorId(tablero, movActual.id, movRelativo);
+        if(movActual.id == JUGADORID && p->estado.Oactivo &&
+           idEscudoIzq != -1 && idEscudoDer != -1)
+        {
+            moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo);
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+            moverElementoPorId(&p->tablero, idEscudoDer, movRelativo);
+        }
+        else
+        {
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+        }
+
         movActual.cant-= PASO;
 
         if(movActual.cant > 0)
-            ponerEnCola(movimientos, &movActual, sizeof(movActual));
+            ponerEnCola(&p->movimientos, &movActual, sizeof(movActual));
 
-        dibujarEscena(tablero, jugador, estado);
+        dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
     }
 }
 
 int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado, tLista *bandidosInteligentes)
 {
-    // DENTRO DE TABLERO.H RECORRE TABLERO, PARA CADA CASILLA ACTUALIZA ESTADO
-    // TOMA EN CUENTA EL PREMIO, OASIS, TORMENTA Y BANDIDO EN LA POSICION FINAL
+
 }
 
 int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
 {
-    // RESOLVER PRIMITIVAS NUEVAS
-    // MATRIZ DE ANIMACIONES PREDEFINIDA
-    // OASIS OBTENIDO (J) J (J) J (J)
-    // OASIS DESOBTENIDO
-    // JUGADO OBTUVO PREMIO *J* -> * J * -> J
-//    IF(OASIS OBTENIDO)
-//        FOR ANIMACION OASIS
-//        DIBUJAR
-    //
+    int mov;
+
+    int idFlechaIzq,
+        idFlechaDer;
+    if(p->estado.JganaPuntos)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio);
+        aumentarPuntaje(&p->jugador);
+        escribirEnLog(&p->log, MSJ_PUNTOS);
+    }
+
+    if(p->estado.JganaVida)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra);
+        aumentarVida(&p->jugador);
+        escribirEnLog(&p->log, MSJ_VIDA);
+    }
+
+    if(p->estado.Oobtenido)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido);
+        escribirEnLog(&p->log, MSJ_OASISOBTENIDO);
+    }
+
+    if(p->estado.Tactiva)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorActiva);
+        escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
+        idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
+        idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
+    }
+
+    if(p->estado.Tfinalizada)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza);
+        escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
+    }
+
+    if(p->estado.BandAtaca)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca);
+        escribirEnLog(&p->log, MSJ_BANDIDOATACA);
+    }
+
+    if(p->estado.Operdido)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido);
+        escribirEnLog(&p->log, MSJ_OASISPERDIDO);
+    }
+
+    if(p->estado.JpierdeVida)
+    {
+        mov = (j->posJug - 1) * - 1;
+        moverElementoPorId(&p->tablero, JUGADORID, mov);
+        if(p->estado.Tactiva)
+        {
+            moverElementoPorId(&p->tablero, idFlechaIzq, mov);
+            moverElementoPorId(&p->tablero, idFlechaDer, mov);
+        }
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado);
+        disminuirVida(&p->jugador);
+        escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
+        posicionarTableroPorIdElem(t, p->estado.IDBandDesaparecido);
+    }
+    if(p->estado.IDBandDesaparecido)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece);
+        escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+    }
+
+    if(p->estado.Jgana)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana);
+        escribirEnLog(&p->log, MSJ_JUGADORGANA);
+    }
+
+    reiniciarEstado(&p->estado);
 }
 
-int  finalizarPartida();
+int  finalizarPartida(tPartida *p);
 
 int  inicializarEstado(tEstado *est, int cantBandidos)
 {

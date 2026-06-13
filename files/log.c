@@ -5,7 +5,7 @@
 void crearLog(tLog *log)
 {
     log->cantMsj = 0;
-    crearLista(log->mensajes);
+    crearLista(&log->mensajes);
 }
 
 int  escribirEnLog(tLog *log, const char *msj)
@@ -34,7 +34,7 @@ int  escribirEnLog(tLog *log, const char *msj)
 
 void mostrarLog(const tLog *log)
 {
-    mostrarLista(log->mensajes, mostrarMensaje);
+    mostrarLista(&log->mensajes, mostrarMensaje);
 }
 
 void mostrarMensaje(const void *m)
@@ -46,7 +46,7 @@ void mostrarMensaje(const void *m)
 
 void vaciarLog(tLog *log)
 {
-    vaciarLista(log->mensajes);
+    vaciarLista(&log->mensajes);
 
     log->cantMsj = 0;
 }

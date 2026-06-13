@@ -1,24 +1,25 @@
 #ifndef ESTADO_H_
 #define ESTADO_H_
 
-typedef struct
+typedef struct Estado
 {
     int Oobtenido,
-        //Oactivo,
+        Oactivo,
         Operdido,
-        //Tobtenida,
         Tactiva,
         Tfinalizada,
+        BandAtaca,
         IDBandDesaparecido,
         JganaPuntos,
         JganaVida,
         JpierdeVida,
-        Jgana;
+        Jgana,
+        Jpierde;
 }tEstado;
 
 void inicializarEstado(tEstado *estado);
 
-
+void reiniciarEstado(tEstado *estado);
 
 
 
