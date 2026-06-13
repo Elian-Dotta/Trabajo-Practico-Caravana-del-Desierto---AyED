@@ -3,22 +3,33 @@
 
 #include <stdio.h>
 #include "arbol.h"
+#include "lista_simple_enlace.h"
+#define TAM_MENU 512
+
+#define ARCHIDXNICK "nickname.idx"
+#define ARCHIDXNOMBRE "nombre.idx"
+#define ARCHPARTIDAS "partida.bin"
+#define ARCHJUGADORES "jugadores.bin"
+
 
 // MODULO USADO PARA EL GUARDADO DE PARTIDA Y JUGADOR.
 
 typedef struct
+{
     char nombre[31];
     char nickname[11];
 } regJugador;        // REGISTRO DEL ARCHIVO JUGADORES
 
 typedef struct
 {
-    char     nombre[31];
-    unsigned indiceRegistro;
-} tIndiceNombre;     // TIPO DEL INDICE (clave: nombre, valor: indice de registro en jugadores)
+    char nickname[11];
+    unsigned nroPartida;
+    unsigned puntaje;
+    unsigned cantMovimientos;
+} regPartida;
 
 
-#define TAM_MENU 512
+
 
 // Revisa los homonimos de 'nombre' y resuelve si el jugador es uno existente o nuevo (Santiago).
 //   Devuelve 1 si el jugador dijo ser uno de los listados (deja *sel con su registro);

@@ -11,7 +11,7 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *
 
     mostrarSeparador();
 
-    mostrarHud(jugador, estado);
+    mostrarHUD(jugador, estado);
 
     mostrarSeparador();
 
@@ -48,7 +48,8 @@ void mostrarHUD(tJugador* jugador, tEstado* estado)
 }
 
 
-void limpiarBuffer(void) {
+void limpiarBuffer(void)
+{
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }

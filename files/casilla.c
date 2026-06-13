@@ -92,7 +92,7 @@ int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato
 
 int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
 {
-    tElem *elemAct = act;
+    tElem *elemAct = *act;
     tElem *elemNue = d;
 
     elemAct->tipo_elem = elemNue->tipo_elem;
@@ -201,33 +201,36 @@ void mostrarElemento(const void *elemVoid){
 int cambiarEstado(void **pl, void* estado)
 {
     static int tieneoasis = 0, tienetormenta = 0;
-    recorrerLista(pl,modEstado,estado);
+    tLista *lista = (tLista*)pl;
+    tEstado *est = (tEstado*)estado;
 
-    if ((tienetormenta=1) && (estado->Tactiva==0))
+    recorrerLista(lista, modEstado, estado);
+
+    if ((tienetormenta=1) && (est->Tactiva==0))
     {
         tienetormenta=0;
-        estado->Tfinalizada=1;
+        est->Tfinalizada=1;
     }
-    else if (estado->Tactiva==1)
+    else if (est->Tactiva==1)
     {
         tienetormenta=1;
     }
-    if ((estado->JpierdeVida==1)&&(tieneoasis==1))
+    if ((est->JpierdeVida==1)&&(tieneoasis==1))
     {
-        if (estado->Bandidos==1)
+        if (est->Bandidos==1)
         {
-            estado->JpierdeVida=0;
+            est->JpierdeVida=0;
 
         }
         tieneoasis=0;
-        estado->Operdido=1;
+        est->Operdido=1;
     }
-    if ((tieneoasis == 1) && (estado->Oobtenido==0))
+    if ((tieneoasis == 1) && (est->Oobtenido==0))
     {
         tieneoasis = 0;
-        estado->Operdido = 1;
+        est->Operdido = 1;
     }
-    if (estado->Oobtenido==1)
+    if (est->Oobtenido==1)
     {
         tieneoasis=1;
     }
@@ -235,8 +238,10 @@ int cambiarEstado(void **pl, void* estado)
 
 
 
-void modEstado(tEstado* estado, const tElem* casilla)
+void modEstado(void* est, void* e)
 {
+    tEstado *estado = (tEstado*)est;
+    tElem *casilla = (tElem*)e;         // DEBERIA DE LLAMARSE ELEMENTO.
 
     if (casilla->tipo_elem == BANDIDO)
     {

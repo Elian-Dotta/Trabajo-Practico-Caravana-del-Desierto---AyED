@@ -12,6 +12,7 @@
 #include "consola.h"
 #include "animacion.h"
 
+
 #define PASO 1
 
 #define MSJ_PUNTOS              "El jugador ha obtenido un premio\n"
@@ -35,7 +36,7 @@ typedef struct
     tLog     log;
     tConfig  config;
     int      corriendo;
-}tPartida
+}tPartida;
 
 int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
