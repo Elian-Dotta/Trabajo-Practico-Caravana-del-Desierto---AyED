@@ -32,13 +32,13 @@ void inicializarRanking(tRanking *ranking);
 
 int insertarEnRanking(tRanking *ranking);
 
-int generarRankingDeArchivo(tRanking *ranking, const char* arch);
+int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char* archJug);
 
 int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolBinBusq *indice);
 
 int mostrarRanking(tRanking *ranking);
 
-void mostrarLinea(void* linea, void *contexto)
+void mostrarLinea(void* linea, void *contexto);
 
 void destruirRanking(tRanking *ranking);
 

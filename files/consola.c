@@ -3,6 +3,8 @@
 
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log)
 {
+    limpiarPantalla();
+
     mostrarTitulo();
 
     mostrarSeparador();
@@ -54,3 +56,7 @@ void limpiarBuffer(void)
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+void limpiarPantalla()
+{
+    printf("\033[2J\033[H");
+}

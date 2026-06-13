@@ -186,7 +186,7 @@ void asignarNroCasElem(void *a, void *contexto)
 
 void mostrarCasilla(const void *pl)
 {
-    tLista *casilla = pl;
+    const tLista *casilla = pl;
     printf("[ ");
     mostrarLista(casilla, mostrarElemento);
     printf(" ] ");

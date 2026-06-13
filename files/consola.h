@@ -22,6 +22,7 @@ void mostrarHUD(tJugador*, tEstado*); // HAY QUE AGREGAR COMO PARAMETRO LAS VARI
 
 void limpiarBuffer(void);
 
+void limpiarPantalla();
 
 //void mostrarTablero(void *casilla);
 

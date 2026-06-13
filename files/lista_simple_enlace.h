@@ -42,17 +42,18 @@ int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos);
 
 int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum);
 
-int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
+int  buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
 
 void recorrerLista(tLista *lista, Accion accion, void *contexto);
 
-void mostrarLista(const tLista *lista, Mostrar mostrar);
+//void mostrarLista(const tLista *lista, Mostrar mostrar);
+int  mostrarLista(const tLista *pl, Mostrar mostrar);
 
 //int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*));
 //int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*));
 //void recorrerLista(void **pl, Accion accion,void* estado);
-//int  mostrarLista(const tLista *p, void (*mostrar)(const void *, FILE *), FILE *fp);
+
 
 
 

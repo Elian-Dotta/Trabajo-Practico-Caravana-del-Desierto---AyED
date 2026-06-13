@@ -1,5 +1,45 @@
 #include "menu.h"
 
+
+void juego()
+{
+    //mostrar("Caravana Del Desierto\n");
+
+    tJugador jugador;
+
+    ingresarJugador(&jugador);
+
+    menuPrincipal(&jugador);
+}
+
+void menuPrincipal(tJugador *jugador)
+{
+    char opcion;
+
+    do
+    {
+        limpiarPantalla();
+        opcion = menu(MENU_JUEGO, OPC_JUEGO, 1, MSJ_ERR_OPC);
+
+        switch(opcion)
+        {
+            case JUGAR_PARTIDA:
+                    jugarPartida(jugador);
+                    break;
+
+            case MOSTRAR_RANKING:
+                    ranking();
+                    break;
+
+            case SALIR_DEL_JUEGO:
+                    mostrar(MSJ_SALIDA);
+                    break;
+        }
+    }while(opcion != SALIR_DEL_JUEGO);
+
+}
+
+
 int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
 {
     int opcion;

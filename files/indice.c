@@ -1,11 +1,11 @@
 #include "indice.h"
 
-int indexarArchivo(const char *nombreArchivo, tArbolBinBusq *p, void *aux, unsigned tamDatoAux, void *indice, unsigned tamDatoIndice, Asignacion asig, Cmp cmp))
+int indexarArchivo(const char *nombreArchivo, tArbolBinBusq *p, void *aux, unsigned tamDatoAux, void *indice, unsigned tamDatoIndice, Asignacion asig, Cmp cmp)
 {
     FILE *fp;
     unsigned long numeroRegistro;
 
-    fp = fopen(nombreArchivoJugadores, "rb");
+    fp = fopen(nombreArchivo, "rb");
     if(!fp)
     {
         return 0;
@@ -19,6 +19,8 @@ int indexarArchivo(const char *nombreArchivo, tArbolBinBusq *p, void *aux, unsig
     while(!feof(fp))
     {
         asig(indice, aux, numeroRegistro);
-        insertarArbolBinBusq()
+        //insertarArbolBinBusq()
     }
+
+    return 1;
 }

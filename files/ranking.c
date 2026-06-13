@@ -6,7 +6,7 @@ void ranking() // FUNCION QUE CONTROLA EL FLUJO COMPLETO DEL RANKING
 
     inicializarRanking(&ranking); // PRIMERO LO INICIALIZA
 
-    generarRankingDeArchivo(&ranking, ARCHPARTIDA, ARCHJUGADORES); // LUEGO LO GENERA
+    generarRankingDeArchivo(&ranking, ARCHPARTIDAS, ARCHJUGADORES); // LUEGO LO GENERA
 
     mostrarRanking(&ranking); // POR ULTIMO LO MUESTRA
 }
@@ -50,7 +50,7 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
     return 1;
 }
 
-int insertarEnRanking(tRanking *ranking, tLinea *linea);
+int insertarEnRanking(tRanking *ranking, tLinea *linea)
 {
     if(linea->nombre[0] == '\0' ||
        linea->nickname[0] == '\0')
@@ -100,10 +100,13 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
 
 void mostrarRanking(tRanking *ranking)
 {
+    limpiarPantalla();
     unsigned contador = 1;
     mostrar(TITULO_RANKING);
     recorrerLista(ranking->ranking, mostrarLinea, &contador);
     mostrar(MENSAJE_SALIDA);
+    while(getchar() != '\n');
+    getchar();
 }
 
 void mostrarLinea(void* linea, void *contexto)

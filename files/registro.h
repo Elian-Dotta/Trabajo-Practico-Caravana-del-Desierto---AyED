@@ -2,8 +2,12 @@
 #define REGISTRO_H_
 
 #include <stdio.h>
+
 #include "arbol.h"
+#include "indice.h"
 #include "lista_simple_enlace.h"
+#include "menu.h"
+
 #define TAM_MENU 512
 
 #define ARCHIDXNICK "nickname.idx"
