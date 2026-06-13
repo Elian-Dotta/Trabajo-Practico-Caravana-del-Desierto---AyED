@@ -2,9 +2,18 @@
 #define LISTA_SIMPLE_ENLACE_H
 
 #include <stdio.h>
-#include <string.h> // Para funciones MEM
-#include <stdlib.h> // Para uso de memoria dinamica y null
+#include <string.h>
+#include <stdlib.h>
 #include "nodos.h"
+
+
+typedef tNodo* tLista;
+
+typedef void (*Mostrar)(const void *);
+typedef void (*Accion)(void *, void *);
+typedef int (*tCompararFn)(const void *, const void *);
+typedef int (*Acumular)(void **, unsigned *, void *, unsigned);
+typedef int  (*Cmp)(const void *, const void *);
 
 typedef tNodo* tLista; // La lista sera un puntero a Nodo. Es decir, la lista
 // tendra la direccion de memoria de un nodo, no datos. Asi ocupara solo 8 Bytes (tam de puntero).
@@ -21,9 +30,9 @@ typedef void  (*Accion)(void *, void *);
 void crearLista(tLista *p);
 int  vaciarLista(tLista *p);
 int  ponerAlFinal(tLista *p, const void *d, unsigned cantBytes);
-int  sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes);
-int  mostrarLista(const tLista *p, void (*mostrar)(const void *, FILE *), FILE *fp);
-int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
+//int  sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes);
+
+//int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
 
 void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void *contexto);
@@ -38,11 +47,9 @@ int sacarUltimoLista(tLista *lista, void *dest, unsigned tamDest);
 int insertarAlInicio(tLista *lista, void *d, unsigned tamDato);
 int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato);
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
-int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos);
 
-//Definidas:
-void mapLista(const tLista *lista, void (*accion)(const void *));
+int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum);
 
 void mostrarLista(const tLista *lista, Mostrar mostrar);
 #endif // LISTA_SIMPLE_ENLACE_H

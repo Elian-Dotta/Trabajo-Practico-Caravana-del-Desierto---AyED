@@ -18,7 +18,7 @@ typedef struct
 
 
 
-int cargarConfig(tConfig*);
+int cargarConfig(tConfig* config);
 
 
 #endif // CONFIG_H_

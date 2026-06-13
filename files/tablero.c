@@ -204,13 +204,22 @@ int  generarMovBandido(tTablero* tablero, tCola *mov)
     return 0;
 }
 
+int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
+{
+    char tipos[2];
+    tipos[0] = tipo1;
+    tipos[1] = tipo2;
+
+    return buscarPorClaveListaDE(tablero, tipos, sizeof(tipos), cmpCasTipos);
+}
+
 void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
 {
     tElem jugador;
     jugador.id_elem=1;
     buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem),cmpElem,cambiarEstado,estado);
-    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 
+    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 }
 
 int  cmpInt(const void *a, const void *b)
@@ -219,4 +228,20 @@ int  cmpInt(const void *a, const void *b)
    const int * n2 = b;
 
    return n1 - n2;
+
 }
+
+void mostrarTablero(tTablero* tablero){
+// (1) Podria recorrer la listaDE (tTablero) y devolver por contexto direccion de nodoDE con tElem de ID 0 (Inicio) para ver inicio
+// (2) Se recorre, en este caso, como si "tablero" (tLista*) apuntase al ultimo nodo insertado. Necesariamente a derecha se llegaria al primer nodo.
+    // Pasar de (2) a (1) es sencillo
+
+    if(NULL == *tablero){
+        printf("\n [ %s ]", MSJ_LISTA_MAPA_VACIO);
+        return;
+    }
+
+    mostrarListaDE(tablero, mostrarCasilla);
+}
+
+

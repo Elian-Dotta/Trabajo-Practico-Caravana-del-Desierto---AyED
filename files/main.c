@@ -2,8 +2,7 @@
 
 int main()
 {
-    printf("Caravana Del Desierto\n");
-    //LLAMA A MENU
+    juego();
 
     return 0;
 }

@@ -49,19 +49,19 @@
 #define ELIM(ELIM) eliminarElemento(tablero, (ELIM))
 
 
-typedef int (*Animacion)(tTablero*, unsigned);
+typedef void (*Animacion)(tTablero*, unsigned);
 
 
-int animPremio           (tTablero *tablero, unsigned frame); // [ PJ ]-> [ *P*J ]-> [***J ]-> [ **J ]-> [ *j ]-> [ J ]
-int animOasisObtenido    (tTablero *tablero, unsigned frame); // [OJ] -> [!O!J] -> [!O!(J)] -> [!O!J] -> [!O!(J)]-> [!O!J] -> [O(J)]
-int animTorSeActiva      (tTablero *tablero, unsigned frame);
-int animTorFinaliza      (tTablero *tablero, unsigned frame);
-int animVidaExtra        (tTablero *tablero, unsigned frame);
-int animOasisPerdido     (tTablero *tablero, unsigned frame);
-int animBandidoAtaca     (tTablero *tablero, unsigned frame);
-int animJugadorDaniado   (tTablero *tablero, unsigned frame);
-int animBandidoDesaparece(tTablero *tablero, unsigned frame);
-int animJugGana          (tTablero *tablero, unsigned frame);
+void animPremio           (tTablero *tablero, unsigned frame); // [ PJ ]-> [ *P*J ]-> [***J ]-> [ **J ]-> [ *j ]-> [ J ]
+void animOasisObtenido    (tTablero *tablero, unsigned frame); // [OJ] -> [!O!J] -> [!O!(J)] -> [!O!J] -> [!O!(J)]-> [!O!J] -> [O(J)]
+void animTorSeActiva      (tTablero *tablero, unsigned frame);
+void animTorFinaliza      (tTablero *tablero, unsigned frame);
+void animVidaExtra        (tTablero *tablero, unsigned frame);
+void animOasisPerdido     (tTablero *tablero, unsigned frame);
+void animBandidoAtaca     (tTablero *tablero, unsigned frame);
+void animJugadorDaniado   (tTablero *tablero, unsigned frame);
+void animBandidoDesaparece(tTablero *tablero, unsigned frame);
+void animJugGana          (tTablero *tablero, unsigned frame);
 
 void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim);
 

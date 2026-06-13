@@ -12,12 +12,12 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 
     do
     {
-        mostrar(msj, stdout);
+        mostrar(msj);
 
         if (conErr && msjErr != NULL)
-            mostrar(msjErr, stdout);
+            mostrar(msjErr);
 
-        mostrar("\nOpcion: ", stdout);
+        mostrar("\nOpcion: ");
 
         if (scanf(" %c", &opcion) != 1)
             opcion = '\0';
@@ -35,7 +35,7 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 
 void ingresarDato(const char* msj, char *out)
 {
-    mostrar(msj, stdout);
+    mostrar(msj);
     scanf(" %[^\n]", out);
     while (getchar() != '\n' && !feof(stdin));
 }

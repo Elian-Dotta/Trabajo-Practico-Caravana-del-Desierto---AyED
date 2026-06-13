@@ -3,6 +3,8 @@
 
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log)
 {
+    limpiarPantalla();
+
     mostrarTitulo();
 
     mostrarSeparador();
@@ -11,7 +13,7 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *
 
     mostrarSeparador();
 
-    mostrarHud(jugador, estado);
+    mostrarHUD(jugador, estado);
 
     mostrarSeparador();
 
@@ -29,44 +31,32 @@ void mostrarSeparador()
     printf("\n-------------------------------------------\n");
 }
 
-void mostrarHud(tJugador* jugador, tEstado *estado)
-{
 
+void mostrarHUD(tJugador* jugador, tEstado* estado)
+{
+    //vidas, puntaje, cant mov, oasis si/no
+    printf("Vidas: %d\t",jugador->vida);
+    printf("\tPuntaje: %d\n",jugador->puntaje);
+    printf("Cantidad de movimientos: %d/n",jugador->cantMov);
+    printf("Protección de oasis: ");
+    if(estado->Oobtenido==1)
+    {
+        printf("SI\n");
+    }
+    else
+    {
+        printf("NO\n");
+    }
 }
 
 
-<<<<<<< Updated upstream
-=======
-void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado)
+void limpiarBuffer(void)
 {
-    mostrarTitulo();
-    mostrarSeparador();
-    mostrarTablero(tablero);
-    mostrarSeparador();
-    mostrarHud(jugador, estado);
-    mostrarSeparador();
-    //MOSTRARLOG();
-}
-
-void mostrarTitulo()
-{
-    printf("CARAVANA DEL DESIERTO\n");
-}
-
-void mostrarSeparador()
-{
-    // PARA HACER VARIABLE USAR FOR
-    printf("\n-------------------------------------------\n");
-}
-
-void mostrarHud(tJugador* jugador, tEstado *estado)
-{
-
-}
-
-
-void limpiarBuffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
->>>>>>> Stashed changes
+
+void limpiarPantalla()
+{
+    printf("\033[2J\033[H");
+}
