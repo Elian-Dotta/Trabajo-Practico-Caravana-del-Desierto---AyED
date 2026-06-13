@@ -10,6 +10,7 @@ typedef struct Estado
         Tfinalizada,
         BandAtaca,
         IDBandDesaparecido,
+        Bandidos,
         JganaPuntos,
         JganaVida,
         JpierdeVida,

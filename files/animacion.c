@@ -11,7 +11,7 @@ void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned 
     }
 }
 
-int animPremio(tTablero *tablero, unsigned frame)
+void animPremio(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -36,7 +36,7 @@ int animPremio(tTablero *tablero, unsigned frame)
     }
 }
 
-int animOasisObtenido(tTablero *tablero, unsigned frame)
+void animOasisObtenido(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -69,7 +69,7 @@ int animOasisObtenido(tTablero *tablero, unsigned frame)
     }
 }
 
-int animOasisPerdido(tTablero *tablero, unsigned frame)
+void animOasisPerdido(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -91,7 +91,8 @@ int animOasisPerdido(tTablero *tablero, unsigned frame)
             break;
     }
 }
-int animTorSeActiva(tTablero *tablero, unsigned frame)
+
+void animTorSeActiva(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -145,7 +146,7 @@ int animTorSeActiva(tTablero *tablero, unsigned frame)
 
     }
 }
-int animTorFinaliza(tTablero *tablero, unsigned frame)
+void animTorFinaliza(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -159,7 +160,8 @@ int animTorFinaliza(tTablero *tablero, unsigned frame)
             break;
     }
 }
-int animVidaExtra(tTablero *tablero, unsigned frame)
+
+void animVidaExtra(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -182,7 +184,8 @@ int animVidaExtra(tTablero *tablero, unsigned frame)
             break;
     }
 }
-int animBandidoAtaca(tTablero *tablero, unsigned frame)
+
+void animBandidoAtaca(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -201,7 +204,8 @@ int animBandidoAtaca(tTablero *tablero, unsigned frame)
             break;
     }
 }
-int animBandidoDesaparece(tTablero *tablero, unsigned frame)
+
+void animBandidoDesaparece(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -216,7 +220,8 @@ int animBandidoDesaparece(tTablero *tablero, unsigned frame)
             break;
     }
 }
-int animJugGana(tTablero *tablero, unsigned frame)
+
+void animJugGana(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
@@ -230,7 +235,7 @@ int animJugGana(tTablero *tablero, unsigned frame)
     }
 }
 
-int animJugadorDaniado(tTablero *tablero, unsigned frame)
+void animJugadorDaniado(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {

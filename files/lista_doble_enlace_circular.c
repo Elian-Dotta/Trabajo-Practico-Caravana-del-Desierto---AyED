@@ -1,6 +1,7 @@
 #include "lista_doble_enlace_circular.h"
 
-int vaciarListaC(tListaDE *lista){
+int vaciarListaC(tListaDE *lista)
+{
 
     tNodoDE *actualNodo = *lista;
     int cont = 0;
@@ -8,17 +9,17 @@ int vaciarListaC(tListaDE *lista){
     if(NULL == actualNodo)
         return 0;
 
-    actualNodo = actualNodo->proxNodo;
+    actualNodo = actualNodo->sig;
 
     while(actualNodo != *lista){
         tNodoDE *auxNodo = actualNodo;
-        free(auxNodo->dato);
+        free(auxNodo->info);
         free(auxNodo);
-        actualNodo = actualNodo->proxNodo;
+        actualNodo = actualNodo->sig;
         cont++;
     }
 
-    free(actualNodo->dato);
+    free(actualNodo->info);
     free(actualNodo);
 
     *lista = NULL;
@@ -27,38 +28,39 @@ int vaciarListaC(tListaDE *lista){
 }
 
 
-int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato){
-
+int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
+{
     tNodoDE *auxNodo;
 
-    if( NULL == (auxNodo = (tNodoDE*)malloc(sizeof(tNodoDE)) ) || NULL == (auxNodo->dato = (void*)malloc(tamDato)  )){
+    if( NULL == (auxNodo = (tNodoDE*)malloc(sizeof(tNodoDE)) ) || NULL == (auxNodo->info = (void*)malloc(tamDato)  )){
         free(auxNodo);
         return 0;
     }
 
-    memcpy(auxNodo->dato, dato, tamDato);
+    memcpy(auxNodo->info, dato, tamDato);
 
     if(0 == tamDato){
-        auxNodo->dato = NULL;
-        auxNodo->tamDato = sizeof(void*);
+        auxNodo->info = NULL;
+        auxNodo->tamInfo = sizeof(void*);
     }else
-        auxNodo->tamDato = tamDato;
+        auxNodo->tamInfo = tamDato;
 
     if(NULL == *lista){
-        auxNodo->proxNodo = auxNodo;
-        auxNodo->antNodo = auxNodo;
-        *lista = auxNodo; // se insertaria al princio de lista
+        auxNodo->sig = auxNodo;
+        auxNodo->ant = auxNodo;
+        *lista = auxNodo; // se insertaria al principio de lista
     }else{
-        tNodoDE *ultimo  = (*lista)->antNodo;
+        tNodoDE *ultimo  = (*lista)->ant;
 
-        auxNodo->antNodo = ultimo;
-        auxNodo->proxNodo = *lista;
+        auxNodo->ant = ultimo;
+        auxNodo->sig = *lista;
 
-        ultimo->proxNodo = auxNodo;
-        (*lista)->antNodo = auxNodo;
+        ultimo->sig = auxNodo;
+        (*lista)->ant = auxNodo;
     }
 
     return 1;
+}
 
 
 void crearListaDE(tListaDE *pl)
@@ -66,7 +68,8 @@ void crearListaDE(tListaDE *pl)
     *pl = NULL;
 }
 
-int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto)
+//int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp)
+
 
 int listaVaciaDE(const tListaDE *pl)
 {
@@ -126,7 +129,7 @@ int vaciarListaDE(tListaDE *pl)
     return cant;
 }
 
-
+/*
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar)
 {
     tNodoDE *aux = *pl;
@@ -141,8 +144,8 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar)
         aux = aux->sig;
     }
 }
-
-
+*/
+/*
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto)
 {
     tNodoDE *aux = *pl;
@@ -157,7 +160,7 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto)
         aux = aux->sig;
     }
 }
-
+*/
 
 int buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp)
 {
@@ -189,8 +192,8 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
         return;
 
     do{
-        accion(nodoActual->dato,contexto);
-        nodoActual = nodoActual->proxNodo;
+        accion(nodoActual->info,contexto);
+        nodoActual = nodoActual->sig;
     }while(nodoActual != *pl);
 }
 
@@ -202,8 +205,8 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
         return;
 
     do{
-        mostrar(nodoActual->dato);
-        nodoActual = nodoActual->proxNodo;
+        mostrar(nodoActual->info);
+        nodoActual = nodoActual->sig;
     }while(nodoActual != *pl);
 }
 

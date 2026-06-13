@@ -14,13 +14,15 @@ typedef tNodoArbol* tArbolBinBusq;
 #define SIN_INICIALIZAR  3
 #define ERROR_ARCH       4
 
+typedef int (*Cmp)(const void *, const void *);
+
 void crearArbolBinBusq(tArbolBinBusq *p);
 
 int  insertarArbolBinBusq(tArbolBinBusq *p, const void *d, unsigned tam,
-                          int (*cmp)(const void *, const void *));
+                          Cmp cmp);
 
 void recorrerEnOrdenSimpleArbolBinBusq(const tArbolBinBusq *p, void *params,
-                          void (*accion)(void *, unsigned, void *));
+                          void (*accion)(void *, void *));
 
 int  cargarArchivoBinOrdenadoArbolBinBusq(tArbolBinBusq *p, const char *path,
                           unsigned tamInfo);

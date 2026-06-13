@@ -20,7 +20,7 @@ void mostrar(const char *msj);
 
 void mostrarHUD(tJugador*, tEstado*); // HAY QUE AGREGAR COMO PARAMETRO LAS VARIABLES A IMPRIMIR, HAY QUE DEFINIR TAMBIEN LAS VARIABLES A IMPRIMIR.
 
-
+void limpiarBuffer(void);
 
 
 //void mostrarTablero(void *casilla);

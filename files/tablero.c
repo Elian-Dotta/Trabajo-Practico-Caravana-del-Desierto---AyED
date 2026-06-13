@@ -18,7 +18,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
     tElem elem;
     int contCas = 0;
 
-    while(contCas < cantPos) //bucle infinito
+    while(contCas < cantPos)
     {
         insertarAlFinalDeListaDE(tablero, crearCasilla(), sizeof(tCasilla));
         if(contCas == 0)

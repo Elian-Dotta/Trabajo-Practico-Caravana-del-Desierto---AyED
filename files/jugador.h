@@ -1,6 +1,8 @@
 #ifndef JUGADOR_H_
 #define JUGADOR_H_
 
+#include <string.h>
+
 #include "cola.h"
 #include "movimiento.h"
 

@@ -5,6 +5,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "consola.h"
+
 
 #define MENU_JUEGO "\
 -----------------------------------\n\

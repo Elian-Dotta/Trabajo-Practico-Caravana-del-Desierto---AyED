@@ -38,12 +38,12 @@ int insertarArbolBinBusq(tArbolBinBusq *p, const void *d, unsigned tam,
 
 
 void recorrerEnOrdenSimpleArbolBinBusq(const tArbolBinBusq *p, void *params,
-                                       void (*accion)(void *, unsigned, void *))
+                                       void (*accion)(void *, void *))
 {
     if(!*p)
         return;
     recorrerEnOrdenSimpleArbolBinBusq(&(*p)->izq, params, accion);
-    accion((*p)->info, (*p)->tamInfo, params);
+    accion((*p)->info, params);
     recorrerEnOrdenSimpleArbolBinBusq(&(*p)->der, params, accion);
 }
 
