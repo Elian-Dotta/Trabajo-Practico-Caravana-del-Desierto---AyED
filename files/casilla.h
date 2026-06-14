@@ -65,4 +65,6 @@ void modEstado(void* estado, void* casilla);
 
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
 
+void destruirCasilla(void **pl, void* contexto);
+
 #endif // CASILLA_H_

@@ -17,8 +17,6 @@ void inicializarRanking(tRanking *ranking)
     ranking->cantLineas = 0;
 }
 
-
-
 int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char *archJug)
 {
     FILE* archPartidas;

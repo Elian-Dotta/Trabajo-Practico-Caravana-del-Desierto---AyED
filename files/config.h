@@ -16,9 +16,6 @@ typedef struct
     int max_tormenta;
 }tConfig;
 
-
-
 int cargarConfig(tConfig* config);
-
 
 #endif // CONFIG_H_

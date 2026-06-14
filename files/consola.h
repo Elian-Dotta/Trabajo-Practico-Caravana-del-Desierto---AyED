@@ -13,7 +13,10 @@
 
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log);
 
+void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log);
+
 void mostrarTitulo();
+
 void mostrarSeparador();
 
 void mostrar(const char *msj);
@@ -23,7 +26,5 @@ void mostrarHUD(tJugador*, tEstado*); // HAY QUE AGREGAR COMO PARAMETRO LAS VARI
 void limpiarBuffer(void);
 
 void limpiarPantalla();
-
-//void mostrarTablero(void *casilla);
 
 #endif // CONSOLA_H_

@@ -79,13 +79,18 @@ void guardarMovimientoJugador(tJugador *j, tMovimiento *mov)
 void mostrarMovimientosJugador(tJugador *j)
 {
     tMovimiento mov;
-    // ACA SE MUESTRA AL FINALIZAR LA PARTIDA, HABRIA QUE VER DE QUE FORMA MOSTRAR
-    // PERO COMO INICIO HAY QUE SACAR ELEMENTOS DE LA COLA Y MOSTRARLOS
+    char buffer[TAM];
+    unsigned contador = 0;
+    mostrar("El jugador realizo los siguientes movimientos:\n");
+    mostrar("(NF - N lugares hacia adelante, NB - N lugares hacia atras)\n\n");
     while(!colaVacia(&j->hisMovJugador))
     {
         sacarDeCola(&j->hisMovJugador, &mov, sizeof(tMovimiento));
-        // MOSTRARLO -> A LO MEJOR UNA FUNCION DE CONSOLA.H, NUEVA O EXISTENTE
+        snprintf(buffer, sizeof(buffer), "[%d%c]", mov->cant, mov->dir);
+        mostrar(buffer);
+        contador++;
+
+        if(contador % MAX_MOV_LINEA == 0)
+            mostrar("\n");
     }
 }
-
-

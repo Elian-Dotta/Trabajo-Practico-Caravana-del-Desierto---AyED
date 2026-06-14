@@ -132,7 +132,7 @@ int  dibujarAnimacionMov(tPartida *p)
 
 int  actualizarEstado(tPartida *p)
 {
-
+    actualizarEstadoDelJugador(&p->tablero, &p->estado, modEstado, &p->bandInteligentes);
 }
 
 
@@ -201,6 +201,9 @@ int  dibujarAnimacionEstado(tPartida *p)
         disminuirVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
         posicionarTableroPorIdElem(t, p->estado.IDBandDesaparecido);
+        if(verVida(&p->jugador)== 0)
+            p->estado.Jpierde = 1;
+
     }
     if(p->estado.IDBandDesaparecido)
     {
@@ -212,11 +215,33 @@ int  dibujarAnimacionEstado(tPartida *p)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana);
         escribirEnLog(&p->log, MSJ_JUGADORGANA);
+        p->estado.Jpierde = 0;
+        p->corriendo = 0;
+    }
+
+    if(p->estado.Jpierde)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde);
+        escribirEnLog(&p->log, MSJ_JUGADORPIERDE);
+        p->corriendo = 0;
     }
 
     reiniciarEstado(&p->estado);
 }
 
-int  finalizarPartida(tPartida *p);
+int  finalizarPartida(tPartida *p)
+{
+    dibujarFinDePartida(&p->tablero, &p->jugador, &p->log);
+
+    guardarPartida(&p->jugador);
+
+    vaciarLista(&p->bandInteligentes);
+
+    vaciarCola(&p->movimientos);
+
+    vaciarLog(&p->log);
+
+    destruirTablero(&p->tablero);
+}
 
 

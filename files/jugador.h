@@ -6,6 +6,9 @@
 #include "cola.h"
 #include "movimiento.h"
 
+#define TAM 128
+#define MAX_MOV_LINEA
+
 typedef struct sJugador
 {
     unsigned vida,

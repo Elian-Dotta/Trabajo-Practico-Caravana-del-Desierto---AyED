@@ -42,6 +42,7 @@
 #define FRBANDES 3
 #define FRJUGGANA 5 // NO ESTA IMPLEMENTADA
 #define FRJUGCAS1 2
+#define FRJUGPIERDE 3
 
 #define INSIZQ(REF, NUE) insertarAlLadoDeElemento(tablero, IZQ, (REF), (NUE))
 #define INSDER(REF, NUE) insertarAlLadoDeElemento(tablero, DER, (REF), (NUE))
@@ -62,6 +63,7 @@ void animBandidoAtaca     (tTablero *tablero, unsigned frame);
 void animJugadorDaniado   (tTablero *tablero, unsigned frame);
 void animBandidoDesaparece(tTablero *tablero, unsigned frame);
 void animJugGana          (tTablero *tablero, unsigned frame);
+void animJugPierde        (tTablero *tablero, unsigned frame);
 
 void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim);
 

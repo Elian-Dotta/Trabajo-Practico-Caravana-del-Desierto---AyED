@@ -14,6 +14,7 @@
 #define ARCHIDXNOMBRE "nombre.idx"
 #define ARCHPARTIDAS "partida.bin"
 #define ARCHJUGADORES "jugadores.bin"
+#define ARCHPARTIDASTMP "partida.tmp"
 
 
 // MODULO USADO PARA EL GUARDADO DE PARTIDA Y JUGADOR.
@@ -51,5 +52,7 @@ void armarMensaje(void *info, void *params);
 
 void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro); // ASIGNACION PARA EL INDICE
 int cmpNickname(const void*, const void*);
+
+void guardarPartida(tJugador *jugador);
 
 #endif // REGISTRO_H_

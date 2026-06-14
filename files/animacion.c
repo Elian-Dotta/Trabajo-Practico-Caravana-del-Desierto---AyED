@@ -239,11 +239,28 @@ void animJugadorDaniado(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
-    case 1:
+        case 1:
             CAMELEM(DESAPARECE, JUGMINUS);
             break;
         case 2:
             CAMELEM(JUGMINUS, JUGADOR);
             break;
+    }
+}
+
+void animJugPierde(tTablero *tablero, unsigned frame)
+{
+    switch(frame)
+    {
+        case 1:
+            CAMELEM(JUGADOR, JUGMINUS);
+            break;
+        case 2:
+            CAMELEM(JUGMINUS, DESAPARECE);
+            break;
+        case 3:
+            ELIM(DESAPARECE);
+            break;
+
     }
 }
