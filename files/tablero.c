@@ -141,7 +141,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov)
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
@@ -213,11 +213,11 @@ int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
     return buscarPorClaveListaDE(tablero, tipos, sizeof(tipos), cmpCasTipos);
 }
 
-void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
+void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes)
 {
     tElem jugador;
-    jugador.id_elem=1;
-    buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem),cmpElem,cambiarEstado,estado);
+    jugador.id_elem = JUGADORID;
+    buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem), cmpElem, cambiarEstado, estado);
 
     eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 }
@@ -290,4 +290,8 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
     }
 }
 
-
+void destruirTablero(tTablero *tablero)
+{
+    recorrerListaDE(tablero, destruirCasilla, NULL);
+    vaciarListaDE(tablero);
+}

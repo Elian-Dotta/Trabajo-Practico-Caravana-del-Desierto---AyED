@@ -18,7 +18,13 @@ typedef int  (*Cmp)(const void *, const void *);
 typedef tNodo* tLista; // La lista sera un puntero a Nodo. Es decir, la lista
 // tendra la direccion de memoria de un nodo, no datos. Asi ocupara solo 8 Bytes (tam de puntero).
 
+
 typedef int (*Cmp)(const void *, const void *);
+typedef void (*Mostrar) (const void*);
+typedef int (*tCompararFn)(const void*, const void*);
+typedef int (*Acumular) (void **, unsigned *, void *, unsigned);
+typedef int  (*Cmp)(const void *, const void *);
+typedef void  (*Accion)(void *, void *);
 
 
 void crearLista(tLista *p);
@@ -28,6 +34,9 @@ int  ponerAlFinal(tLista *p, const void *d, unsigned cantBytes);
 
 //int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
+
+void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void *contexto);
+int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
 int vaciarLista(tLista *lista);
 int ponerAlFinal(tLista *lista, const void *dato, unsigned tamDato);
 
@@ -45,18 +54,5 @@ int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato
 
 int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum);
 
-int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
-int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
-
-void recorrerLista(tLista *lista, Accion accion, void *contexto);
-
 void mostrarLista(const tLista *lista, Mostrar mostrar);
-
-//int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*));
-//int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*));
-//void recorrerLista(void **pl, Accion accion,void* estado);
-//int  mostrarLista(const tLista *p, void (*mostrar)(const void *, FILE *), FILE *fp);
-
-
-
 #endif // LISTA_SIMPLE_ENLACE_H

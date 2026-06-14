@@ -22,6 +22,4 @@ void inicializarEstado(tEstado *estado);
 
 void reiniciarEstado(tEstado *estado);
 
-
-
 #endif // ESTADO_H_

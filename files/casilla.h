@@ -78,4 +78,6 @@ void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer);
 void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer);
 void corregirCadenadeMapaConIndice(char *buffer);
 
+void destruirCasilla(void **pl, void* contexto);
+
 #endif // CASILLA_H_

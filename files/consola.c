@@ -3,6 +3,10 @@
 
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log)
 {
+    limpiarPantalla();
+
+    mostrarSeparador();
+
     mostrarTitulo();
 
     mostrarSeparador();
@@ -18,10 +22,31 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *
     mostrarLog(log);
 }
 
+void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log)
+{
+    limpiarPantalla();
+    mostrarSeparador();
+
+    mostrarTitulo();
+    mostrarSeparador();
+
+    mostrarTablero(tablero);
+    mostrarSeparador();
+
+    mostrarEstadisticas(jugador);
+    mostrarSeparador();
+
+    mostrarLog(log);
+    mostrarSeparador();
+
+    mostrarMovimientosJugador(jugador);
+}
+
 void mostrarTitulo()
 {
     printf("CARAVANA DEL DESIERTO\n");
 }
+
 
 void mostrarSeparador()
 {
@@ -54,3 +79,7 @@ void limpiarBuffer(void)
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+void limpiarPantalla()
+{
+    printf("\033[2J\033[H");
+}

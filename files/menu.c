@@ -1,29 +1,9 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
 #include "menu.h"
-
-int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
-{
-    int opcion;
-    int valido = 0;
-    int priVez = 1;
-
-    do
-    {
-        if(!priVez && conErr && msjErr)
-        {
-            mostrar(msjErr);
-        }
-
-        mostrar(msj);
-
-        if(scanf("%d", &opcion) != 1)
-            opcion = 0;
-
-        valido = (opcion >= 1 && opcion <= cantOpciones);
-        priVez = 0;
-    } while(!valido);
-
-    return opcion;
-}
+#include "consola.h"
 
 char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 {
@@ -60,3 +40,29 @@ void ingresarDato(const char* msj, char *out)
     while (getchar() != '\n' && !feof(stdin));
 }
 
+
+
+int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
+{
+    int opcion;
+    int valido = 0;
+    int priVez = 1;
+
+    do
+    {
+        if(!priVez && conErr && msjErr)
+        {
+            mostrar(msjErr);
+        }
+
+        mostrar(msj);
+
+        if(scanf("%d", &opcion) != 1)
+            opcion = 0;
+
+        valido = (opcion >= 1 && opcion <= cantOpciones);
+        priVez = 0;
+    } while(!valido);
+
+    return opcion;
+}

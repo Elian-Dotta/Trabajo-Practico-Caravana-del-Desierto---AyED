@@ -186,15 +186,21 @@ void asignarNroCasElem(void *a, void *contexto)
 
 void mostrarCasilla(const void *pl)
 {
-    tLista *casilla = pl;
-    printf("[ ");
+    const tCasilla *casilla = (const tCasilla*)pl;
+    char buffer[TAM_BUFFER];
+    snprintf(buffer, TAM_BUFFER, "[");
+    mostrar(buffer);
     mostrarLista(casilla, mostrarElemento);
-    printf(" ] ");
+    snprintf(buffer, TAM_BUFFER, "]");
+    mostrar(buffer);
 }
 
-void mostrarElemento(const void *elemVoid){
+void mostrarElemento(const void *elemVoid)
+{
     tElem *elem = (tElem*)elemVoid;
-    printf(" %c ", elem->tipo_elem);
+    char buffer[3];
+    snprintf(buffer, sizeof(buffer), "%c", elem->tipo_elem);
+    mostrar(buffer);
 }
 
 
@@ -270,7 +276,6 @@ void modEstado(void* est, void* e)
     {
         estado->Jgana=1;
     }
-
 }
 
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq){
@@ -471,3 +476,9 @@ void corregirCadenadeMapaConIndice(char *buffer){
     *auxIni = '\0'; // corta la cadena
 }
 
+
+void destruirCasilla(void **pl, void* contexto)
+{
+    tCasilla *cas = (tCasilla*)pl;
+    vaciarLista(cas);
+}

@@ -6,6 +6,9 @@
 #include "cola.h"
 #include "movimiento.h"
 
+#define TAM 128
+#define MAX_MOV_LINEA
+
 typedef struct sJugador
 {
     unsigned vida,
@@ -17,11 +20,6 @@ typedef struct sJugador
     tCola    hisMovJugador;
 }tJugador;
 
-typedef struct
-{
-    char nombre[31];
-    char nickname[11];
-} regJugador;
 
 void inicializarJugador(tJugador* j, unsigned vida);
 void aumentarVida(tJugador* j);
@@ -43,6 +41,8 @@ const char* verNick(const tJugador *j);
 
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);
+
+void ingresarJugador(tJugador *j);
 
 
 #endif // JUGADOR_H_

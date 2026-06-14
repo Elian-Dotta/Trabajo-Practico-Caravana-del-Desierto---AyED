@@ -6,7 +6,8 @@
 #include <ctype.h>
 
 #include "consola.h"
-
+#include "partida.h"
+#include "ranking.h"
 
 #define MENU_JUEGO "\
 -----------------------------------\n\
@@ -18,7 +19,17 @@
 
 #define OPC_JUEGO "JRS"
 
+#define JUGAR_PARTIDA 'J'
+#define MOSTRAR_RANKING 'R'
+#define SALIR_DEL_JUEGO 'S'
+
+#define MSJ_SALIDA "Saliendo del juego...\n"
+
 #define MSJ_ERR_OPC "Opcion invalida. Intente nuevamente.\n"
+
+void juego();
+
+void menuPrincipal();
 
 char menu(const char* msj, const char *opc, int conErr, const char *msjErr);
 
