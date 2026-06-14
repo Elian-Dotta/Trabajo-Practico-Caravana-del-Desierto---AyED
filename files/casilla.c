@@ -215,7 +215,7 @@ int cambiarEstado(void **pl, void* estado)
     {
         if (tieneoasis==1)
         {
-            estado->Tactiva=0;
+            est->Tactiva=0;
             tienetormenta=0;
         }
         else
@@ -242,6 +242,7 @@ int cambiarEstado(void **pl, void* estado)
     {
         tieneoasis=1;
     }
+    return 1;
 }
 
 

@@ -63,7 +63,7 @@ void mostrarMovimientosJugador(tJugador *j)
 
 void armarMensaje(void *jugador, void *msjBuffer)
 {
-    static int contador=0;
-    sprintf(msjBuffer, "%d. %s %s\n", contador+1, ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
+    void **buf = (void**)msjBuffer;
+    sprintf((char*)buf[0], "%d. %s %s\n", *(int*)buf[1], ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
 }
 
