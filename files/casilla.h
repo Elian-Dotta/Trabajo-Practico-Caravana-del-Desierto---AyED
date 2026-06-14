@@ -70,7 +70,6 @@ void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int 
 int compararIDtElem(const void *voidE1, const void *voidE2);
 int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, int IDElemento);
-void devolverPrimerBandido(void *voidCasilla, void *contexto);
 
 void accionCasillaACadena(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);

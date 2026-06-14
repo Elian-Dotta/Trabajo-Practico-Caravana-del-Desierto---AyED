@@ -298,17 +298,62 @@ int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
    Se diseña para ser usada como una funcion de comparacion para una funcion de recorrido generica
 */
     tElem auxElem = { *((int*)voidIDElemento), '\0', 0 };
-    return !buscarPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,NULL,compararIDtElem);
+    return !buscarPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,NULL,0,compararIDtElem);
 }
 
-void devolverPrimerBandido(void *voidCasilla, void *contexto){
-    tCasilla*      casilla        = (tCasilla*)voidCasilla;
-    tElem*         dirElemDestino = (tElem*)contexto;
-    tElem          elementoClave  = {0,'B',0};
-
-    if(0 == dirElemDestino->id_elem)
-        buscarPorClaveEnLista(casilla,&elementoClave, dirElemDestino, compararTipotElem);
+int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado){
+    // DEVUELVE LA MENOR DISTANCIA ENTRE DOS ELEMENTOS, SI ESA MENOR DISTANCIA SE ENCUENTRA
+    // YENDO DE DE LA POS ACTUAL A IZQUIERDA, LA DEVUELVE EN NEGATIVO
+    int der, izq;
+    distanciasEntreElementos(posElem1, posElem2, cantidadCasillas, &der, &izq);
+    der = abs(der - dado);
+    izq = abs(izq - dado);
+    return der<izq?der:(-1)*izq;
 }
+
+void asignarBandidoMenorDistancia(void *elementoCasilla, void *contexto){
+/*
+    FUNCION DE ACCION DE LISTASE EJECUTADA SOBRE UN RECORRIDO DE LISTADE
+        PARA CADA CASILLA BUSCA BANDIDOS EN SU LISTASE Y CALCULA SU DISTANCIA AL JUGADOR
+        SI LA DISTANCIA ES MENOR QUE LA EXISTENTE ALMACENADA PARA UN BANDIDO DADO, ASIGNA
+        LOS DATOS DE ESE BANDIDO EN LA VARIABLE QUE GUARDA EL BANDIDO DE MENOR DISTANCIA AL JUGADOR
+            SI LA VARIABLE ANTERIOR NO ESTA INICIALIZADA (CONTROL EN ID == 0, YA QUE NINGUN BANDIDO TIENE ESE ID)
+            LA INICIALIZA CON EL PRIMER BANDIDO ENCONTRADO.
+*/
+
+    tElem       *bandidoMenorDistancia =  (tElem*)((void**)contexto)[0];
+    unsigned     posJugador            = *(unsigned*)((void**)contexto)[1];
+    int          cantidadCasillas      = *(int*)((void**)contexto)[2];
+    unsigned     resultadoDado         = *(unsigned*)((void**)contexto)[3];
+    tElem       *elementoEnCasilla     =  (tElem*)elementoCasilla;
+    int          distActual,
+                 distBandidoMenor;
+
+    if(elementoEnCasilla->tipo_elem != 'B')
+        return;
+
+    if(0 == bandidoMenorDistancia->id_elem){
+        memcpy(bandidoMenorDistancia, elementoCasilla, sizeof(tElem));
+        return;
+    }
+
+    distActual       = abs(devolverMenorDistanciaEntreElementos(elementoEnCasilla->nro_casilla, posJugador, cantidadCasillas, resultadoDado));
+    distBandidoMenor = abs(devolverMenorDistanciaEntreElementos(bandidoMenorDistancia->nro_casilla, posJugador, cantidadCasillas, resultadoDado));
+    if(distActual < distBandidoMenor)
+        memcpy(bandidoMenorDistancia, elementoCasilla, sizeof(tElem));
+}
+
+void bandidoMasCercanoAJugador(void *voidCasilla, void *contexto){
+/*
+    FUNCION DE ACCION PARA LISTADE, FUNCIONA COMO ENVOLTORIO PARA RECORRER CADA LISTASE (CASILLA) DE CADA NODODE
+    TERMINADA SU EJECUCION, SE ESPERA TENER EN LA FUNCION LLAMADORA, UN BANDIDO QUE SE ENCUENTRE A LA MENOR DISTANCIA
+    DEL JUGADOR (CUALQUIER BANDIDO).
+    // IMPORTANTE: LA DISTANCIA SE CALCULA CONSIDERANDO EL RESULTADO DEL DADO TIRADO.
+*/
+    tCasilla casilla = (tCasilla)voidCasilla;
+    recorrerLista(&casilla, asignarBandidoMenorDistancia, contexto);
+}
+
 
 //Accion para recorrido de listaSE
 void accionCasillaACadena(void *e1, void *voidBuffer){ //Funcion de accion en recorrido de tLista, e1 es un nodo->dato

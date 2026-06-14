@@ -41,7 +41,7 @@ int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos);
 
 void recorrerLista(tLista *lista, Accion accion, void *contexto);
-int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, tCompararFn comparar);
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar)
 
 int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum);
 

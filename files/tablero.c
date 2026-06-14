@@ -222,13 +222,12 @@ void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado,
     eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 }
 
-int  compararEnteros(const void *a, const void *b)
-{
+int  compararEnteros(const void *a, const void *b){
+
    const int * n1 = a;
    const int * n2 = b;
 
    return n1 - n2;
-
 }
 
 tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar que tTablero es tNodo*

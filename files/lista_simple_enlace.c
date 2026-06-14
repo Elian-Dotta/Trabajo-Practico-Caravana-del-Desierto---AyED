@@ -71,15 +71,6 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
 }
 */
 
-void recorrerLista(tLista *lista, Accion accion, void *contexto){ //Nombre anterior, mapLista
-    tNodo *aux = *lista;
-    while(aux)
-    {
-        accion(aux->info, contexto);
-        aux = aux->sig;
-    }
-}
-
 void mostrarLista(const tLista *lista, Mostrar mostrar){
 
     tNodo *aux = *lista;
@@ -196,6 +187,15 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 }
 
 
+void recorrerListaA(tLista *lista, Accion accion, void *contexto){
+    tNodo *aux = *lista;
+    while(aux)
+    {
+        accion(aux->info, contexto);
+        aux = aux->sig;
+    }
+}
+
 void recorrerLista(void **pl, Accion accion,void* contexto)
 {
     tLista* puntero = pl;
@@ -218,17 +218,18 @@ void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void
     }
 }
 
-int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, tCompararFn comparar){
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){
     tNodo *aux = *lista;
     while(aux){
         if(0 == comparar(aux->dato, clave)){
             if(destDato)
-                memcpy(destDato, aux->dato, aux->tamDato);
+                memcpy(destDato, aux->dato, minimo(tamDest,aux->tamDato));
             return 1;
         }
         aux = aux->proxNodo;
     }
     return 0;
+}
 
 int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
 {

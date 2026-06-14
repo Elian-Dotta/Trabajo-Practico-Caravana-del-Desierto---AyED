@@ -62,31 +62,36 @@ int  procesarEntrada(tPartida *p)
 
 }
 
-int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int posJugador, int cantCasillaTablero, tCola *movimientos)
-{ // SE CORRIGE DESPUES CONCIDERANDO QUE tPARTIDA TIENE LOS PARAMETROS NECESARIOS
-    tTablero     tableroInicio     = NULL;
-    tElem        bandidoEncontrado = {0,'\0',0};
-    tMovimiento  movimientoBandido;
+int  calcularMovBandido(tPartida *p)
+{
+/*
+    SE PIDE RECORRER LA LISTA DE, Y BUSCAR PARA CADA CASILLA LOS BANDIDOS,
+    DE ESE BANDIDO, CALCULAR SU DISTANCIA AL JUGADOR Y GUARDAR EL ID DEL QUE TENGA MENOR DISTANCIA LUEGO DE TIRADO EL DADO (SI HAY DOS BANDIDOS EN UNA CASILLA)
+    RECORRIDA TODA LA LISTA Y ELEGIDO EL BANDIDO DE MENOR DISTANCIA, VER SI ESE BANDIDO ESTA EN LA LISTA DE BANDIDOS INTELIGENTES
+    SI ESTA EN LA LISTA DE BANDIDOS INTELIGENTES, ENTONCES MOVER EL BANDIDO EN EL SENTIDO (DERECHA O IZQUIERDA) MAS CONVENIENTE PARA LLEGAR AL JUGADOR
+    SI NO ESTA EN LA LISTA REALIZAR ALEATORIAMENTE LA ELECCION DE IR A IZQUIERDA O DERECHA (TIRAR DADO (0,1))
+*/
+    tElem       bandidoMenorDistancia = {0};
+    unsigned    resultadoDado         = tirarDado(1,6);
+    void        *parametros[4]        = {&bandidoMenorDistancia, &p->jugador->posJug, &p->config->cant_pos, &resultadoDado};
+    tMovimiento movimientoBandido;
 
     if(NULL == *tablero)
         return 0;
 
-    recorrerListaDE(&tableroInicio, devolverPrimerBandido, &bandidoEncontrado);
+    recorrerListaDE(&p->tablero, bandidoMasCercanoAJugador, parametros);
 
     if(0 == bandidoEncontrado.id_elem)
-        return 0; //No hay bandidos en el tablero
+        return 0; //NO HAY BANDIDOS
 
-    movimientoBandido.id    = bandidoEncontrado.id_elem;
-    movimientoBandido.cant  = tirarDado(1,6); //srand(...) -> semilla debe inicializarse al momento de inicializar el juego...
+    movimientoBandido.id   = bandidoMenorDistancia.id_elem;
+    movimientoBandido.cant = resultadoDado;
 
-    if(0 == buscarPorClaveEnLista(bandidosInteligentes, bandidoEncontrado.id_elem, NULL, compararEnteros)){
+    if(0 == buscarPorClaveEnLista(p->bandInteligentes, bandidoMenorDistancia.id_elem, NULL, 0, compararEnteros)){
         movimientoBandido.dir = tirarDado(0,1)?'F':'B';
     }else{
-        int distDer = 0, distIzq = 0;
-        distanciasEntreElementos(bandidoEncontrado.nro_casilla, posJugador, cantCasillaTablero, &distDer, &distIzq);
-        distDer = abs(distDer - movimientoBandido.cant);
-        distIzq = abs(distIzq - movimientoBandido.cant);
-        movimientoBandido.dir = distDer<distIzq?'F':'B';
+        int movDir = devolverMenorDistanciaEntreElementos(bandidoMenorDistancia.nro_casilla, p->jugador.posJug, p->config.cant_pos, resultadoDado);
+        movimientoBandido.dir = movDir>0?'F':'B';
     }
 
     ponerEnCola(movimientos, &movimientoBandido, sizeof(tMovimiento));
