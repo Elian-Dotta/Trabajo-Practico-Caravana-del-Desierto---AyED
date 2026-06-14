@@ -141,7 +141,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov)
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla); // ESTA FUNCION DEVUELVE EL DATO SIN ACTUALIZAR
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 

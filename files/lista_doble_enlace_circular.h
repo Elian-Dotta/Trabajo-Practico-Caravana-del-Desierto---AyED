@@ -8,7 +8,7 @@
 typedef tNodoDE* tListaDE;
 
 
-//  - LA LISTA DOBLEMENTE ENLAZADA SIEMPRE QUEDA APUNTANDO AL ULTIMO ELEMENTO QUE PROCESO, SEA AÑADIRLO, ACTUALIZARLO O ELIMINARLO(EN ESTE CASO QUEDA AL LADO DEL ELIMINADO)
+//  - LA LISTA DOBLEMENTE ENLAZADA SIEMPRE QUEDA APUNTANDO AL ULTIMO ELEMENTO QUE PROCESO, SEA Aï¿½ADIRLO, ACTUALIZARLO O ELIMINARLO(EN ESTE CASO QUEDA AL LADO DEL ELIMINADO)
 //  - DEBE HABER UNA FUNCION DE ACTUALIZAR POSICION DE LISTA YA QUE NO VAMOS A ELIMINAR LAS CASILLAS, SOLO ACTUALIZAR SU CONTENIDO
 //  - EL ACCESO A LA ESTRUCTURA NODO DEBE QUEDAR UNICAMENTE A DISPOSICION DEL TDA, SINO ROMPEMOS ENCAPSULAMIENTO
 // EL ACCESO AL DATO VA A SER SIEMPRE POR UNA FUNCION DE ACUMULAR O MOSTRAR O COMPARACION, COMO PUNTERO A FUNCION ENVIADO A LA PRIMITIVA
@@ -25,7 +25,7 @@ typedef tNodoDE* tListaDE;
 // int  actualizarPosListaDE(tListaDE *pl, void *d, unsigned tamInfo, unsigned pos, Acumular acum);
 // ESTA FUNCION FUNCIONARIA SI LA LISTADE QUEDARIA APUNTANDO AL INICIO
 // PERO NO FUNCIONA ASI, LA PLANTIE ANTES DE SABER COMO FUNCIONABA LA DE. MEJOR UTILIZAR ACTUALIZAR POR ID Y POR POS RELATIVA
-// COMO REEMPLAZO SE PUEDE JUSTO LUEGO DE AÑADIR UNA CASILLA A LA LISTA UTILIZAR ACTUALIZAR POR POS RELATIVA
+// COMO REEMPLAZO SE PUEDE JUSTO LUEGO DE Aï¿½ADIR UNA CASILLA A LA LISTA UTILIZAR ACTUALIZAR POR POS RELATIVA
 
 //int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto);
 //int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* estado);
@@ -60,8 +60,8 @@ int  buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp
 int  actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum);                  // PARA ACTUALIZAR POR ID
 int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int pos, Acumular acum);  // PARA ACTUALIZAR RELATIVO A LA ULTIMA POSICION DE PUNTERO
 
-void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto);
+void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 
 
 

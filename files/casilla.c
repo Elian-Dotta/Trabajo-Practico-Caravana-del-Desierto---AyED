@@ -187,14 +187,20 @@ void asignarNroCasElem(void *a, void *contexto)
 void mostrarCasilla(const void *pl)
 {
     const tCasilla *casilla = (const tCasilla*)pl;
-    printf("[ ");
+    char buffer[TAM_BUFFER];
+    snprintf(buffer, TAM_BUFFER, "[");
+    mostrar(buffer);
     mostrarLista(casilla, mostrarElemento);
-    printf(" ] ");
+    snprintf(buffer, TAM_BUFFER, "]");
+    mostrar(buffer);
 }
 
-void mostrarElemento(const void *elemVoid){
+void mostrarElemento(const void *elemVoid)
+{
     tElem *elem = (tElem*)elemVoid;
-    printf(" %c ", elem->tipo_elem);
+    char buffer[3];
+    snprintf(buffer, sizeof(buffer), "%c", elem->tipo_elem);
+    mostrar(buffer);
 }
 
 

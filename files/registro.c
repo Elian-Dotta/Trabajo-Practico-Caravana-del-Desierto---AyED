@@ -1,4 +1,3 @@
-#include <string.h>
 #include "registro.h"
 
 
@@ -35,6 +34,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     vaciarLista(&nicknames);
     return 1;                                // -> jugador existente, *sel cargado
 }
+
 
 void enlistarNickNames(void *idxNombre, void *contexto)
 {
