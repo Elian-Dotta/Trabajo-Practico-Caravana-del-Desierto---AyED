@@ -65,7 +65,7 @@ void animBandidoDesaparece(tTablero *tablero, unsigned frame);
 void animJugGana          (tTablero *tablero, unsigned frame);
 void animJugPierde        (tTablero *tablero, unsigned frame);
 
-void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim);
+void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim, unsigned IDAncla);
 
 
 #endif // ANIMACION_H_

@@ -159,27 +159,27 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
         idFlechaDer;
     if(p->estado.JganaPuntos)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
         aumentarPuntaje(&p->jugador);
         escribirEnLog(&p->log, MSJ_PUNTOS);
     }
 
     if(p->estado.JganaVida)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra, JUGADORID);
         aumentarVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_VIDA);
     }
 
     if(p->estado.Oobtenido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISOBTENIDO);
     }
 
     if(p->estado.Tactiva)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorActiva);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorActiva, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
         idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
         idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
@@ -187,19 +187,19 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
 
     if(p->estado.Tfinalizada)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
     }
 
     if(p->estado.BandAtaca)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
         escribirEnLog(&p->log, MSJ_BANDIDOATACA);
     }
 
     if(p->estado.Operdido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISPERDIDO);
     }
 
@@ -212,23 +212,22 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
             moverElementoPorId(&p->tablero, idFlechaIzq, mov);
             moverElementoPorId(&p->tablero, idFlechaDer, mov);
         }
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
         disminuirVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
-        posicionarTableroPorIdElem(t, p->estado.IDBandDesaparecido);
         if(verVida(&p->jugador)== 0)
             p->estado.Jpierde = 1;
 
     }
     if(p->estado.IDBandDesaparecido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido);
         escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
     }
 
     if(p->estado.Jgana)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana, JUGADORID);
         escribirEnLog(&p->log, MSJ_JUGADORGANA);
         p->estado.Jpierde = 0;
         p->corriendo = 0;
@@ -236,7 +235,7 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
 
     if(p->estado.Jpierde)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde, JUGADORID);
         escribirEnLog(&p->log, MSJ_JUGADORPIERDE);
         p->corriendo = 0;
     }

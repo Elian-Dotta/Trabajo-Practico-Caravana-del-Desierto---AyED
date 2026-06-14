@@ -38,18 +38,19 @@ tCasilla crearCasilla();
 
 // FUNCIONES DE INSERCION EN CASILLA
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI AÑADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
-
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
-int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // INSERCION PARA LA GENERACION
 
 // FUNCIONES DE MOFICACION DE ELEMENTOS EN CASILLA
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 int cambiarTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
+// FUNCIONES PARA MOSTRAR ELEMENTOS
 void mostrarCasilla(const void *pl);
 void mostrarElemento(const void *elemVoid);
 
+// FUNCIONES DE ASIGNACION DE NUMERO
 void asignarNroCasilla(void *a, void *contexto);
 void asignarNroCasElem(void *a, void *contexto);
 

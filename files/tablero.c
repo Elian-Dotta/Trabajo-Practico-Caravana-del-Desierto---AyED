@@ -240,7 +240,7 @@ void mostrarTablero(tTablero* tablero){
         printf("\n [ %s ]", MSJ_LISTA_MAPA_VACIO);
         return;
     }
-
+    posicionarTablero(tablero, 0); // POSICIONA EN EL INICIO
     mostrarListaDE(tablero, mostrarCasilla);
 }
 
