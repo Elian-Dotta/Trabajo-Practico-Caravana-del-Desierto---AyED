@@ -3,6 +3,7 @@
 
 // ENGLOBA LOS MODULOS PARA EL FUNCIONAMIENTO DE LA PARTIDA
 #include <stdlib.h>
+
 #include "tablero.h"
 #include "cola.h"
 #include "movimiento.h"

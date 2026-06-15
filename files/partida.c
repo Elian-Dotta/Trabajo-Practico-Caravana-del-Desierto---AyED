@@ -82,7 +82,7 @@ int  procesarEntrada(tPartida *p)
 
 int actualizarMovimientos(tPartida *p)
 {
-    obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPos(p->jugador), p->config.cant_pos);
+    obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPosJugador(&p->jugador), p->config.cant_pos);
 }
 
 

@@ -205,42 +205,88 @@ void mostrarElemento(const void *elemVoid)
 }
 
 
-int cambiarEstado(void **pl, void* estado)
+void calcularMovBandido(void *pl, void* contexto)
+{
+    tCasilla *cas = (tCasilla*)pl;
+
+    recorrerLista(cas, buscarYCalcularBandido, contexto);
+}
+
+void buscarYCalcularBandido(void *e, void *contexto)
+{
+    tElem *elem = (tElem*)e;
+    void *ctx[4] = contexto;
+
+    tCola *movimientos = contexto[0];
+    tLista *bandInteligentes = contexto[1];
+    int *posJug = contexto[2];
+    int *cantPos = contexto[3];
+    tMovimiento movimientoBandido;
+    int resultadoDado;
+
+    if(elem->tipo_elem == BANDIDO)
+    {
+        resultadoDado = tirarDado(1, 6);
+
+        movimientoBandido.id   = elem->id_elem;
+        movimientoBandido.cant = resultadoDado;
+
+        if(0 == buscarPorClaveLista(bandInteligentes, elem->id_elem, cmpIdElem)
+        {
+            movimientoBandido.dir = tirarDado(0,1)?'F':'B';
+        }
+        else{
+            int movDir = devolverMenorDistanciaEntreElementos(elem->nro_casilla, *posJug, *cantPos, resultadoDado);
+            movimientoBandido.dir = movDir>0?'F':'B';
+        }
+
+        ponerEnCola(movimientos, &movimientoBandido, sizeof(tMovimiento));
+    }
+}
+
+
+void cambiarEstado(void *pl, void* estado)
 {
     static int tieneoasis = 0, tienetormenta = 0;
     tLista *lista = (tLista*)pl;
     tEstado *est = (tEstado*)estado;
+    tElem elem;
+    elem.id_elem = JUGADORID;
 
-    recorrerLista(lista, modEstado, estado);
+    if(buscarPorClaveLista(lista, &elem, sizeof(tElem), cmpIdElem) != -1)
+    {
+         recorrerLista(lista, modEstado, estado);
 
-    if ((tienetormenta=1) && (est->Tactiva==0))
-    {
-        tienetormenta=0;
-        est->Tfinalizada=1;
-    }
-    else if (est->Tactiva==1)
-    {
-        tienetormenta=1;
-    }
-    if ((est->JpierdeVida==1)&&(tieneoasis==1))
-    {
-        if (est->Bandidos==1)
+        if ((tienetormenta=1) && (est->Tactiva==0))
         {
-            est->JpierdeVida=0;
-
+            tienetormenta=0;
+            est->Tfinalizada=1;
         }
-        tieneoasis=0;
-        est->Operdido=1;
+        else if (est->Tactiva==1)
+        {
+            tienetormenta=1;
+        }
+        if ((est->JpierdeVida==1)&&(tieneoasis==1))
+        {
+            if (est->Bandidos==1)
+            {
+                est->JpierdeVida=0;
+
+            }
+            tieneoasis=0;
+            est->Operdido=1;
+        }
+        if ((tieneoasis == 1) && (est->Oobtenido==0))
+        {
+            tieneoasis = 0;
+            est->Operdido = 1;
+        }
+        if (est->Oobtenido==1)
+        {
+            tieneoasis=1;
+        }
     }
-    if ((tieneoasis == 1) && (est->Oobtenido==0))
-    {
-        tieneoasis = 0;
-        est->Operdido = 1;
-    }
-    if (est->Oobtenido==1)
-    {
-        tieneoasis=1;
-    }
+
 }
 
 

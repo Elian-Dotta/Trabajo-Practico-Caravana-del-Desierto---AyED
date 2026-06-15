@@ -222,8 +222,8 @@ void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *ban
 {
     tElem jugador;
     jugador.id_elem = JUGADORID;
-    
-    actualizarPorClaveListaDE(tablero, &jugador, sizeof(tElem), cmpCasIdElem, cambiarEstado, estado);
+
+    recorrerListaDE(tablero, cambiarEstado, estado);
     eliminarPorClave(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
 
