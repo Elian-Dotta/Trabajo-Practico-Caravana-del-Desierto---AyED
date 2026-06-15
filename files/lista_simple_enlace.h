@@ -12,7 +12,7 @@ typedef int (*tCompararFn)(const void *, const void *);
 typedef int (*Acumular)(void **, unsigned *, void *, unsigned);
 typedef int  (*Cmp)(const void *, const void *);
 
-// typedef tNodo* tLista; // DUPLICADO del typedef de la linea 10 (ya declarado arriba).
+typedef tNodo* tLista; // DUPLICADO del typedef de la linea 10 (ya declarado arriba).
 // La lista sera un puntero a Nodo: tendra la direccion de un nodo, no datos. Ocupa 8 Bytes.
 
 

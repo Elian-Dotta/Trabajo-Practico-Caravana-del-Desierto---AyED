@@ -1,4 +1,5 @@
 #include "tablero.h"
+#include "movimiento.h"
 
 int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligentes)
 {
@@ -60,7 +61,7 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
         elemInsertados = 0,
         indiceElem,
         posInsercion,
-        nroCasilla = 0;
+        nroCasilla = 1;
 
     for(indiceElem = 0; indiceElem < 5; indiceElem++)
     {
@@ -136,13 +137,13 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
 
 }
 
-int  moverElementoPorId(tListaDE* tablero, int id, int mov)
+int  moverElementoPorId(tListaDE* tablero, int id, int mov, int tamTablero)
 {
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
     actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
-    elemAActualizar.nro_casilla+=mov;
+    elemAActualizar.nro_casilla = calcularNroCasilla(elemAActualizar.nro_casilla, mov, tamTablero);
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;
@@ -224,7 +225,7 @@ void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *ban
     jugador.id_elem = JUGADORID;
 
     recorrerListaDE(tablero, cambiarEstado, estado);
-    eliminarPorClave(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
+    eliminarPorClaveLista(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
 
 int  compararEnteros(const void *a, const void *b){

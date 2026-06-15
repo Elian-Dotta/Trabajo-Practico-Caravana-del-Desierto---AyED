@@ -13,3 +13,14 @@ void cambiarDireccion(tMovimiento *mov)
 {
     mov->dir = mov->dir == 'F' ? 'B' : 'F';
 }
+
+int calcularNroCasilla(int nroCasilla, int mov, int tamTablero)
+{
+    int nuevaPos = nroCasilla + mov;
+    if(nuevaPos < 1)
+        return tamTablero;
+    else if(nuevaPos > tamTablero)
+        return 1;
+    else
+        return nuevaPos;
+}

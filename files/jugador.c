@@ -1,13 +1,17 @@
 #include "jugador.h"
 #include "consola.h"
 
-void inicializarJugador(tJugador* j, unsigned vida)
+void inicializarJugador(tJugador* j)
 {
-    j->vida = vida;
     j->cantMov = 0;
     j->puntaje = 0;
     j->posJug = 1;
     crearCola(&j->hisMovJugador);
+}
+
+void asignarVida(tJugador *j, const unsigned vida)
+{
+    j->vida = vida;
 }
 
 void aumentarVida(tJugador* j)

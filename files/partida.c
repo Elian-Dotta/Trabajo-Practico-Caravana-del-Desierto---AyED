@@ -43,7 +43,7 @@ int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
     inicializarEstado(&p->estado);
 
-    inicializarJugador(&p->jugador, p->config.vidas_ini);
+    asignarVida(&p->jugador, p->config.vidas_ini);
 
     crearCola(&p->movimientos);
 
@@ -115,13 +115,13 @@ int  dibujarAnimacionMov(tPartida *p)
         if(movActual.id == JUGADORID && p->estado.Oactivo &&
            idEscudoIzq != -1 && idEscudoDer != -1)
         {
-            moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo);
-            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
-            moverElementoPorId(&p->tablero, idEscudoDer, movRelativo);
+            moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo, p->config.cant_pos);
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo, p->config.cant_pos);
+            moverElementoPorId(&p->tablero, idEscudoDer, movRelativo, p->config.cant_pos);
         }
         else
         {
-            moverElementoPorId(&p->tablero, movActual.id, movRelativo);
+            moverElementoPorId(&p->tablero, movActual.id, movRelativo, p->config.cant_pos);
         }
 
         movActual.cant-= PASO;
@@ -201,11 +201,11 @@ int  dibujarAnimacionEstado(tPartida *p)
     if(p->estado.JpierdeVida)
     {
         mov = (p->jugador.posJug - 1) * - 1;
-        moverElementoPorId(&p->tablero, JUGADORID, mov);
+        moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
         if(p->estado.Tactiva)
         {
-            moverElementoPorId(&p->tablero, idFlechaIzq, mov);
-            moverElementoPorId(&p->tablero, idFlechaDer, mov);
+            moverElementoPorId(&p->tablero, idFlechaIzq, mov, p->config.cant_pos);
+            moverElementoPorId(&p->tablero, idFlechaDer, mov, p->config.cant_pos);
         }
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
         disminuirVida(&p->jugador);

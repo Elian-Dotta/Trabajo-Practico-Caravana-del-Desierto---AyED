@@ -14,5 +14,6 @@ int tirarDado(unsigned minNro, unsigned maxNro);
 
 int  calcularDireccion(char dir);
 void cambiarDireccion(tMovimiento *mov);
+int calcularNroCasilla(int nroCasilla, int mov, int tamTablero);
 
 #endif // MOVIMIENTO_H_

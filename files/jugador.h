@@ -23,7 +23,9 @@ typedef struct sJugador
 }tJugador;
 
 
-void inicializarJugador(tJugador* j, unsigned vida);
+void inicializarJugador(tJugador* j);
+
+void asignarVida(tJugador *j, const unsigned vida);
 void aumentarVida(tJugador* j);
 void disminuirVida(tJugador* j);
 unsigned verVida(const tJugador* j);

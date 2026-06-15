@@ -11,6 +11,8 @@ void juego()
 
     tJugador jugador;
 
+    inicializarJugador(&jugador);
+
     ingresarJugador(&jugador);
 
     menuPrincipal(&jugador);

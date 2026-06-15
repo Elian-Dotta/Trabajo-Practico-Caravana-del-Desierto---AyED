@@ -61,7 +61,7 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 
     return 1;
 }
-*/
+
 
 
 void crearListaDE(tListaDE *pl)
