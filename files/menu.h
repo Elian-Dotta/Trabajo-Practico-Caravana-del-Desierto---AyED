@@ -37,6 +37,12 @@ int  menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr);
 
 void ingresarDato(const char* msj, char *out);
 
+void mensajeSeparador(int margenIzqConsola, int cantLugares, int inicio);
+void mensajeLineaVacia(int margenIzqConsola, int cantLugares);
+void mensajeEnLinea(int margenIzqConsola, int cantLugares, const char* msj, int margenIzqTabla);
+void mensajeEnLineaCentrado(int margenIzqConsola, int cantLugares, const char* msj);
+void mensajeIngresoCadena(int margenIzqConsola, int cantLugares, char* buffer, int maxLenBuffer, int margenIzqTabla);
+void ingresarDatosJugador(char *buffer, const char *msj, int maxLenBuffer, int cantEspacios, int margenIzqConsola, int margenIzqTabla);
 
 
 

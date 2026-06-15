@@ -66,3 +66,55 @@ int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
 
     return opcion;
 }
+
+void mensajeSeparador(int margenIzqConsola, int cantLugares, int inicio){
+    if(inicio)
+        printf("\n%*s+", margenIzqConsola, "");
+    else
+        printf("%*s+", margenIzqConsola, "");
+    for(int i=0; i<cantLugares ; i++)
+        printf("-");
+    printf("+\n");
+}
+
+void mensajeLineaVacia(int margenIzqConsola, int cantLugares){
+    printf("%*s|%*s|\n", margenIzqConsola, "", cantLugares, "");
+}
+
+void mensajeEnLinea(int margenIzqConsola, int cantLugares, const char* msj, int margenIzqTabla){
+    if( (strlen(msj)+margenIzqTabla) > cantLugares)
+        return; // se rompe la visualizacion si se mostrase
+    printf("%*s|%*s%s%*s|\n", margenIzqConsola, "", margenIzqTabla, "", msj, (int)(cantLugares-(strlen(msj)+margenIzqTabla)), "");
+}
+
+void mensajeEnLineaCentrado(int margenIzqConsola, int cantLugares, const char* msj){
+    int lenMsj      = strlen(msj);
+    int espacioTotal = cantLugares - lenMsj;
+    int margenIzq   = espacioTotal / 2;
+    int margenDer   = espacioTotal - margenIzq; // absorbe el impar
+
+    if(lenMsj > cantLugares)
+        return;
+
+    printf("%*s|%*s%s%*s|\n", margenIzqConsola, "", margenIzq, "", msj, margenDer, "");
+}
+
+void mensajeIngresoCadena(int margenIzqConsola, int cantLugares, char* buffer, int maxLenBuffer, int margenIzqTabla){
+    int i;
+    printf("%*s|%*s> ", margenIzqConsola, "", margenIzqTabla, "");
+    fgets(buffer, maxLenBuffer, stdin);
+    // elimina el \n que deja fgets
+    for(i = 0; buffer[i] != '\0'; i++)
+        if(buffer[i] == '\n')
+            buffer[i] = '\0';
+}
+
+void ingresarDatosJugador(char *buffer, const char *msj, int maxLenBuffer, int cantEspacios, int margenIzqConsola, int margenIzqTabla){
+        mensajeSeparador(margenIzqConsola, cantEspacios, 1);
+        mensajeLineaVacia(margenIzqConsola,cantEspacios);
+        mensajeEnLinea(margenIzqConsola, cantEspacios, msj, margenIzqTabla);
+        mensajeLineaVacia(margenIzqConsola,cantEspacios);
+        mensajeIngresoCadena(margenIzqConsola,cantEspacios, buffer, maxLenBuffer, margenIzqTabla);
+        mensajeLineaVacia(margenIzqConsola,cantEspacios);
+        mensajeSeparador(margenIzqConsola, cantEspacios, 0);
+}
