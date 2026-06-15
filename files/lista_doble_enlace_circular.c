@@ -76,7 +76,7 @@ int listaVaciaDE(const tListaDE *pl)
 }
 
 
-int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto)
+int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp);
 
 
 
@@ -106,7 +106,7 @@ int insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo)
         (*pl)->sig->ant = nue;
         (*pl)->sig = nue;
 
-        accion(act,contexto);
+//        accion((*pl)->info,contexto);
         return 1;
     }
     *pl = nue;                       // el cursor queda en el nuevo nodo

@@ -8,7 +8,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
     inicializarPartida(&partida);
 
-    while(partida->corriendo)
+    while(partida.corriendo)
     {
         dibujarEstadoDelJuego(&partida); // ESTADO PARA LA ELECCION DEL JUGADOR
 
@@ -37,9 +37,9 @@ int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
     crearLista(&p->bandInteligentes);
 
-    crearLog(&p->log)
+    crearLog(&p->log);
 
-    crearTablero(&p->tablero, p->config, &p->bandidosInteligentes);
+    crearTablero(&p->tablero, p->config, &p->bandInteligentes);
 
     inicializarEstado(&p->estado, p->config.max_band);
 

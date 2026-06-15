@@ -18,6 +18,8 @@
 
 #define JUGADORID 1
 
+#define TAM_BUFFER 30
+
 typedef tLista tCasilla;
 
 typedef struct

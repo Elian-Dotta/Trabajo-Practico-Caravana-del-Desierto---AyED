@@ -35,7 +35,7 @@ int  ponerAlFinal(tLista *p, const void *d, unsigned cantBytes);
 //int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
 
-void recorrerLista(tLista *lista, void (*accion)(void *, unsigned, void *), void *contexto);
+void recorrerLista(tLista *lista, Accion accion, void *contexto);
 int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
 int vaciarLista(tLista *lista);
 int ponerAlFinal(tLista *lista, const void *dato, unsigned tamDato);
@@ -50,6 +50,7 @@ int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos);
 
 int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum);
+int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp);
 
-void mostrarLista(const tLista *lista, Mostrar mostrar);
+int mostrarLista(const tLista *lista, Mostrar mostrar);
 #endif // LISTA_SIMPLE_ENLACE_H

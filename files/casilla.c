@@ -1,5 +1,5 @@
 #include "casilla.h"
-
+#include "consola.h"
 tCasilla crearCasilla()
 {
     tCasilla cas;

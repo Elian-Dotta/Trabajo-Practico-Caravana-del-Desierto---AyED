@@ -117,6 +117,7 @@ void mostrarLista(const tLista *lista, Mostrar mostrar)
     }
 }
 */
+
 int mostrarLista(const tLista *p, Mostrar mostrar) // ME QUEDO CON ESTA IMPLEMENTACION QUE DEVUELVE EL NUMERO DE MOSTRADOS.
 {
     int cant = 0;

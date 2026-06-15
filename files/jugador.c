@@ -1,5 +1,5 @@
 #include "jugador.h"
-
+#include "consola.h"
 
 void inicializarJugador(tJugador* j, unsigned vida)
 {
@@ -86,11 +86,11 @@ void mostrarMovimientosJugador(tJugador *j)
     while(!colaVacia(&j->hisMovJugador))
     {
         sacarDeCola(&j->hisMovJugador, &mov, sizeof(tMovimiento));
-        snprintf(buffer, sizeof(buffer), "[%d%c]", mov->cant, mov->dir);
+        snprintf(buffer, sizeof(buffer), "[%d%c]", mov.cant, mov.dir);
         mostrar(buffer);
         contador++;
 
-        if(contador % MAX_MOV_LINEA == 0)
+        if((contador % MAX_MOV_LINEA) == 0)
             mostrar("\n");
     }
 }
