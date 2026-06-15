@@ -2,7 +2,7 @@
 #include "menu.h"
 
 // INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
-int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+void jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
     tPartida partida;
 

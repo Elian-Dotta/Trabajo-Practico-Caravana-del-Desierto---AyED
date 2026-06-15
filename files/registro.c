@@ -69,12 +69,49 @@ void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro) // EN LA
     i->indiceRegistro = nroRegistro;
 }
 
-int cmpClaveNickname(const void*a, const void*b)
-{
-    tIndiceNickname *i1 = (tIndiceNickname*)a;
-    tIndiceNickname *i2 = (tIndiceNickname*)b;
 
-    return strcmp(i1->nickname, i2->nickname);
+void armarMensaje(void *jugador, void *msjBuffer)
+{
+    void **buf = (void**)msjBuffer;
+    sprintf((char*)buf[0], "%d. %s %s\n", *(int*)buf[1], ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
+}
+
+int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxNombre, tArbolBinBusq* arbolIdxNick, const char* archJug, const char* archIdxNombre, const char *archIdxNick)
+{
+    tIndiceNombre indNombre;
+    tIndiceNickname indNick;
+    regJugador reg;
+
+    FILE* fJug = fopen(archJug, "a+b");
+    if(!fJug)
+    {
+        return 0;
+    }
+
+    strcpy(reg.nombre, nombre);
+    strcpy(reg.nickname, nickname);
+    strcpy(indNombre.nombre, nombre);
+    strcpy(indNick.nickname, nickname);
+
+
+    fseek(fJug, 0, SEEK_END);
+
+    int pos = (ftell(fJug)/sizeof(regJugador));
+
+    indNombre.indiceRegistro = pos;
+    indNick.indiceRegistro = pos;
+
+    fwrite(&reg, sizeof(regJugador), 1, fJug);
+
+    insertarArbolBinBusq(arbolIdxNombre, &indNombre, sizeof(tIndiceNombre), cmpClaveNombre);
+    insertarArbolBinBusq(arbolIdxNick, &indNick, sizeof(tIndiceNickname), cmpClaveNickname);
+
+    guardarArchivoIndice(arbolIdxNombre, archIdxNombre, sizeof(tIndiceNombre));
+    guardarArchivoIndice(arbolIdxNick, archIdxNick, sizeof(tIndiceNickname));
+
+    fclose(fJug);
+
+    return 1;
 }
 
 void guardarPartida(tJugador *jugador)

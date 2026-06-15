@@ -36,6 +36,14 @@ int cmpSoloNombre(const void *a, const void *b)       // compara solo el nombre
 
 // cmpClaveNickname definida en registro.c
 
+int cmpClaveNickname(const void*a, const void*b)
+{
+    tIndiceNickname *i1 = (tIndiceNickname*)a;
+    tIndiceNickname *i2 = (tIndiceNickname*)b;
+
+    return strcmp(i1->nickname, i2->nickname);
+}
+
 
 // ---------------------------------------------------------------------------
 //  Indexar: arma el arbol leyendo el archivo de jugadores (desordenado)

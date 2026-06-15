@@ -42,6 +42,19 @@ void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log)
     mostrarMovimientosJugador(jugador);
 }
 
+void mostrar(const char *msj)
+{
+    if(msj[0] != '\0')
+        printf("%s", msj);
+}
+
+void mostrarEstadisticas(tJugador *j)
+{
+    printf("Vidas: %d\t", j->vida);
+    printf("\tPuntaje: %d\n", j->puntaje);
+    printf("Cantidad de movimientos: %d/n", j->cantMov);
+}
+
 void mostrarTitulo()
 {
     printf("CARAVANA DEL DESIERTO\n");

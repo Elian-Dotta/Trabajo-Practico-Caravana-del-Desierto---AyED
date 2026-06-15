@@ -51,6 +51,7 @@ void enlistarNickNames(void *idxNombre, void *contexto);
 // Firma exigida por recorrerLista: (void *info, unsigned tamInfo, void *params)
 void armarMensaje(void *info, void *params);
 
+int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxNombre, tArbolBinBusq* arbolIdxNick, const char* archJug, const char* archIdxNombre, const char *archIdxNick);
 
 void guardarPartida(tJugador *jugador);
 

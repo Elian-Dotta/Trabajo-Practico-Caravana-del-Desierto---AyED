@@ -40,7 +40,7 @@ typedef struct
     int      corriendo;
 }tPartida;
 
-int  jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+void jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
 int  inicializarPartida(tPartida *partida); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 

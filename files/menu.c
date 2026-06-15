@@ -47,25 +47,26 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 {
     char opcion;
     int valido = 0;
+    int priVez = 1;
 
     do
     {
         mostrar(msj);
 
-        if (conErr && msjErr != NULL)
+        if (!priVez && conErr && msjErr)
             mostrar(msjErr);
 
         mostrar("\nOpcion: ");
 
+        limpiarBuffer();
+
         if (scanf(" %c", &opcion) != 1)
             opcion = '\0';
-
-        limpiarBuffer();
 
         opcion = (char) toupper((unsigned char) opcion);
 
         valido = (strchr(opc, opcion) != NULL);
-        conErr = 1;
+        priVez = 0;
     } while (!valido);
 
     return opcion;

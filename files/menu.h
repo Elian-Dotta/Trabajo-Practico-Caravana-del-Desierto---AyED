@@ -11,7 +11,7 @@
 
 #define MENU_JUEGO "\
 -----------------------------------\n\
-\t   CARAVANA DEL DESIERTO\n\
+\tCARAVANA DEL DESIERTO\n\
 -----------------------------------\n\
 [J] Jugar nueva partida\n\
 [R] Ver ranking\n\
