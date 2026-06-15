@@ -44,10 +44,21 @@ void actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *band
 // FUNCION DE PREGUNTA
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2);
 
+
 void mostrarTablero(tTablero* tablero);
 int  cmpInt(const void *a, const void *b);
 
 void destruirTablero(tTablero *tablero);
 
+void mostrarTablero(tTablero* tablero); // muestra la lista
+//int  compararEnteros(const void *a, const void *b);
+tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
+
+void destruirTablero(tTablero *tablero);
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice);
+//void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
+//int borrarMapa(tListaDE *lista);
+
+//int  agregarElemento();
 
 #endif // TABLERO_H_

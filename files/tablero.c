@@ -222,26 +222,70 @@ void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *ban
     eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
 }
 
-int  cmpInt(const void *a, const void *b)
-{
+int  compararEnteros(const void *a, const void *b){
+
    const int * n1 = a;
    const int * n2 = b;
 
    return n1 - n2;
-
 }
 
-void mostrarTablero(tTablero* tablero){
-// (1) Podria recorrer la listaDE (tTablero) y devolver por contexto direccion de nodoDE con tElem de ID 0 (Inicio) para ver inicio
-// (2) Se recorre, en este caso, como si "tablero" (tLista*) apuntase al ultimo nodo insertado. Necesariamente a derecha se llegaria al primer nodo.
-    // Pasar de (2) a (1) es sencillo
+tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar que tTablero es tNodo*
+/*
+    Funcion que devuelve la direccion de memoria del nodo que tiene en su listaSE un tElem de ID "idPosicion".
+        -> Para posicionar el nodoDE al inicio, este nodo sera aquel que en su listaSE (dentro del campo dato) tiene un elemento con ID 0.
+*/
+    if(NULL == *tablero)
+        return NULL;
 
+    return buscarNodoPorClaveEnListaDE(tablero, &idElemPosicion, elementoEnCasilla);
+}
+
+void mostrarTablero(tTablero* tablero)
+{
     if(NULL == *tablero){
         printf("\n [ %s ]", MSJ_LISTA_MAPA_VACIO);
         return;
     }
     posicionarTablero(tablero, 0); // POSICIONA EN EL INICIO
     mostrarListaDE(tablero, mostrarCasilla);
+}
+
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
+/*
+    Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
+    para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
+    Tiene los valores de parametros:
+    -> Valores de Orientacion: 0 (Vertical) - 1 (Horizontal)
+    -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
+    El buffer debe ser el adecuado en tam.
+*/
+    if(NULL == *tablero || NULL == buffer)
+        return;
+    if(0 != indice && 1 != indice)
+        return;
+    if(0 != orientacion && 1 != orientacion)
+        return;
+
+    switch(orientacion){
+        case 0: { // Vertical
+            if(!indice){
+                recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalSinIndice);
+                return;
+            }
+            recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalConIndice);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+
+        case 1: { // Horizontal
+            if(!indice){
+                recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalSinIndice);
+                return;
+            }
+            recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalConIndice);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+    }
 }
 
 void destruirTablero(tTablero *tablero)

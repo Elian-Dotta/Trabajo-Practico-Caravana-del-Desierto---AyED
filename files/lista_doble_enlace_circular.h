@@ -63,6 +63,8 @@ int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int p
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto);
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 
-
+tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar);
+int  buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp);
+int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int pos, Acumular acum);
 
 #endif // LISTA_DOBLE_ENLACE_CIRCULAR_H

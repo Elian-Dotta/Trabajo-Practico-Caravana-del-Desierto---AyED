@@ -190,7 +190,6 @@ int buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp
 }
 
 
-
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
 
     tNodoDE *nodoActual = *pl;
@@ -204,6 +203,7 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
     }while(nodoActual != *pl);
 }
 
+
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
 
     tNodoDE *nodoActual = *pl;
@@ -215,6 +215,21 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
         mostrar(nodoActual->info);
         nodoActual = nodoActual->sig;
     }while(nodoActual != *pl);
+}
+
+
+tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
+
+    tNodoDE *nodoActual = *lista;
+    if(NULL == *lista)
+        return NULL;
+    do{
+        if(0 == comparar(nodoActual->dato, clave))
+            return nodoActual;
+        nodoActual = nodoActual->proxNodo;
+    }while(nodoActual != *lista);
+
+    return NULL;
 }
 
 

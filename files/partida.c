@@ -82,13 +82,39 @@ int  procesarEntrada(tPartida *p)
 
 int  calcularMovBandido(tPartida *p)
 {
-    // LLAMAR A RECORRER DESDE UNA FUNCION DE TABLERO
-    // RECORRER PARA CALCULAR PARA BANDIDO
-    // LA ACCION VA A VERIFICAR SI ES BANDIDO -> CALCULARBANDIDO
-    // SI ES BANDIDO GENERA UN MOV ALEATORIO CON EL ID DEL BANDIDO // 50 PORCIENTO SER INTELIGENTE
-    // LO ENCOLA EN LA COLA ENVIADA POR CONTEXTO
-    // ENVIAMOS POSICION DEL JUGADOR POR CONTEXTO
-    // POR MEDIO DE RECORRERLISTADE
+/*
+    SE PIDE RECORRER LA LISTA DE, Y BUSCAR PARA CADA CASILLA LOS BANDIDOS,
+    DE ESE BANDIDO, CALCULAR SU DISTANCIA AL JUGADOR Y GUARDAR EL ID DEL QUE TENGA MENOR DISTANCIA LUEGO DE TIRADO EL DADO (SI HAY DOS BANDIDOS EN UNA CASILLA)
+    RECORRIDA TODA LA LISTA Y ELEGIDO EL BANDIDO DE MENOR DISTANCIA, VER SI ESE BANDIDO ESTA EN LA LISTA DE BANDIDOS INTELIGENTES
+    SI ESTA EN LA LISTA DE BANDIDOS INTELIGENTES, ENTONCES MOVER EL BANDIDO EN EL SENTIDO (DERECHA O IZQUIERDA) MAS CONVENIENTE PARA LLEGAR AL JUGADOR
+    SI NO ESTA EN LA LISTA REALIZAR ALEATORIAMENTE LA ELECCION DE IR A IZQUIERDA O DERECHA (TIRAR DADO (0,1))
+*/
+    tElem       bandidoMenorDistancia = {0};
+    unsigned    resultadoDado         = tirarDado(1,6);
+    void        *parametros[4]        = {&bandidoMenorDistancia, &p->jugador->posJug, &p->config->cant_pos, &resultadoDado};
+    tMovimiento movimientoBandido;
+
+    if(NULL == *tablero)
+        return 0;
+
+    recorrerListaDE(&p->tablero, bandidoMasCercanoAJugador, parametros);
+
+    if(0 == bandidoEncontrado.id_elem)
+        return 0; //NO HAY BANDIDOS
+
+    movimientoBandido.id   = bandidoMenorDistancia.id_elem;
+    movimientoBandido.cant = resultadoDado;
+
+    if(0 == buscarPorClaveEnLista(p->bandInteligentes, bandidoMenorDistancia.id_elem, NULL, 0, compararEnteros)){
+        movimientoBandido.dir = tirarDado(0,1)?'F':'B';
+    }else{
+        int movDir = devolverMenorDistanciaEntreElementos(bandidoMenorDistancia.nro_casilla, p->jugador.posJug, p->config.cant_pos, resultadoDado);
+        movimientoBandido.dir = movDir>0?'F':'B';
+    }
+
+    ponerEnCola(movimientos, &movimientoBandido, sizeof(tMovimiento));
+
+    return 1;
 }
 
 int  dibujarAnimacionMov(tPartida *p)
