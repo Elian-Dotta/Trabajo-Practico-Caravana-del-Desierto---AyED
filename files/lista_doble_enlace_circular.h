@@ -53,7 +53,7 @@ int  insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo);
 
 void crearListaDE(tListaDE *lista);
 int  vaciarListaDE(tListaDE *lista);
-int  listaVaciaDE(const tListaDE *lista);
+// int  listaVaciaDE(const tListaDE *lista);  // SIN USO: se define en el .c pero nunca se llama
 
 int  buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp);
 
@@ -64,7 +64,7 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto);
 void mostrarListaDE(tListaDE *pl, Mostrar mostrar);
 
 tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar);
-int  buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp);
-int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int pos, Acumular acum);
+// int  buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp);                  // DUPLICADO de la linea 58
+// int  actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo, int pos, Acumular acum);  // DUPLICADO de la linea 61
 
 #endif // LISTA_DOBLE_ENLACE_CIRCULAR_H

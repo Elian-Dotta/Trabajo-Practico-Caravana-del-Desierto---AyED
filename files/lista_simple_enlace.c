@@ -159,7 +159,7 @@ int vaciarLista(tLista *p)
 }
 
 
-int ponerAlFinal(tLista *p, const void *d, unsigned cantBytes)
+int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
 {
     tNodo *nue;
 
@@ -205,7 +205,7 @@ int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
     return 1;
 }
 
-int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
+int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
     tLista *elim = lista,
            *auxSig;

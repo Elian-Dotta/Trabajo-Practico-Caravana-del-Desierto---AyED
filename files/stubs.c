@@ -18,18 +18,3 @@ void ingresarJugador(tJugador *j)        { (void)j; }
 
 // --- registro ---
 void armarMensaje(void *info, void *params) { (void)info; (void)params; }
-
-// --- lista simple (declaradas en lista_simple_enlace.h, sin cuerpo) ---
-int insertarAlFinalLista(tLista *lista, const void *d, unsigned tamDato)
-{ return ponerAlFinal(lista, d, tamDato); }
-
-int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
-{ return eliminarPorClave(lista, d, tamDato, cmp); }
-
-// --- lista doble circular ---
-int actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum)
-{
-    if(buscarPorClaveListaDE(pl, d, tamInfo, cmp))
-        return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
-    return 0;
-}

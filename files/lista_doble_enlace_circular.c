@@ -1,5 +1,6 @@
 #include "lista_doble_enlace_circular.h"
 
+/*
 int vaciarListaC(tListaDE *lista)
 {
 
@@ -61,6 +62,7 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 
     return 1;
 }
+*/
 
 
 void crearListaDE(tListaDE *pl)
@@ -249,5 +251,12 @@ int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
         pos++;
     }
     return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
+}
+
+int actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum)
+{
+    if(buscarPorClaveListaDE(pl, d, tamInfo, cmp))
+        return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
+    return 0;
 }
 
