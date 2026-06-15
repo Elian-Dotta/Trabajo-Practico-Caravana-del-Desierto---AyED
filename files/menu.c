@@ -5,6 +5,44 @@
 #include "menu.h"
 #include "consola.h"
 
+void juego()
+{
+    //mostrar("Caravana Del Desierto\n");
+
+    tJugador jugador;
+
+    ingresarJugador(&jugador);
+
+    menuPrincipal(&jugador);
+}
+
+void menuPrincipal(tJugador *jugador)
+{
+    char opcion;
+
+    do
+    {
+        limpiarPantalla();
+        opcion = menu(MENU_JUEGO, OPC_JUEGO, 1, MSJ_ERR_OPC);
+
+        switch(opcion)
+        {
+            case JUGAR_PARTIDA:
+                    jugarPartida(jugador);
+                    break;
+
+            case MOSTRAR_RANKING:
+                    ranking();
+                    break;
+
+            case SALIR_DEL_JUEGO:
+                    mostrar(MSJ_SALIDA);
+                    break;
+        }
+    }while(opcion != SALIR_DEL_JUEGO);
+
+}
+
 char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 {
     char opcion;
@@ -40,7 +78,7 @@ void ingresarDato(const char* msj, char *out)
     while (getchar() != '\n' && !feof(stdin));
 }
 
-#include "menu.h"
+
 
 int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
 {

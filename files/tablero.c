@@ -141,7 +141,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov)
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
@@ -185,9 +185,9 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
 {
     tElem ctxElem[2];
     ctxElem[0].tipo_elem = elemNue;
-    ctxElem[1].tipo_elem = elemRef;
+    ctxElem[1].tipo_elem = elemAct;
 
-    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
+    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipo);
 }
 
 int  eliminarElemento(tTablero *tablero, char elemAct)
@@ -213,35 +213,85 @@ int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
     return buscarPorClaveListaDE(tablero, tipos, sizeof(tipos), cmpCasTipos);
 }
 
-void  actualizarEstadoDelJugador(tTablero* tablero, int posJug, tEstado *estado, ModificarEstado modEstado, tLista *bandinteligentes)
+void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes)
 {
     tElem jugador;
-    jugador.id_elem=1;
-    buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem),cmpElem,cambiarEstado,estado);
+    jugador.id_elem = JUGADORID;
+    buscarPorClaveListaDE(tablero, &jugador, sizeof(tElem), cmpCasIdElem);
 
-    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
+    eliminarPorClave(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
 
-int  cmpInt(const void *a, const void *b)
-{
+int  compararEnteros(const void *a, const void *b){
+
    const int * n1 = a;
    const int * n2 = b;
 
    return n1 - n2;
-
 }
 
-void mostrarTablero(tTablero* tablero){
-// (1) Podria recorrer la listaDE (tTablero) y devolver por contexto direccion de nodoDE con tElem de ID 0 (Inicio) para ver inicio
-// (2) Se recorre, en este caso, como si "tablero" (tLista*) apuntase al ultimo nodo insertado. Necesariamente a derecha se llegaria al primer nodo.
-    // Pasar de (2) a (1) es sencillo
+#if 0   // DUPLICADO de posicionarTablero (void) de arriba -> desactivado para que compile
+tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar que tTablero es tNodo*
+/*
+    Funcion que devuelve la direccion de memoria del nodo que tiene en su listaSE un tElem de ID "idPosicion".
+        -> Para posicionar el nodoDE al inicio, este nodo sera aquel que en su listaSE (dentro del campo dato) tiene un elemento con ID 0.
+*/
+    if(NULL == *tablero)
+        return NULL;
 
+    return buscarNodoPorClaveEnListaDE(tablero, &idElemPosicion, elementoEnCasilla);
+}
+#endif
+
+void mostrarTablero(tTablero* tablero)
+{
     if(NULL == *tablero){
         printf("\n [ %s ]", MSJ_LISTA_MAPA_VACIO);
         return;
     }
-
+    posicionarTablero(tablero, 0); // POSICIONA EN EL INICIO
     mostrarListaDE(tablero, mostrarCasilla);
 }
 
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
+/*
+    Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
+    para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
+    Tiene los valores de parametros:
+    -> Valores de Orientacion: 0 (Vertical) - 1 (Horizontal)
+    -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
+    El buffer debe ser el adecuado en tam.
+*/
+    if(NULL == *tablero || NULL == buffer)
+        return;
+    if(0 != indice && 1 != indice)
+        return;
+    if(0 != orientacion && 1 != orientacion)
+        return;
 
+    switch(orientacion){
+        case 0: { // Vertical
+            if(!indice){
+                recorrerListaDE(tablero, convertirMapaACadenaVerticalSinIndice, buffer);
+                return;
+            }
+            recorrerListaDE(tablero, convertirMapaACadenaVerticalConIndice, buffer);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+
+        case 1: { // Horizontal
+            if(!indice){
+                recorrerListaDE(tablero, convertirMapaACadenaHorizontalSinIndice, buffer);
+                return;
+            }
+            recorrerListaDE(tablero, convertirMapaACadenaHorizontalConIndice, buffer);
+            corregirCadenadeMapaConIndice(buffer);
+        }break;
+    }
+}
+
+void destruirTablero(tTablero *tablero)
+{
+    recorrerListaDE(tablero, (Accion)destruirCasilla, NULL);
+    vaciarListaDE(tablero);
+}

@@ -11,7 +11,7 @@ int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompara
 
     if( NULL==(nuevoNodo=(tNodo*)malloc(sizeof(tNodo))) || NULL==(nuevoNodo->info=(void*)malloc(tamDato)) ){
         free(nuevoNodo);
-        return 0; //No hay memoria suficiente
+        return 0;
     } //CREAR_NODO(nuevoNodo,tamDato); // Usando Macro
 
     memcpy(nuevoNodo->info, dato, tamDato);
@@ -117,6 +117,7 @@ void mostrarLista(const tLista *lista, Mostrar mostrar)
     }
 }
 */
+
 int mostrarLista(const tLista *p, Mostrar mostrar) // ME QUEDO CON ESTA IMPLEMENTACION QUE DEVUELVE EL NUMERO DE MOSTRADOS.
 {
     int cant = 0;
@@ -191,10 +192,6 @@ int sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes)
     return 1;
 }
 
-
-
-
-
 int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
     tLista *elim = lista,
@@ -223,8 +220,18 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 
 }
 
-
-
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){
+    tNodo *aux = *lista;
+    while(aux){
+        if(0 == comparar(aux->info, clave)){
+            if(destDato)
+                memcpy(destDato, aux->info, minimo(tamDest,aux->tamInfo));
+            return 1;
+        }
+        aux = aux->sig;
+    }
+    return 0;
+}
 
 int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
 {

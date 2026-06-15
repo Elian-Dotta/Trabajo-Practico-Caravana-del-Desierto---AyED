@@ -1,11 +1,12 @@
 #include "animacion.h"
 
 
-void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim)
+void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim, unsigned IDAncla)
 {
     int i;
     for( i = 1; i <= frame; i++)
     {
+        posicionarTablero(t, IDAncla);
         anim(t, i);
         dibujarEscena(t, j, e, l);
     }
@@ -226,12 +227,21 @@ void animJugGana(tTablero *tablero, unsigned frame)
     switch(frame)
     {
         case 1:
+            CAMELEM(JUGADOR, JUGMINUS);
+            break;
         case 2:
+            CAMELEM(JUGMINUS, JUGADOR);
+            break;
         case 3:
+            CAMELEM(JUGADOR, JUGMINUS);
+            break;
         case 4:
+            CAMELEM(JUGMINUS, JUGADOR);
+            break;
         case 5:
         case 6:
         case 7:
+            break;
     }
 }
 
@@ -239,11 +249,28 @@ void animJugadorDaniado(tTablero *tablero, unsigned frame)
 {
     switch(frame)
     {
-    case 1:
+        case 1:
             CAMELEM(DESAPARECE, JUGMINUS);
             break;
         case 2:
             CAMELEM(JUGMINUS, JUGADOR);
             break;
+    }
+}
+
+void animJugPierde(tTablero *tablero, unsigned frame)
+{
+    switch(frame)
+    {
+        case 1:
+            CAMELEM(JUGADOR, JUGMINUS);
+            break;
+        case 2:
+            CAMELEM(JUGMINUS, DESAPARECE);
+            break;
+        case 3:
+            ELIM(DESAPARECE);
+            break;
+
     }
 }

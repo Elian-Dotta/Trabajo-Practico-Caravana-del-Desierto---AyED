@@ -17,8 +17,6 @@ void inicializarRanking(tRanking *ranking)
     ranking->cantLineas = 0;
 }
 
-
-
 int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char *archJug)
 {
     FILE* archPartidas;
@@ -40,7 +38,7 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
     crearArbolBinBusq(&arNicknames);
     tIndiceNickname idx;
 
-    cargarIndiceDesdeArchivo(arNicknames, ARCHIDXNICK, &idx, sizeof(idx));
+    cargarIndiceDesdeArchivo(&arNicknames, ARCHIDXNICK, &idx, sizeof(idx));
 
     while(obtenerLinea(archPartidas, archJugadores, &linea, &arNicknames))
     {
@@ -59,12 +57,12 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
     int ret;
     tLinea buffer;
 
-    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), cmpLinea, 0, NULL))
+    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 0, NULL))
     {
         if(ranking->cantLineas == MAX_RANKING)
-            sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea))
+            sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
         else
-            ranking->cantLinea++;
+            ranking->cantLineas++;
     }
 
     return ret;
@@ -90,7 +88,7 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
         strcpy(linea->nickname, nickAprocesar);
         linea->puntaje+= partida.puntaje;
         buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname);
-        strcpy(linea->nombre, jugador->nombre);
+        strcpy(linea->nombre, jugador.nombre);
 
         fread(&partida, sizeof(regPartida), 1, archPartidas);
     }
@@ -103,7 +101,7 @@ void mostrarRanking(tRanking *ranking)
     limpiarPantalla();
     unsigned contador = 1;
     mostrar(TITULO_RANKING);
-    recorrerLista(ranking->ranking, mostrarLinea, &contador);
+    recorrerLista(&ranking->ranking, mostrarLinea, &contador);
     mostrar(MENSAJE_SALIDA);
     while(getchar() != '\n');
     getchar();
@@ -122,7 +120,7 @@ void mostrarLinea(void* linea, void *contexto)
 
 void destruirRanking(tRanking *ranking)
 {
-    vaciarLista(ranking->ranking);
+    vaciarLista(&ranking->ranking);
     ranking->cantLineas = 0;
 }
 

@@ -5,6 +5,7 @@
 
 #include "arbol.h"
 #include "indice.h"
+#include <string.h>
 #include "lista_simple_enlace.h"
 #include "menu.h"
 
@@ -14,6 +15,7 @@
 #define ARCHIDXNOMBRE "nombre.idx"
 #define ARCHPARTIDAS "partida.bin"
 #define ARCHJUGADORES "jugadores.bin"
+#define ARCHPARTIDASTMP "partida.tmp"
 
 
 // MODULO USADO PARA EL GUARDADO DE PARTIDA Y JUGADOR.
@@ -49,5 +51,7 @@ void enlistarNickNames(void *idxNombre, void *contexto);
 // Firma exigida por recorrerLista: (void *info, unsigned tamInfo, void *params)
 void armarMensaje(void *info, void *params);
 
+
+void guardarPartida(tJugador *jugador);
 
 #endif // REGISTRO_H_

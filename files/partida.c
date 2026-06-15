@@ -8,7 +8,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
     inicializarPartida(&partida);
 
-    while(partida->corriendo)
+    while(partida.corriendo)
     {
         dibujarEstadoDelJuego(&partida); // ESTADO PARA LA ELECCION DEL JUGADOR
 
@@ -37,11 +37,11 @@ int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
     crearLista(&p->bandInteligentes);
 
-    crearLog(&p->log)
+    crearLog(&p->log);
 
-    crearTablero(&p->tablero, p->config, &p->bandidosInteligentes);
+    crearTablero(&p->tablero, p->config, &p->bandInteligentes);
 
-    inicializarEstado(&p->estado, p->config.max_band);
+    inicializarEstado(&p->estado);
 
     inicializarJugador(&p->jugador, p->config.vidas_ini);
 
@@ -80,15 +80,43 @@ int  procesarEntrada(tPartida *p)
     return 1;
 }
 
+static void bandidoMasCercanoAJugador(void *info, void *ctx) { (void)info; (void)ctx; } // stub para compilar
+
 int  calcularMovBandido(tPartida *p)
 {
-    // LLAMAR A RECORRER DESDE UNA FUNCION DE TABLERO
-    // RECORRER PARA CALCULAR PARA BANDIDO
-    // LA ACCION VA A VERIFICAR SI ES BANDIDO -> CALCULARBANDIDO
-    // SI ES BANDIDO GENERA UN MOV ALEATORIO CON EL ID DEL BANDIDO // 50 PORCIENTO SER INTELIGENTE
-    // LO ENCOLA EN LA COLA ENVIADA POR CONTEXTO
-    // ENVIAMOS POSICION DEL JUGADOR POR CONTEXTO
-    // POR MEDIO DE RECORRERLISTADE
+/*
+    SE PIDE RECORRER LA LISTA DE, Y BUSCAR PARA CADA CASILLA LOS BANDIDOS,
+    DE ESE BANDIDO, CALCULAR SU DISTANCIA AL JUGADOR Y GUARDAR EL ID DEL QUE TENGA MENOR DISTANCIA LUEGO DE TIRADO EL DADO (SI HAY DOS BANDIDOS EN UNA CASILLA)
+    RECORRIDA TODA LA LISTA Y ELEGIDO EL BANDIDO DE MENOR DISTANCIA, VER SI ESE BANDIDO ESTA EN LA LISTA DE BANDIDOS INTELIGENTES
+    SI ESTA EN LA LISTA DE BANDIDOS INTELIGENTES, ENTONCES MOVER EL BANDIDO EN EL SENTIDO (DERECHA O IZQUIERDA) MAS CONVENIENTE PARA LLEGAR AL JUGADOR
+    SI NO ESTA EN LA LISTA REALIZAR ALEATORIAMENTE LA ELECCION DE IR A IZQUIERDA O DERECHA (TIRAR DADO (0,1))
+*/
+    tElem       bandidoMenorDistancia = {0};
+    unsigned    resultadoDado         = tirarDado(1,6);
+    void        *parametros[4]        = {&bandidoMenorDistancia, &p->jugador.posJug, &p->config.cant_pos, &resultadoDado};
+    tMovimiento movimientoBandido;
+
+    if(NULL == p->tablero)
+        return 0;
+
+    recorrerListaDE(&p->tablero, bandidoMasCercanoAJugador, parametros);
+
+    if(0 == bandidoMenorDistancia.id_elem)
+        return 0; //NO HAY BANDIDOS
+
+    movimientoBandido.id   = bandidoMenorDistancia.id_elem;
+    movimientoBandido.cant = resultadoDado;
+
+    if(0 == buscarPorClaveEnLista(&p->bandInteligentes, &bandidoMenorDistancia.id_elem, NULL, 0, compararEnteros)){
+        movimientoBandido.dir = tirarDado(0,1)?'F':'B';
+    }else{
+        int movDir = devolverMenorDistanciaEntreElementos(bandidoMenorDistancia.nro_casilla, p->jugador.posJug, p->config.cant_pos, resultadoDado);
+        movimientoBandido.dir = movDir>0?'F':'B';
+    }
+
+    ponerEnCola(&p->movimientos, &movimientoBandido, sizeof(tMovimiento));
+
+    return 1;
 }
 
 int  dibujarAnimacionMov(tPartida *p)
@@ -146,12 +174,12 @@ int  dibujarAnimacionMov(tPartida *p)
     }
 }
 
-int  actualizarEstado(tTablero *tablero, tJugador *jugador, tEstado *estado, tLista *bandidosInteligentes)
+int  actualizarEstado(tPartida *p)
 {
-
+    actualizarEstadoDelJugador(&p->tablero, &p->estado, &p->bandInteligentes);
 }
 
-int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estado)
+int  dibujarAnimacionEstado(tPartida *p)
 {
     int mov;
 
@@ -159,27 +187,27 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
         idFlechaDer;
     if(p->estado.JganaPuntos)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
         aumentarPuntaje(&p->jugador);
         escribirEnLog(&p->log, MSJ_PUNTOS);
     }
 
     if(p->estado.JganaVida)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra, JUGADORID);
         aumentarVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_VIDA);
     }
 
     if(p->estado.Oobtenido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISOBTENIDO);
     }
 
     if(p->estado.Tactiva)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorActiva);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorSeActiva, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
         idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
         idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
@@ -187,51 +215,75 @@ int  dibujarAnimacionEstado(tTablero *tablero, tJugador *jugador, tEstado *estad
 
     if(p->estado.Tfinalizada)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
     }
 
     if(p->estado.BandAtaca)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
         escribirEnLog(&p->log, MSJ_BANDIDOATACA);
     }
 
     if(p->estado.Operdido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISPERDIDO);
     }
 
     if(p->estado.JpierdeVida)
     {
-        mov = (j->posJug - 1) * - 1;
+        mov = (p->jugador.posJug - 1) * - 1;
         moverElementoPorId(&p->tablero, JUGADORID, mov);
         if(p->estado.Tactiva)
         {
             moverElementoPorId(&p->tablero, idFlechaIzq, mov);
             moverElementoPorId(&p->tablero, idFlechaDer, mov);
         }
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
         disminuirVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
-        posicionarTableroPorIdElem(t, p->estado.IDBandDesaparecido);
+        if(verVida(&p->jugador)== 0)
+            p->estado.Jpierde = 1;
+
     }
     if(p->estado.IDBandDesaparecido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido);
         escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
     }
 
     if(p->estado.Jgana)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana, JUGADORID);
         escribirEnLog(&p->log, MSJ_JUGADORGANA);
+        p->estado.Jpierde = 0;
+        p->corriendo = 0;
+    }
+
+    if(p->estado.Jpierde)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde, JUGADORID);
+        escribirEnLog(&p->log, MSJ_JUGADORPIERDE);
+        p->corriendo = 0;
     }
 
     reiniciarEstado(&p->estado);
 }
 
-int  finalizarPartida(tPartida *p);
+int  finalizarPartida(tPartida *p)
+{
+    dibujarFinDePartida(&p->tablero, &p->jugador, &p->log);
+
+    guardarPartida(&p->jugador);
+
+    vaciarLista(&p->bandInteligentes);
+
+    vaciarCola(&p->movimientos);
+
+    vaciarLog(&p->log);
+
+    destruirTablero(&p->tablero);
+}
 
 
