@@ -18,6 +18,15 @@
 #define MSJ_LISTA_MAPA_VACIO "EL TABLERO NO FUE GENERADO"
 #define TAM_BUFFER 30
 
+#ifndef IZQ
+#define IZQ -1
+#endif
+#ifndef DER
+#define DER 1
+#endif
+
+int compararEnteros(const void *a, const void *b);
+
 typedef tListaDE tTablero;
 
 // FUNCIONES DE GENERACION

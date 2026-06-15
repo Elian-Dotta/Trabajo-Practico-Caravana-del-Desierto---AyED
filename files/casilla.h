@@ -42,7 +42,7 @@ int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla
 tCasilla crearCasilla();
 
 // FUNCIONES DE INSERCION EN CASILLA
-int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI AÑADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI Aï¿½ADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // INSERCION PARA LA GENERACION
@@ -76,7 +76,8 @@ void buscarYCalcularBandido(void *e, void *contexto);
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
 int compararIDtElem(const void *voidE1, const void *voidE2);
 int compararTipotElem(const void *voidE1, const void *voidE2);
-int elementoEnCasilla(const void *voidCasilla, const void *IDElemento);
+int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento);
+int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado);
 
 void accionCasillaACadena(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);

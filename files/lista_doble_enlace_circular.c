@@ -233,6 +233,21 @@ tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, C
 }
 */
 
+tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
+
+    tNodoDE *nodoActual = *lista;
+    if(NULL == *lista)
+        return NULL;
+    do{
+        if(0 == comparar(nodoActual->info, clave))
+            return nodoActual;
+        nodoActual = nodoActual->sig;
+    }while(nodoActual != *lista);
+
+    return NULL;
+}
+
+
 int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
                                  int pos, Acumular acum)
 {

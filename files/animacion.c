@@ -241,6 +241,7 @@ void animJugGana(tTablero *tablero, unsigned frame)
         case 5:
         case 6:
         case 7:
+            break;
     }
 }
 

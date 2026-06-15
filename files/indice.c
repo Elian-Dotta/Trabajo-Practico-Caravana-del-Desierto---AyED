@@ -15,14 +15,7 @@ void asigJugNombre(void *idx, const void *reg, unsigned long nroReg)
     i->indiceRegistro = (unsigned)nroReg;
 }
 
-void asigJugNick(void *idx, const void *reg, unsigned long nroReg)
-{
-    tIndiceNickname  *i = idx;
-    const regJugador *r = reg;
-
-    strcpy(i->nickname, r->nickname);
-    i->indiceRegistro = (unsigned)nroReg;
-}
+// asigJugNick y cmpClaveNickname estan definidas en registro.c (se evita duplicar)
 
 
 // ---------------------------------------------------------------------------
@@ -41,11 +34,7 @@ int cmpSoloNombre(const void *a, const void *b)       // compara solo el nombre
                   ((const tIndiceNombre *)b)->nombre);
 }
 
-int cmpClaveNickname(const void *a, const void *b)    // nickname (unico)
-{
-    return strcmp(((const tIndiceNickname *)a)->nickname,
-                  ((const tIndiceNickname *)b)->nickname);
-}
+// cmpClaveNickname definida en registro.c
 
 
 // ---------------------------------------------------------------------------

@@ -22,10 +22,12 @@ void crearLista(tLista *p);
 
 //int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
+
 void recorrerLista(tLista *lista, Accion accion, void *contexto);
 int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);
-int  vaciarLista(tLista *lista);
-int  ponerAlFinal(tLista *lista, const void *dato, unsigned tamDato);
+int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
+int vaciarLista(tLista *lista);
+int ponerAlFinal(tLista *lista, const void *dato, unsigned tamDato);
 
 int  insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum);
 int  sacarPrimeroLista(tLista *lista, void *dest, unsigned tamDest);

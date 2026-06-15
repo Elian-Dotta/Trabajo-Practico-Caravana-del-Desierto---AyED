@@ -141,7 +141,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov)
     tElem elemAActualizar;
     elemAActualizar.id_elem = id;
 
-    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpElem, eliminarDeCasilla);
+    actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
     elemAActualizar.nro_casilla+=mov;
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
@@ -185,9 +185,9 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
 {
     tElem ctxElem[2];
     ctxElem[0].tipo_elem = elemNue;
-    ctxElem[1].tipo_elem = elemRef;
+    ctxElem[1].tipo_elem = elemAct;
 
-    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
+    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipo);
 }
 
 int  eliminarElemento(tTablero *tablero, char elemAct)
@@ -195,13 +195,6 @@ int  eliminarElemento(tTablero *tablero, char elemAct)
     tElem elim;
     elim.tipo_elem = elemAct;
     actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasilla);
-}
-
-int  generarMovBandido(tTablero* tablero, tCola *mov)
-{
-    //recorrerListaDE()
-
-    return 0;
 }
 
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
@@ -229,9 +222,9 @@ void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *ban
 {
     tElem jugador;
     jugador.id_elem = JUGADORID;
-    buscarPorClaveListaDE(tablero,&jugador,sizeof(tElem), cmpElem, cambiarEstado, estado);
-
-    eliminarPorClave(bandinteligentes,estado->IDBandDesaparecido,sizeof(estado->IDBandDesaparecido),cmpElem);
+    
+    actualizarPorClaveListaDE(tablero, &jugador, sizeof(tElem), cmpCasIdElem, cambiarEstado, estado);
+    eliminarPorClave(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
 
 int  compararEnteros(const void *a, const void *b){
@@ -242,6 +235,7 @@ int  compararEnteros(const void *a, const void *b){
    return n1 - n2;
 }
 
+#if 0   // DUPLICADO de posicionarTablero (void) de arriba -> desactivado para que compile
 tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar que tTablero es tNodo*
 /*
     Funcion que devuelve la direccion de memoria del nodo que tiene en su listaSE un tElem de ID "idPosicion".
@@ -252,6 +246,7 @@ tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar qu
 
     return buscarNodoPorClaveEnListaDE(tablero, &idElemPosicion, elementoEnCasilla);
 }
+#endif
 
 void mostrarTablero(tTablero* tablero)
 {
@@ -282,19 +277,19 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
     switch(orientacion){
         case 0: { // Vertical
             if(!indice){
-                recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalSinIndice);
+                recorrerListaDE(tablero, convertirMapaACadenaVerticalSinIndice, buffer);
                 return;
             }
-            recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalConIndice);
+            recorrerListaDE(tablero, convertirMapaACadenaVerticalConIndice, buffer);
             corregirCadenadeMapaConIndice(buffer);
         }break;
 
         case 1: { // Horizontal
             if(!indice){
-                recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalSinIndice);
+                recorrerListaDE(tablero, convertirMapaACadenaHorizontalSinIndice, buffer);
                 return;
             }
-            recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalConIndice);
+            recorrerListaDE(tablero, convertirMapaACadenaHorizontalConIndice, buffer);
             corregirCadenadeMapaConIndice(buffer);
         }break;
     }
@@ -302,6 +297,6 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
 
 void destruirTablero(tTablero *tablero)
 {
-    recorrerListaDE(tablero, destruirCasilla, NULL);
+    recorrerListaDE(tablero, (Accion)destruirCasilla, NULL);
     vaciarListaDE(tablero);
 }

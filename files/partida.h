@@ -25,6 +25,7 @@
 #define MSJ_JUGADORDANIADO      "El jugador ha perdido una vida\n"
 #define MSJ_BANDIDODESAPARECE   "Un bandido ha desaparecido\n"
 #define MSJ_JUGADORGANA         "FELICITACIONES, GANASTE LA PARTIDA\n"
+#define MSJ_JUGADORPIERDE       "El jugador ha perdido la partida\n"
 
 typedef struct
 {
