@@ -213,6 +213,18 @@ int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
     return buscarPorClaveListaDE(tablero, tipos, sizeof(tipos), cmpCasTipos);
 }
 
+// FUNCIONES DE ACTUALIZACION
+void obtenerMovimientoBandidos(tTablero *tablero, tCola *movimientos, tLista *bandInteligentes, int posJug, int cantPos)
+{
+    void *contexto[4];
+    contexto[0] = movimientos;
+    contexto[1] = bandInteligentes;
+    contexto[2] = &posJug;
+    contexto[3] = &cantPos;
+
+    recorrerListaDE(tablero, calcularMovBandido, contexto);
+}
+
 void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes)
 {
     tElem jugador;

@@ -14,7 +14,7 @@ int  jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
         procesarEntrada(&partida); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-        calcularMovBandido(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+        actualizarMovimientos(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
         dibujarAnimacionMov(&partida); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
 
@@ -79,16 +79,16 @@ int  procesarEntrada(tPartida *p)
 
     return 1;
 }
-
+/*
 int  calcularMovBandido(tPartida *p)
 {
-/*
+
     SE PIDE RECORRER LA LISTA DE, Y BUSCAR PARA CADA CASILLA LOS BANDIDOS,
     DE ESE BANDIDO, CALCULAR SU DISTANCIA AL JUGADOR Y GUARDAR EL ID DEL QUE TENGA MENOR DISTANCIA LUEGO DE TIRADO EL DADO (SI HAY DOS BANDIDOS EN UNA CASILLA)
     RECORRIDA TODA LA LISTA Y ELEGIDO EL BANDIDO DE MENOR DISTANCIA, VER SI ESE BANDIDO ESTA EN LA LISTA DE BANDIDOS INTELIGENTES
     SI ESTA EN LA LISTA DE BANDIDOS INTELIGENTES, ENTONCES MOVER EL BANDIDO EN EL SENTIDO (DERECHA O IZQUIERDA) MAS CONVENIENTE PARA LLEGAR AL JUGADOR
     SI NO ESTA EN LA LISTA REALIZAR ALEATORIAMENTE LA ELECCION DE IR A IZQUIERDA O DERECHA (TIRAR DADO (0,1))
-*/
+
     tElem       bandidoMenorDistancia = {0};
     unsigned    resultadoDado         = tirarDado(1,6);
     void        *parametros[4]        = {&bandidoMenorDistancia, &p->jugador->posJug, &p->config->cant_pos, &resultadoDado};
@@ -116,6 +116,13 @@ int  calcularMovBandido(tPartida *p)
 
     return 1;
 }
+*/
+
+int actualizarMovimientos(tPartida *p)
+{
+    obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPos(p->jugador), p->config.cant_pos);
+}
+
 
 int  dibujarAnimacionMov(tPartida *p)
 {

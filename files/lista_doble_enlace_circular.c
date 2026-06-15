@@ -1,5 +1,5 @@
 #include "lista_doble_enlace_circular.h"
-
+/*
 int vaciarListaC(tListaDE *lista)
 {
 
@@ -26,7 +26,7 @@ int vaciarListaC(tListaDE *lista)
 
     return ++cont;
 }
-
+*/
 
 int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 {
@@ -217,7 +217,7 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
     }while(nodoActual != *pl);
 }
 
-
+/*
 tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
 
     tNodoDE *nodoActual = *lista;
@@ -231,7 +231,7 @@ tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, C
 
     return NULL;
 }
-
+*/
 
 int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
                                  int pos, Acumular acum)

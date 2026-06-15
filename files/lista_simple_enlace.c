@@ -223,12 +223,12 @@ int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){
     tNodo *aux = *lista;
     while(aux){
-        if(0 == comparar(aux->dato, clave)){
+        if(0 == comparar(aux->info, clave)){
             if(destDato)
-                memcpy(destDato, aux->dato, minimo(tamDest,aux->tamDato));
+                memcpy(destDato, aux->info, minimo(tamDest, aux->tamInfo));
             return 1;
         }
-        aux = aux->proxNodo;
+        aux = aux->sig;
     }
     return 0;
 }

@@ -279,6 +279,45 @@ void modEstado(void* est, void* e)
     }
 }
 
+void calcularMovBandido(void *pl, void* contexto)
+{
+    tCasilla *cas = (tCasilla*)pl;
+
+    recorrerLista(cas, buscarYCalcularBandido, contexto);
+}
+
+void buscarYCalcularBandido(void *e, void *contexto)
+{
+    tElem *elem = (tElem*)e;
+    void *ctx[4] = contexto;
+
+    tCola *movimientos = contexto[0];
+    tLista *bandInteligentes = contexto[1];
+    int *posJug = contexto[2];
+    int *cantPos = contexto[3];
+    tMovimiento movimientoBandido;
+    int resultadoDado;
+
+    if(elem->tipo_elem == BANDIDO)
+    {
+        resultadoDado = tirarDado(1, 6);
+
+        movimientoBandido.id   = elem->id_elem;
+        movimientoBandido.cant = resultadoDado;
+
+        if(0 == buscarPorClaveLista(bandInteligentes, elem->id_elem, cmpIdElem)
+        {
+            movimientoBandido.dir = tirarDado(0,1)?'F':'B';
+        }
+        else{
+            int movDir = devolverMenorDistanciaEntreElementos(elem->nro_casilla, *posJug, *cantPos, resultadoDado);
+            movimientoBandido.dir = movDir>0?'F':'B';
+        }
+
+        ponerEnCola(movimientos, &movimientoBandido, sizeof(tMovimiento));
+    }
+}
+
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq){
     *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas; //distancia yendo de izquierda a derecha
     *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas; //distancia yendo de derecha a izquierda
@@ -304,7 +343,7 @@ int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento){
    Se diseña para ser usada como una funcion de comparacion para una funcion de recorrido generica
 */
     tElem auxElem = { *((int*)voidIDElemento), '\0', 0 };
-    return !buscarPorClaveEnLista((tCasilla*)voidCasilla,&auxElem,NULL,0,compararIDtElem);
+    return !buscarPorClaveLista((tCasilla*)voidCasilla, &auxElem, sizeof(auxElem), compararIDtElem);
 }
 
 int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado){

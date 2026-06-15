@@ -48,7 +48,7 @@ int  procesarEntrada(tPartida *partida);   // Pide un ENTER para tirar el dado p
                                                                // Pide la direccion por medio de la funcion de menu -> Nada mas dice: "Ingrese direccion (Adelante - 'F' o Atras 'B'): ",
                                                                // el resto del HUD se encarga la funcion anterior
 
-int  calcularMovBandido(tTablero *tablero, tLista *bandidosInteligentes, int posJugador, int cantCasillaTablero, tCola *movimientos);
+int  actualizarMovimientos(tPartida *partida);
 // SE CORRIGE DESPUES CONCIDERANDO QUE tPARTIDA TIENE LOS PARAMETROS NECESARIOS
 // Se puede usar verPrimero para los bandidos inteligentes y calcular en base al mov del jugador
 // Funcion para calcular movimientos de bandidos

@@ -38,7 +38,7 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue);
 int  eliminarElemento(tTablero *tablero, char elemAct);
 
 // FUNCIONES DE ACTUALIZACION
-int  generarMovBandido(tTablero* tablero, tCola *mov);
+void obtenerMovimientoBandidos(tTablero *tablero, tCola *movimientos, tLista *bandInteligentes, int posJug, int cantPos);
 void actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes);
 
 // FUNCION DE PREGUNTA
@@ -50,11 +50,9 @@ int  cmpInt(const void *a, const void *b);
 
 void destruirTablero(tTablero *tablero);
 
-void mostrarTablero(tTablero* tablero); // muestra la lista
 //int  compararEnteros(const void *a, const void *b);
-tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
+//tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
 
-void destruirTablero(tTablero *tablero);
 void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice);
 //void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
 //int borrarMapa(tListaDE *lista);
