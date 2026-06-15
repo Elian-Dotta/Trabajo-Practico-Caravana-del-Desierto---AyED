@@ -192,6 +192,19 @@ int sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes)
     return 1;
 }
 
+int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
+{
+    if(*p == NULL)
+        return 0;
+    while((*p)->sig)
+        p = &(*p)->sig;
+    memcpy(d, (*p)->info, minimo(cantBytes, (*p)->tamInfo));
+    free((*p)->info);
+    free(*p);
+    *p = NULL;
+    return 1;
+}
+
 int eliminarPorClave(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
     tLista *elim = lista,
@@ -246,4 +259,90 @@ int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
         return 0;
     memcpy(dest, aux->info, minimo(tam, aux->tamInfo));
     return 1;
+}
+
+
+int insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum)
+{
+    tNodo *nue;
+
+    while(*lista && comparar((*lista)->info, dato) < 0)
+        lista = &(*lista)->sig;
+
+    if(!conDup && *lista && comparar((*lista)->info, dato) == 0)
+    {
+        if(acum)
+            return acum(&(*lista)->info, &(*lista)->tamInfo, (void *)dato, tamDato);
+        return 0;
+    }
+
+    if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+       (nue->info = malloc(tamDato)) == NULL)
+    {
+        free(nue);
+        return 0;
+    }
+    memcpy(nue->info, dato, tamDato);
+    nue->tamInfo = tamDato;
+    nue->sig = *lista;
+    *lista = nue;
+    return 1;
+}
+
+
+int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos)
+{
+    tNodo *nue;
+
+    while(pos > 0 && *lista)
+    {
+        lista = &(*lista)->sig;
+        pos--;
+    }
+    if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+       (nue->info = malloc(tamDato)) == NULL)
+    {
+        free(nue);
+        return 0;
+    }
+    memcpy(nue->info, d, tamDato);
+    nue->tamInfo = tamDato;
+    nue->sig = *lista;
+    *lista = nue;
+    return 1;
+}
+
+
+int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum)
+{
+    while(pos > 0 && *lista)
+    {
+        lista = &(*lista)->sig;
+        pos--;
+    }
+    if(*lista == NULL)
+        return 0;
+
+    acum(&(*lista)->info, &(*lista)->tamInfo, d, tamDato);
+
+    return 1;
+}
+
+
+int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
+{
+    tNodo *aux = *lista;
+    int pos = 0;
+
+    while(aux)
+    {
+        if(cmp(aux->info, d) == 0)
+        {
+            memcpy(d, aux->info, minimo(aux->tamInfo,tamDato));
+            return pos;
+        }
+        aux = aux->sig;
+        pos++;
+    }
+    return -1;
 }
