@@ -73,19 +73,20 @@ void modEstado(void* estado, void* casilla);
 void calcularMovBandido(void *pl, void* contexto);
 void buscarYCalcularBandido(void *e, void *contexto);
 
-void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq);
+void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int* der, int* izq);
 int compararIDtElem(const void *voidE1, const void *voidE2);
 int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento);
 int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado);
 
+/*
 void accionCasillaACadena(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer);
 void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer);
 void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer);
 void corregirCadenadeMapaConIndice(char *buffer);
-
+*/
 void destruirCasilla(void **pl, void* contexto);
 
 #endif // CASILLA_H_

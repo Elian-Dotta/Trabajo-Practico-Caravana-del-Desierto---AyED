@@ -257,7 +257,7 @@ void mostrarTablero(tTablero* tablero)
     posicionarTablero(tablero, 0); // POSICIONA EN EL INICIO
     mostrarListaDE(tablero, mostrarCasilla);
 }
-
+/*
 void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
 /*
     Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
@@ -266,7 +266,7 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
     -> Valores de Orientacion: 0 (Vertical) - 1 (Horizontal)
     -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
     El buffer debe ser el adecuado en tam.
-*/
+
     if(NULL == *tablero || NULL == buffer)
         return;
     if(0 != indice && 1 != indice)
@@ -294,7 +294,7 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
         }break;
     }
 }
-
+*/
 void destruirTablero(tTablero *tablero)
 {
     recorrerListaDE(tablero, (Accion)destruirCasilla, NULL);

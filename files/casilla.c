@@ -215,12 +215,13 @@ void calcularMovBandido(void *pl, void* contexto)
 void buscarYCalcularBandido(void *e, void *contexto)
 {
     tElem *elem = (tElem*)e;
-    void *ctx[4] = contexto;
 
-    tCola *movimientos = contexto[0];
-    tLista *bandInteligentes = contexto[1];
-    int *posJug = contexto[2];
-    int *cantPos = contexto[3];
+    void **ctx = (void**)contexto;
+
+    tCola *movimientos       = (tCola*)ctx[0];
+    tLista *bandInteligentes = (tLista*)ctx[1];
+    int *posJug              = (int*)ctx[2];
+    int *cantPos             = (int*)ctx[3];
     tMovimiento movimientoBandido;
     int resultadoDado;
 
@@ -231,7 +232,7 @@ void buscarYCalcularBandido(void *e, void *contexto)
         movimientoBandido.id   = elem->id_elem;
         movimientoBandido.cant = resultadoDado;
 
-        if(0 == buscarPorClaveLista(bandInteligentes, elem->id_elem, cmpIdElem)
+        if(0 == buscarPorClaveLista(bandInteligentes, &elem->id_elem, sizeof(tElem),cmpIdElem))
         {
             movimientoBandido.dir = tirarDado(0,1)?'F':'B';
         }
@@ -244,6 +245,21 @@ void buscarYCalcularBandido(void *e, void *contexto)
     }
 }
 
+int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado){
+    // DEVUELVE LA MENOR DISTANCIA ENTRE DOS ELEMENTOS, SI ESA MENOR DISTANCIA SE ENCUENTRA
+    // YENDO DE DE LA POS ACTUAL A IZQUIERDA, LA DEVUELVE EN NEGATIVO
+    int der, izq;
+    distanciasEntreElementos(posElem1, posElem2, cantidadCasillas, &der, &izq);
+    der = abs(der - dado);
+    izq = abs(izq - dado);
+    return der < izq? der : (-1)*izq;
+}
+
+void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int* der, int* izq)
+{
+    *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas; //distancia yendo de izquierda a derecha
+    *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas; //distancia yendo de derecha a izquierda
+}
 
 void cambiarEstado(void *pl, void* estado)
 {
@@ -326,10 +342,6 @@ void modEstado(void* est, void* e)
 
 }
 
-void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int *der, int *izq){
-    *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas; //distancia yendo de izquierda a derecha
-    *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas; //distancia yendo de derecha a izquierda
-}
 
 void destruirCasilla(void **pl, void* contexto)
 {
