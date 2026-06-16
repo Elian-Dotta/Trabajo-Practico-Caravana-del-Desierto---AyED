@@ -57,7 +57,9 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
     int ret;
     tLinea buffer;
 
-    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 0, NULL))
+    // conDup=1: dos jugadores pueden tener el MISMO puntaje y ambos deben
+    // figurar (cmpLinea solo ordena por puntaje, no identifica al jugador).
+    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL))
     {
         if(ranking->cantLineas == MAX_RANKING)
             sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
@@ -85,18 +87,25 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
     strcpy(nickAprocesar, partida.nickname);
 
     strcpy(linea->nickname, nickAprocesar);
-    strcpy(idx.nickname, nickAprocesar);
-    buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname);
-    strcpy(linea->nombre, jugador.nombre);
+    // la clave de busqueda va en 'aux' (jugador): buscarEnArchivoConIndice
+    // arma la entrada de indice a partir de el con asigJugNick.
+    strcpy(jugador.nickname, nickAprocesar);
+    if(buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname))
+        strcpy(linea->nombre, jugador.nombre);
 
-    while(!feof(archPartidas) && strcmp(nickAprocesar, partida.nickname) == 0)
+    // las partidas de un mismo nick estan agrupadas: sumar todas sus puntajes
+    do
     {
-
-        linea->puntaje+= partida.puntaje;
-        fread(&partida, sizeof(regPartida), 1, archPartidas);
+        linea->puntaje += partida.puntaje;
     }
+    while(fread(&partida, sizeof(regPartida), 1, archPartidas) == 1 &&
+          strcmp(nickAprocesar, partida.nickname) == 0);
 
-    fseek(archPartidas, -1 * sizeof(regPartida), SEEK_CUR);
+    // si se leyo un registro de OTRO nick, retroceder para procesarlo despues
+    if(!feof(archPartidas))
+        fseek(archPartidas, -1L * (long)sizeof(regPartida), SEEK_CUR);
+
+    return 1;
 }
 
 void mostrarRanking(tRanking *ranking)

@@ -39,6 +39,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/arbol.h" />
+		<Unit filename="files/caravana.exe" />
 		<Unit filename="files/casilla.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -104,10 +105,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/registro.h" />
+		<Unit filename="files/stubs.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="files/tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/tablero.h" />
+		<Unit filename="files/timer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files/timer.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
