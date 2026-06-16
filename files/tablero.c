@@ -290,6 +290,50 @@ void mostrarTablero(tTablero* tablero)
     posicionarTablero(tablero, 0); // POSICIONA EN EL INICIO
     mostrarListaDE(tablero, mostrarCasilla);
 }
+
+// Acumula en 'buf' los caracteres de los elementos de una casilla.
+static void acumularTipoElem(void *elemVoid, void *bufVoid)
+{
+    tElem *elem = (tElem*)elemVoid;
+    char  *buf  = (char*)bufVoid;
+    unsigned n  = strlen(buf);
+
+    buf[n]     = elem->tipo_elem;
+    buf[n + 1] = '\0';
+}
+
+// Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
+static void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
+{
+    tCasilla *casilla = (tCasilla*)casillaVoid;
+    FILE     *arch    = (FILE*)archVoid;
+    char      contenido[TAM_BUFFER];
+
+    contenido[0] = '\0';
+    recorrerLista(casilla, acumularTipoElem, contenido);
+
+    if(contenido[0] == '\0')
+        fprintf(arch, "[.]");          // posicion vacia / ruta despejada
+    else
+        fprintf(arch, "[%s]", contenido);
+}
+
+int generarArchivoTablero(tTablero* tablero, const char *path)
+{
+    FILE *arch;
+
+    if(NULL == *tablero)
+        return 0;
+    if((arch = fopen(path, "wt")) == NULL)
+        return 0;
+
+    posicionarTablero(tablero, 0);     // arrancar desde el Inicio
+    recorrerListaDE(tablero, escribirCasillaArchivo, arch);
+    fprintf(arch, "\n");
+
+    fclose(arch);
+    return 1;
+}
 /*
 void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
 /*

@@ -42,6 +42,8 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
 
     crearTablero(&p->tablero, p->config, &p->bandInteligentes);
 
+    generarArchivoTablero(&p->tablero, ARCH_CARAVANA); // consigna c: volcar el tablero a caravana.txt
+
     inicializarEstado(&p->estado);
 
     p->jugador = *jugador;

@@ -17,6 +17,7 @@
 
 #define MSJ_LISTA_MAPA_VACIO "EL TABLERO NO FUE GENERADO"
 #define TAM_BUFFER 30
+#define ARCH_CARAVANA "caravana.txt"
 
 #ifndef IZQ
 #define IZQ -1
@@ -55,6 +56,10 @@ int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2);
 
 
 void mostrarTablero(tTablero* tablero);
+
+// Genera el tablero en un archivo de texto (consigna c: caravana.txt).
+int  generarArchivoTablero(tTablero* tablero, const char *path);
+
 int  cmpInt(const void *a, const void *b);
 
 void destruirTablero(tTablero *tablero);
