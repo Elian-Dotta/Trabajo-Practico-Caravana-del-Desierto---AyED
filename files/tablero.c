@@ -175,10 +175,7 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov, int tamTablero)
     elemAActualizar.id_elem = id;
 
     actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
-    printf("ANTES: %d\n", elemAActualizar.nro_casilla);
-    printf("mov=%d\n", mov);
     elemAActualizar.nro_casilla = calcularNroCasilla(elemAActualizar.nro_casilla, mov, tamTablero);
-    printf("DESPUES: %d\n", elemAActualizar.nro_casilla);
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;

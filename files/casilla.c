@@ -29,10 +29,6 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpIdElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
 
-    printf("ELIMINO tipo=%c id=%d\n",
-       elem->tipo_elem,
-       elem->id_elem);
-
     return 1;
 }
 
@@ -76,8 +72,6 @@ int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
 
-    printf("BUSCO %c POS=%d\n", ref->tipo_elem, pos);
-
     ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos + 1);
 
     return ret;
@@ -95,8 +89,6 @@ int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
 
-    printf("BUSCO %c POS=%d\n", ref->tipo_elem, pos);
-
     ret = actualizarPosLista(casilla, nue, sizeof(tElem), pos, cambiarTipo);
 
     return ret;
@@ -108,10 +100,6 @@ int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
-
-    printf("ELIMINO tipo=%c id=%d\n",
-       elem->tipo_elem,
-       elem->id_elem);
 
     return 1;
 }

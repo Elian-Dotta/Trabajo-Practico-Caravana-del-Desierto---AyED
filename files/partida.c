@@ -282,6 +282,8 @@ int  dibujarAnimacionEstado(tPartida *p)
 
     if(p->estado.JpierdeVida)
     {
+        // El jugador vuelve al Campamento Inicial (casilla 1). 'posJug' esta en
+        // sincronia con la casilla real, asi que este desplazamiento la lleva a 1.
         mov = (p->jugador.posJug - 1) * - 1;
         moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
         if(p->estado.Tactiva)
@@ -289,6 +291,10 @@ int  dibujarAnimacionEstado(tPartida *p)
             moverElementoPorId(&p->tablero, idFlechaIzq, mov, p->config.cant_pos);
             moverElementoPorId(&p->tablero, idFlechaDer, mov, p->config.cant_pos);
         }
+        // Mantener la posicion logica sincronizada con la ficha: sin esto, 'posJug'
+        // quedaba con el valor viejo y se desincronizaba de la casilla real (el
+        // jugador "rebotaba"/teletransportaba en el medio del tablero).
+        p->jugador.posJug = 1;
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
         disminuirVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
