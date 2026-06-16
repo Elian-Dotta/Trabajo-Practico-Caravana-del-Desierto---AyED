@@ -39,7 +39,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/arbol.h" />
-		<Unit filename="files/caravana.exe" />
 		<Unit filename="files/casilla.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -150,7 +150,7 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     #define VIDAEXTRA 'V'
     */
 
-    return prioridadElem(elemAct->tipo_elem) - prioridadElem(elemNue->tipo_elem);
+    return elemNue->tipo_elem != BANDIDO ? prioridadElem(elemAct->tipo_elem) - prioridadElem(elemNue->tipo_elem) :  -1;
 }
 
 int prioridadElem(char tipo)
