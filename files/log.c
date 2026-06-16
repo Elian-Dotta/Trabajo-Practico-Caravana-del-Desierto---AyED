@@ -34,6 +34,8 @@ int  escribirEnLog(tLog *log, const char *msj)
 
 void mostrarLog(const tLog *log)
 {
+    if(listaVacia(&log->mensajes))
+        return;
     mostrarLista(&log->mensajes, mostrarMensaje);
 }
 

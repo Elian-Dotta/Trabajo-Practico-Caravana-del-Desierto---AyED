@@ -61,6 +61,18 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
                               config.max_tormenta };
 
     char elemTipo[] = { BANDIDO, PREMIO, VIDAEXTRA, OASIS, TORMENTA};
+
+    int disponibles[5];
+    int cantDisponibles = 0;
+
+    for(int i = 0; i < 5; i++)
+    {
+        if(elemFaltantes[i])
+        {
+            disponibles[cantDisponibles++] = i;
+        }
+    }
+
     int cantElem = 0,
         elemInsertados = 0,
         indiceElem,
@@ -79,8 +91,9 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
 
     while(elemInsertados < cantElem)
     {
+        printf("AAAAAA\n");
         posInsercion = rand() % config.cant_pos;
-        indiceElem = rand() % 5;
+        indiceElem = disponibles[rand() % cantDisponibles];
         if(elemFaltantes[indiceElem])
         {
             elem.id_elem = *contElem;
@@ -95,6 +108,22 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
                 (*contElem)++;                 // AVANZAMOS EL INDICE DE LOS ELEMENTOS
                 elemInsertados++;            // SUMAMOS UN ELEMENTO INSERTADO
             }
+        }
+
+        if(elemFaltantes[indiceElem] == 0)
+        {
+            int i;
+
+            for(i = 0; i < cantDisponibles; i++)
+            {
+                if(disponibles[i] == indiceElem)
+                    break;
+            }
+
+            for(; i < cantDisponibles - 1; i++)
+                disponibles[i] = disponibles[i + 1];
+
+            cantDisponibles--;
         }
     }
 
@@ -147,7 +176,10 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov, int tamTablero)
     elemAActualizar.id_elem = id;
 
     actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
+    printf("ANTES: %d\n", elemAActualizar.nro_casilla);
+    printf("mov=%d\n", mov);
     elemAActualizar.nro_casilla = calcularNroCasilla(elemAActualizar.nro_casilla, mov, tamTablero);
+    printf("DESPUES: %d\n", elemAActualizar.nro_casilla);
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;
@@ -192,14 +224,14 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
     ctxElem[0].tipo_elem = elemNue;
     ctxElem[1].tipo_elem = elemAct;
 
-    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipo);
+    actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
 }
 
 int  eliminarElemento(tTablero *tablero, char elemAct)
 {
     tElem elim;
     elim.tipo_elem = elemAct;
-    actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasilla);
+    actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasillaTipo);
 }
 
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)

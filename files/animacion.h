@@ -8,6 +8,7 @@
 #include "estado.h"
 #include "consola.h"
 #include "log.h"
+#include "timer.h"
 
 #define IZQ -1
 #define DER 1
@@ -22,8 +23,8 @@
 #define PUNALIZQ '<'
 #define PUNALDER '>'
 #define MANGO '-'
-#define FLECHAIZQ '>'
-#define FLECHADER '<'
+#define FLECHAIZQ '|'
+#define FLECHADER '/'
 #define DESAPARECE '_'
 #define OASISACTIVO '!'
 #define ESCUDOIZQ '('

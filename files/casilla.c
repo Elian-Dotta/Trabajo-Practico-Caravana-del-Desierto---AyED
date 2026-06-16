@@ -1,5 +1,6 @@
 #include "casilla.h"
 #include "consola.h"
+#include "animacion.h"
 
 tCasilla crearCasilla()
 {
@@ -28,6 +29,10 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpIdElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
 
+    printf("ELIMINO tipo=%c id=%d\n",
+       elem->tipo_elem,
+       elem->id_elem);
+
     return 1;
 }
 
@@ -39,6 +44,7 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
     ret = insertarOrdenadoLista(casilla, elem, tamDato, cmpRestriccionCasilla, 0, NULL);
     // LA UTILIZAMOS PARA EVITAR DUPLICADOS NO PARA ORDENAR. LA FUNCION DE CMP DEVUELVE -1 SIEMPRE EXCEPTO DUPLICADOS QUE DEVUELVE 0
+
 
     return ret;
 }
@@ -53,6 +59,8 @@ int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+
+    printf("BUSCO %c POS=%d\n", ref->tipo_elem, pos);
 
     ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos);
 
@@ -70,10 +78,13 @@ int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
 
+    printf("BUSCO %c POS=%d\n", ref->tipo_elem, pos);
+
     ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos + 1);
 
     return ret;
 }
+
 
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
@@ -86,9 +97,25 @@ int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
 
+    printf("BUSCO %c POS=%d\n", ref->tipo_elem, pos);
+
     ret = actualizarPosLista(casilla, nue, sizeof(tElem), pos, cambiarTipo);
 
     return ret;
+}
+
+int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = (tCasilla*)(*pl);
+    tElem  *elem = (tElem*)d;
+
+    eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
+
+    printf("ELIMINO tipo=%c id=%d\n",
+       elem->tipo_elem,
+       elem->id_elem);
+
+    return 1;
 }
 
 int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
@@ -109,7 +136,7 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     if(elemAct->tipo_elem == INICIO && elemNue->tipo_elem != JUGADOR) // EVITAMOS QUE APAREZCAN BANDIDOS EN EL INICIO
        return 0;
 
-    if(elemAct->tipo_elem == elemNue->tipo_elem && elemNue->tipo_elem != BANDIDO) // EVITAMOS QUE APAREZCAN TIPOS REPETIDOS EXCEPTUANDO EL BANDIDO
+    if(elemNue->tipo_elem != BANDIDO && elemAct->tipo_elem == elemNue->tipo_elem)  // EVITAMOS QUE APAREZCAN TIPOS REPETIDOS EXCEPTUANDO EL BANDIDO
         return 0;
 
     /*
@@ -130,15 +157,36 @@ int prioridadElem(char tipo)
 {
     switch(tipo)
     {
-        case INICIO:    return 1;
-        case SALIDA:    return 2;
-        case JUGADOR:   return 3;
-        case OASIS:     return 4;
-        case TORMENTA:  return 5;
-        case VIDAEXTRA: return 6;
-        case PREMIO:    return 7;
-        case BANDIDO:   return 8;
-        default:        return 999;
+        case INICIO:        return 1;
+        case SALIDA:        return 2;
+        case JUGADOR:       return 3;
+        case OASIS:         return 4;
+        case TORMENTA:      return 5;
+        case VIDAEXTRA:     return 6;
+        case PREMIO:        return 7;
+        case BANDIDO:       return 8;
+
+        case ASTERISCO:     return 200;
+        case ARENA1:        return 201;
+        case ARENA2:        return 202;
+        case ARENA3:        return 203;
+        case ARENA4:        return 204;
+        case ATURDIDOIZQ:   return 205;
+        case ATURDIDODER:   return 206;
+        case PUNALIZQ:      return 207;
+        case PUNALDER:      return 208;
+        case MANGO:         return 209;
+        case FLECHAIZQ:     return 210;
+        case FLECHADER:     return 211;
+        case DESAPARECE:    return 212;
+        case OASISACTIVO:   return 213;
+        case ESCUDOIZQ:     return 214;
+        case ESCUDODER:     return 215;
+        case ESCUDOCAIDO:   return 216;
+        case JUGMINUS:      return 217;
+        case BANMINUS:      return 218;
+
+        default:            return 999;
     }
 }
 
@@ -150,9 +198,9 @@ int  cmpCasIdElem(const void *a, const void *b)
     int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpIdElem);
 
     if(ret != -1)
-        return 1;
-    else
         return 0;
+    else
+        return 1;
 }
 
 int  cmpCasTipoElem(const void *a, const void *b)
@@ -163,9 +211,9 @@ int  cmpCasTipoElem(const void *a, const void *b)
     int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpTipoElem);
 
     if(ret != -1)
-        return 1;
-    else
         return 0;
+    else
+        return 1;
 }
 
 int  cmpIdElem(const void *a, const void *b)
@@ -296,7 +344,6 @@ void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int*
 
 void cambiarEstado(void *pl, void* estado)
 {
-    static int tieneoasis = 0, tienetormenta = 0;
     tLista *lista = (tLista*)pl;
     tEstado *est = (tEstado*)estado;
     tElem elem;
@@ -306,73 +353,88 @@ void cambiarEstado(void *pl, void* estado)
     {
          recorrerLista(lista, modEstado, estado);
 
-        if ((tienetormenta=1) && (est->Tactiva==0))
+        if ((est->tieneOasis == 1))
         {
-            tienetormenta=0;
+            est->tieneOasis = 0;
+            est->Operdido = 1;
+        }
+        if (est->Oobtenido==1)
+        {
+            est->tieneOasis=1;
+        }
+        if(est->tieneOasis && est->Tactiva)
+        {
+            est->Tactiva = 0;
+        }
+        if((est->tieneTormenta==1) && (est->Tactiva==0))
+        {
+            est->tieneTormenta=0;
             est->Tfinalizada=1;
         }
         else if (est->Tactiva==1)
         {
-            tienetormenta=1;
+            if(est->tieneTormenta==1)
+            {
+                est->Tactiva = 0;
+                est->tieneTormenta = 0;
+                est->Tfinalizada = 1;
+            }
+            else
+                est->tieneTormenta=1;
+
         }
-        if ((est->JpierdeVida==1)&&(tieneoasis==1))
+        if ((est->JpierdeVida == 1)&&(est->tieneOasis==1))
         {
             if (est->Bandidos==1)
             {
                 est->JpierdeVida=0;
 
             }
-            tieneoasis=0;
+            est->tieneOasis=0;
             est->Operdido=1;
         }
-        if ((tieneoasis == 1) && (est->Oobtenido==0))
-        {
-            tieneoasis = 0;
-            est->Operdido = 1;
-        }
-        if (est->Oobtenido==1)
-        {
-            tieneoasis=1;
-        }
     }
-
 }
 
 
 
-void modEstado(void* est, void* e)
+void modEstado(void* e, void* est)
 {
     tEstado *estado = (tEstado*)est;
     tElem *casilla = (tElem*)e;         // DEBERIA DE LLAMARSE ELEMENTO.
 
-    if (casilla->tipo_elem == BANDIDO)
+    switch(casilla->tipo_elem)
     {
-        estado->JpierdeVida = 1;
-        estado->IDBandDesaparecido=(casilla)->id_elem;
-        estado->Bandidos++;
-        estado->BandAtaca = 1;
-    }
-    if (casilla->tipo_elem == OASIS)
-    {
-        estado->Oobtenido=1;
-    }
-    if (casilla->tipo_elem == PREMIO)
-    {
-        estado->JganaPuntos=1;
-    }
-    if (casilla->tipo_elem == VIDAEXTRA)
-    {
-        estado->JganaVida=1;
-    }
-    if (casilla->tipo_elem == TORMENTA)
-    {
-        estado->Tactiva=1;
-    }
-    if (casilla->tipo_elem == SALIDA)
-    {
-        estado->Jgana=1;
-    }
+        case BANDIDO:
+            estado->JpierdeVida = 1;
+            if(!estado->IDBandDesaparecido[0])
+                estado->IDBandDesaparecido[0] = casilla->id_elem;
+            else if(!estado->IDBandDesaparecido[1])
+                estado->IDBandDesaparecido[1] = casilla->id_elem;
+            estado->Bandidos++;
+            estado->BandAtaca = 1;
+            break;
 
+        case OASIS:
+            estado->Oobtenido = 1;
+            break;
+
+        case PREMIO:
+            estado->JganaPuntos = 1;
+            break;
+
+        case VIDAEXTRA:
+            estado->JganaVida = 1;
+            break;
+
+        case TORMENTA:
+            estado->Tactiva = 1;
+            break;
+
+        case SALIDA:
+            estado->Jgana = 1;
+            break;
+    }
 }
 
 

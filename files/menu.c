@@ -58,11 +58,11 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
         if (!priVez && conErr && msjErr)
             mostrar(msjErr);
 
-        mostrar("\nOpcion: ");
+        //mostrar("\nOpcion: ");
 
-        limpiarBuffer();
+        //limpiarBuffer();
 
-        if (scanf("%c", &opcion) != 1)
+        if (scanf(" %c", &opcion) != 1)
             opcion = '\0';
 
         limpiarBuffer();

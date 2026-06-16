@@ -50,7 +50,9 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 // FUNCIONES DE MOFICACION DE ELEMENTOS EN CASILLA
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 int cambiarTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
+int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato);
 
 // FUNCIONES PARA MOSTRAR ELEMENTOS
 void mostrarCasilla(const void *pl);

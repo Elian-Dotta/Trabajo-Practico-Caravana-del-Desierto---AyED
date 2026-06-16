@@ -49,9 +49,12 @@ unsigned verMovimiento(const tJugador *j)
     return j->cantMov;
 }
 
-void modificarPosJug(tJugador *j, int pos)
+void modificarPosJug(tJugador *j, int dir)
 {
-    j->posJug = pos;
+    if(dir == 'F')
+        j->posJug++;
+    else
+        j->posJug--;
 }
 
 unsigned verPosJugador(const tJugador *j)

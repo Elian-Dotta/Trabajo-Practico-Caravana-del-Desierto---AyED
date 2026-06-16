@@ -76,6 +76,7 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
     char nickAprocesar[11];
     linea->puntaje = 0;
     linea->nickname[0] = '\0';
+    linea->nombre[0] = '\0';
 
 
     if(fread(&partida, sizeof(regPartida), 1, archPartidas) != 1)
@@ -83,13 +84,15 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
 
     strcpy(nickAprocesar, partida.nickname);
 
+    strcpy(linea->nickname, nickAprocesar);
+    strcpy(idx.nickname, nickAprocesar);
+    buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname);
+    strcpy(linea->nombre, jugador.nombre);
+
     while(!feof(archPartidas) && strcmp(nickAprocesar, partida.nickname) == 0)
     {
-        strcpy(linea->nickname, nickAprocesar);
-        linea->puntaje+= partida.puntaje;
-        buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname);
-        strcpy(linea->nombre, jugador.nombre);
 
+        linea->puntaje+= partida.puntaje;
         fread(&partida, sizeof(regPartida), 1, archPartidas);
     }
 

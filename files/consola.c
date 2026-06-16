@@ -40,6 +40,10 @@ void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log)
     mostrarSeparador();
 
     mostrarMovimientosJugador(jugador);
+
+    mostrarSeparador();
+    mostrar("\nPresione ENTER para continuar...\n");
+    getchar();
 }
 
 void mostrar(const char *msj)
@@ -52,7 +56,7 @@ void mostrarEstadisticas(tJugador *j)
 {
     printf("Vidas: %u\t", j->vida);
     printf("\tPuntaje: %u\n", j->puntaje);
-    printf("Cantidad de movimientos: %u/n", j->cantMov);
+    printf("Cantidad de movimientos: %u", j->cantMov);
 }
 
 void mostrarTitulo()
@@ -74,15 +78,16 @@ void mostrarHUD(tJugador* jugador, tEstado* estado)
     printf("Vidas: %d\t", verVida(jugador));
     printf("\tPuntaje: %d\n", verPuntaje(jugador));
     printf("Cantidad de movimientos: %d\n", verMovimiento(jugador));
-    printf("Protección de oasis: ");
-    if(estado->Oobtenido==1)
-    {
+    printf("Proteccion de Oasis: ");
+    if(estado->tieneOasis == 1)
         printf("SI\n");
-    }
     else
-    {
         printf("NO\n");
-    }
+    printf("Tapado por Arena: ");
+    if(estado->tieneTormenta == 1)
+        printf("SI");
+    else
+        printf("NO");
 }
 
 

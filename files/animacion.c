@@ -6,6 +6,7 @@ void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned 
     int i;
     for( i = 1; i <= frame; i++)
     {
+        wait(1);
         posicionarTablero(t, IDAncla);
         anim(t, i);
         dibujarEscena(t, j, e, l);
@@ -201,7 +202,6 @@ void animBandidoAtaca(tTablero *tablero, unsigned frame)
         case 3:
             CAMELEM(JUGMINUS, DESAPARECE);
             ELIM(PUNALIZQ);
-
             break;
     }
 }

@@ -168,6 +168,35 @@ void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto)
 }
 */
 
+int actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum)
+{
+    if(buscarPorClaveListaDE(pl, d, tamInfo, cmp))
+        return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
+    return 0;
+}
+
+
+int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
+                                 int pos, Acumular acum)
+{
+    if(*pl == NULL)
+        return 0;
+    while(pos > 0)                   // avanzar
+    {
+        *pl = (*pl)->sig;
+        pos--;
+    }
+    while(pos < 0)                  // retroceder
+    {
+        *pl = (*pl)->ant;
+        pos++;
+    }
+    return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
+}
+
+
+
+
 int buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp)
 {
     tNodoDE *aux = *pl;
@@ -246,29 +275,4 @@ tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, C
     return NULL;
 }
 
-
-int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
-                                 int pos, Acumular acum)
-{
-    if(*pl == NULL)
-        return 0;
-    while(pos > 0)                   // avanzar
-    {
-        *pl = (*pl)->sig;
-        pos--;
-    }
-    while(pos < 0)                  // retroceder
-    {
-        *pl = (*pl)->ant;
-        pos++;
-    }
-    return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
-}
-
-int actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum)
-{
-    if(buscarPorClaveListaDE(pl, d, tamInfo, cmp))
-        return acum(&(*pl)->info, &(*pl)->tamInfo, d, tamInfo);
-    return 0;
-}
 

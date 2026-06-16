@@ -31,6 +31,7 @@ int  vaciarLista(tLista *p);
 
 //int  eliminarPorClave(tLista *p, void *d, unsigned tamDato, Cmp cmp);
 
+int  listaVacia(tLista *p);
 
 void recorrerLista(tLista *lista, Accion accion, void *contexto);
 int  buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos);

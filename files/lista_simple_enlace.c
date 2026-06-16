@@ -142,6 +142,10 @@ void crearLista(tLista *p)
     *p = NULL;
 }
 
+int  listaVacia(tLista *p)
+{
+    return *p == NULL;
+}
 
 int vaciarLista(tLista *p)
 {

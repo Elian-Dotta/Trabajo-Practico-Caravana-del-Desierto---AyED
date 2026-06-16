@@ -36,7 +36,7 @@ unsigned verPuntaje(const tJugador *j);
 void aumentarMovimiento(tJugador *j);
 unsigned verMovimiento(const tJugador *j);
 
-void modificarPosJug(tJugador *j, int pos);
+void modificarPosJug(tJugador *j, int dir);
 unsigned verPosJugador(const tJugador *j);
 
 void guardarNombreYNick(tJugador *j, const char *nombre, const char* nick);

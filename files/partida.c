@@ -2,11 +2,11 @@
 #include "menu.h"
 
 // INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
-void jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
     tPartida partida;
 
-    inicializarPartida(&partida);
+    inicializarPartida(&partida, jugador);
 
     while(partida.corriendo)
     {
@@ -29,10 +29,11 @@ void jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
 
-int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
 {
     //tConfig config = { 25, 3, 2, 3, 1, 2, 3};
+
     cargarConfig(&p->config);
 
     crearLista(&p->bandInteligentes);
@@ -43,11 +44,30 @@ int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
     inicializarEstado(&p->estado);
 
+    p->jugador = *jugador;
+
     asignarVida(&p->jugador, p->config.vidas_ini);
 
     crearCola(&p->movimientos);
 
     p->corriendo = 1;
+
+    mostrar("INICIANDO PARTIDA...\n");
+    wait(1);
+    mostrar("CARGANDO: 1%\n");
+    wait(1);
+    mostrar("CARGANDO: 2%\n");
+    wait(1);
+    mostrar("CARGANDO: 3%\n");
+    wait(0.4);
+    mostrar("CARGANDO: 57%\n");
+    wait(0.3);
+    mostrar("CARGANDO: 99%\n");
+    wait(0.5);
+    mostrar("CARGANDO: 99,999%\n");
+    wait(0.2);
+    mostrar("CARGANDO: 100%\n");
+    wait(0.1);
 }
 
 int  dibujarEstadoDelJuego(tPartida *p)
@@ -59,23 +79,39 @@ int  dibujarEstadoDelJuego(tPartida *p)
 int  procesarEntrada(tPartida *p)
 {
     tMovimiento mov;
-    char        enter[8];
+    char        enter;
     int         pasos;
     char        dir;
+    char        buffer[TAM];
+    if(!p->estado.tieneTormenta)
+    {
+        // 1) pedir ENTER y tirar el dado (1 a 6)
+        escribirEnLog(&p->log, "Presione ENTER para tirar el dado...\n");
+        dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
 
-    // 1) pedir ENTER y tirar el dado (1 a 6)
-    ingresarDato("Presione ENTER para tirar el dado...", enter);
-    pasos = tirarDado(1, 6);
+        scanf("%c", &enter);
+        pasos = tirarDado(1, 6);
+        wait(0.3);
 
-    // 2) pedir la direccion (el menu valida que sea 'F' o 'B')
-    dir = menu("Ingrese direccion (Adelante 'F' / Atras 'B'): ",
-               "FB", 1, "Direccion invalida\n");
+        sprintf(buffer, "Obtuviste un %d\n", pasos);
+        escribirEnLog(&p->log, buffer);
 
-    // 3) armar el movimiento del jugador y encolarlo
-    mov.id   = JUGADORID;
-    mov.dir  = dir;
-    mov.cant = pasos;
-    ponerEnCola(&p->movimientos, &mov, sizeof(mov));
+        escribirEnLog(&p->log, "Ingrese direccion (Adelante 'F' / Atras 'B'): \n");
+        dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
+
+        // 2) pedir la direccion (el menu valida que sea 'F' o 'B')
+        dir = menu("",
+                   "FB", 1, "Direccion invalida\n");
+
+        // 3) armar el movimiento del jugador y encolarlo
+        mov.id   = JUGADORID;
+        mov.dir  = dir;
+        mov.cant = pasos;
+        aumentarMovimiento(&p->jugador);
+        guardarMovimientoJugador(&p->jugador, &mov);
+        ponerEnCola(&p->movimientos, &mov, sizeof(mov));
+    }
+
 
     return 1;
 }
@@ -93,11 +129,13 @@ int  dibujarAnimacionMov(tPartida *p)
     // O CAMBIAR LA ESTRUCTURA TMOV PARA AÑADIR EL ID, EL UNICO USO SERIA ESTE, PARA CALCULAR EL MOV DE LOS BANDIDOS NO SE NECESITA ID EN EL TMOV
     tMovimiento movActual;
     int movRelativo;
+    char buffer[TAM];
+    int posJug;
 
     int idEscudoIzq,
         idEscudoDer;
 
-    if(p->estado.Oactivo)
+    if(p->estado.tieneOasis)
     {
         idEscudoIzq = obtenerIdElementoPorTipo(&p->tablero, ESCUDOIZQ);
         idEscudoDer = obtenerIdElementoPorTipo(&p->tablero, ESCUDODER);
@@ -109,10 +147,23 @@ int  dibujarAnimacionMov(tPartida *p)
     {
         sacarDeCola(&p->movimientos, &movActual, sizeof(movActual));
 
+
+
+        if(movActual.id == JUGADORID)
+        {
+            posJug = verPosJugador(&p->jugador);
+            if(posJug == 1 && movActual.dir == 'B' ||
+               posJug == p->config.cant_pos && movActual.dir == 'F')
+                cambiarDireccion(&movActual);
+            modificarPosJug(&p->jugador, movActual.dir);
+        }
+
         // movRelativo = mov.dir == 'F'? 1 : -1; // ESTA FORMA UTILIZA EL CAMPO DE LA ESTRUCTURA Y DEJA EL CODIGO MEDIO CRIPTICO AL USAR EL OPERADOR TERNARIO
         movRelativo = PASO * calcularDireccion(movActual.dir); // DEVUELVE 1 O -1 PARA MULTIPLICAR EL NUMERO DE CASILLAS POR LA DIRECCION
 
-        if(movActual.id == JUGADORID && p->estado.Oactivo &&
+
+
+        if(movActual.id == JUGADORID && p->estado.tieneOasis &&
            idEscudoIzq != -1 && idEscudoDer != -1)
         {
             moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo, p->config.cant_pos);
@@ -121,6 +172,14 @@ int  dibujarAnimacionMov(tPartida *p)
         }
         else
         {
+            printf("id=%d dir=%c cant=%d\n",
+           movActual.id,
+           movActual.dir,
+           movActual.cant);
+           printf("Pos=%d Dir=%c Mov=%d\n",
+           verPosJugador(&p->jugador),
+           movActual.dir,
+           movRelativo);
             moverElementoPorId(&p->tablero, movActual.id, movRelativo, p->config.cant_pos);
         }
 
@@ -128,17 +187,29 @@ int  dibujarAnimacionMov(tPartida *p)
 
         if(movActual.cant > 0)
         {
+            /*
             if(movActual.id == JUGADORID && (elementosJuntos(&p->tablero, JUGADOR, INICIO) ||
-                                             elementosJuntos(&p->tablero, JUGADOR, SALIDA)))
-            {
-                cambiarDireccion(&movActual);
-            }
+                                             elementosJuntos(&p->tablero, JUGADOR, SALIDA)) &&
+               )
+            */
             ponerEnCola(&p->movimientos, &movActual, sizeof(movActual));
         }
+        if(movActual.id == JUGADORID)
+        {
+            snprintf(buffer, TAM, "Jugador se movio a la %s\n", movActual.dir == 'F'? "derecha" : "izquierda");
+            escribirEnLog(&p->log, buffer);
+        }
+        else
+        {
+            snprintf(buffer, TAM, "Un bandido se movio a la %s\n", movActual.dir == 'F'? "derecha" : "izquierda");
+            escribirEnLog(&p->log, buffer);
+        }
 
-
+        wait(1);
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
     }
+
+    return 1;
 }
 
 int  actualizarEstado(tPartida *p)
@@ -148,6 +219,7 @@ int  actualizarEstado(tPartida *p)
 
 int  dibujarAnimacionEstado(tPartida *p)
 {
+
     int mov;
 
     int idFlechaIzq,
@@ -164,6 +236,12 @@ int  dibujarAnimacionEstado(tPartida *p)
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra, JUGADORID);
         aumentarVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_VIDA);
+    }
+
+    if(!p->estado.BandAtaca && p->estado.Operdido)
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
+        escribirEnLog(&p->log, MSJ_OASISPERDIDO);
     }
 
     if(p->estado.Oobtenido)
@@ -192,10 +270,22 @@ int  dibujarAnimacionEstado(tPartida *p)
         escribirEnLog(&p->log, MSJ_BANDIDOATACA);
     }
 
-    if(p->estado.Operdido)
+
+    if(p->estado.BandAtaca && p->estado.Operdido)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISPERDIDO);
+
+        if(p->estado.Bandidos > 1)
+        {
+            if(p->estado.IDBandDesaparecido[0])
+            {
+                ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
+                escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+            }
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
+            escribirEnLog(&p->log, MSJ_BANDIDOATACA);
+        }
     }
 
     if(p->estado.JpierdeVida)
@@ -214,9 +304,14 @@ int  dibujarAnimacionEstado(tPartida *p)
             p->estado.Jpierde = 1;
 
     }
-    if(p->estado.IDBandDesaparecido)
+    if(p->estado.IDBandDesaparecido[0] && !p->estado.Operdido)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
+        escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+    }
+    else if(p->estado.IDBandDesaparecido[1])
+    {
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[1]);
         escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
     }
 
