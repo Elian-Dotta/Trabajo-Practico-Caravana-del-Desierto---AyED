@@ -27,5 +27,11 @@ void limpiarBuffer(void);
 
 void limpiarPantalla();
 
+#define VELOCIDAD_ANIM 180   // milisegundos por cuadro de animacion
+
+void pausaFrame(void);       // espera entre cuadros para que la animacion sea visible
+
+void habilitarConsola(void); // habilita ANSI en la consola (limpieza de pantalla)
+
 
 #endif // CONSOLA_H_

@@ -2,17 +2,23 @@
 #include "menu.h"
 
 // INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
-void jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
     tPartida partida;
 
-    inicializarPartida(&partida);
+    inicializarPartida(&partida, jugador);
 
     while(partida.corriendo)
     {
         dibujarEstadoDelJuego(&partida); // ESTADO PARA LA ELECCION DEL JUGADOR
 
-        procesarEntrada(&partida); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
+        // si quedo aturdido por una tormenta, pierde este turno (no mueve), pero los bandidos si
+        partida.enRecuperacion = partida.saltarTurno;
+        partida.saltarTurno = 0;
+        if(partida.enRecuperacion)
+            escribirEnLog(&partida.log, MSJ_TURNO_PERDIDO);
+        else
+            procesarEntrada(&partida); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
         actualizarMovimientos(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
@@ -24,15 +30,25 @@ void jugarPartida()// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
     }
 
     finalizarPartida(&partida); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
+
+    *jugador = partida.jugador; // devuelve al menu las estadisticas actualizadas de la partida
 }
 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
 
-int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
 {
     //tConfig config = { 25, 3, 2, 3, 1, 2, 3};
+    p->jugador = *jugador;   // se conserva nombre/nick del jugador del menu
+
+    // estadisticas frescas para esta partida (no arrastrar las de la partida anterior)
+    p->jugador.puntaje = 0;
+    p->jugador.cantMov = 0;
+    p->jugador.posJug  = 1;
+    vaciarCola(&p->jugador.hisMovJugador);   // historial de movimientos vacio
+
     cargarConfig(&p->config);
 
     crearLista(&p->bandInteligentes);
@@ -48,6 +64,10 @@ int  inicializarPartida(tPartida *p)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
     crearCola(&p->movimientos);
 
     p->corriendo = 1;
+    p->saltarTurno = 0;
+    p->enRecuperacion = 0;
+
+    return 1;
 }
 
 int  dibujarEstadoDelJuego(tPartida *p)
@@ -63,9 +83,14 @@ int  procesarEntrada(tPartida *p)
     int         pasos;
     char        dir;
 
+    char        msjDado[40];
+
     // 1) pedir ENTER y tirar el dado (1 a 6)
     ingresarDato("Presione ENTER para tirar el dado...", enter);
     pasos = tirarDado(1, 6);
+
+    snprintf(msjDado, sizeof(msjDado), "Sacaste un %d!\n", pasos);
+    mostrar(msjDado);
 
     // 2) pedir la direccion (el menu valida que sea 'F' o 'B')
     dir = menu("Ingrese direccion (Adelante 'F' / Atras 'B'): ",
@@ -77,12 +102,17 @@ int  procesarEntrada(tPartida *p)
     mov.cant = pasos;
     ponerEnCola(&p->movimientos, &mov, sizeof(mov));
 
+    // registrar el movimiento del jugador (contador + historial FX/BX)
+    aumentarMovimiento(&p->jugador);
+    guardarMovimientoJugador(&p->jugador, &mov);
+
     return 1;
 }
 
 int actualizarMovimientos(tPartida *p)
 {
     obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPosJugador(&p->jugador), p->config.cant_pos);
+    return 1;
 }
 
 
@@ -138,20 +168,22 @@ int  dibujarAnimacionMov(tPartida *p)
 
 
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
+        pausaFrame();
     }
+    return 1;
 }
 
 int  actualizarEstado(tPartida *p)
 {
     actualizarEstadoDelJugador(&p->tablero, &p->estado, &p->bandInteligentes);
+    return 1;
 }
 
 int  dibujarAnimacionEstado(tPartida *p)
 {
-    int mov;
+    int protegido = p->estado.Oactivo;   // inmunidad obtenida al pasar por un oasis el turno anterior
+    int protegidoProx;
 
-    int idFlechaIzq,
-        idFlechaDer;
     if(p->estado.JganaPuntos)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
@@ -172,52 +204,50 @@ int  dibujarAnimacionEstado(tPartida *p)
         escribirEnLog(&p->log, MSJ_OASISOBTENIDO);
     }
 
+    // TORMENTA: aturde y hace perder el proximo turno, salvo proteccion del oasis
     if(p->estado.Tactiva)
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorSeActiva, JUGADORID);
-        escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
-        idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
-        idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
+        if(p->enRecuperacion)               // este turno era el perdido: se recupera
+            escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
+        else if(protegido)                  // el oasis anula la tormenta
+            escribirEnLog(&p->log, MSJ_TORMENTA_PROTEGIDO);
+        else
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorSeActiva, JUGADORID);
+            escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
+            p->saltarTurno = 1;             // perdera el proximo turno
+        }
     }
 
-    if(p->estado.Tfinalizada)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza, JUGADORID);
-        escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
-    }
-
-    if(p->estado.BandAtaca)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
-        escribirEnLog(&p->log, MSJ_BANDIDOATACA);
-    }
-
-    if(p->estado.Operdido)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
-        escribirEnLog(&p->log, MSJ_OASISPERDIDO);
-    }
-
+    // BANDIDO: el jugador pierde una vida, salvo proteccion del oasis
     if(p->estado.JpierdeVida)
     {
-        mov = (p->jugador.posJug - 1) * - 1;
-        moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
-        if(p->estado.Tactiva)
+        if(protegido)
+            escribirEnLog(&p->log, MSJ_BANDIDO_PROTEGIDO);
+        else
         {
-            moverElementoPorId(&p->tablero, idFlechaIzq, mov, p->config.cant_pos);
-            moverElementoPorId(&p->tablero, idFlechaDer, mov, p->config.cant_pos);
+            if(p->estado.BandAtaca)
+                ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
+            disminuirVida(&p->jugador);
+            escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
+            if(p->estado.IDBandDesaparecido)
+            {
+                ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido);
+                escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+            }
+            if(verVida(&p->jugador) == 0)
+                p->estado.Jpierde = 1;
+            else
+            {
+                // el jugador vuelve al campamento inicial (casilla 1)
+                tElem jug;
+                jug.id_elem = JUGADORID;
+                buscarPorClaveListaDE(&p->tablero, &jug, sizeof(tElem), cmpCasIdElem);
+                moverElementoPorId(&p->tablero, JUGADORID, 1 - jug.nro_casilla, p->config.cant_pos);
+                modificarPosJug(&p->jugador, 1);
+            }
         }
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
-        disminuirVida(&p->jugador);
-        escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
-        if(verVida(&p->jugador)== 0)
-            p->estado.Jpierde = 1;
-
-    }
-    if(p->estado.IDBandDesaparecido)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido);
-        escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
     }
 
     if(p->estado.Jgana)
@@ -235,7 +265,14 @@ int  dibujarAnimacionEstado(tPartida *p)
         p->corriendo = 0;
     }
 
+    // la proteccion del oasis dura el turno SIGUIENTE al que se pisa el oasis
+    protegidoProx = p->estado.Oobtenido ? 1 : 0;
+
     reiniciarEstado(&p->estado);
+
+    p->estado.Oactivo = protegidoProx;   // reiniciarEstado no toca Oactivo
+
+    return 1;
 }
 
 int  finalizarPartida(tPartida *p)
@@ -251,6 +288,8 @@ int  finalizarPartida(tPartida *p)
     vaciarLog(&p->log);
 
     destruirTablero(&p->tablero);
+
+    return 1;
 }
 
 

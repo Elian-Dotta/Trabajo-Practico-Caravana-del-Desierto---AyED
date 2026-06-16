@@ -207,30 +207,22 @@ int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
 
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
-    tLista *elim = lista,
-           *auxSig;
+    tNodo *muerto;
 
-    if (elim==NULL)
-    {
+    (void)tamDato;
+
+    // avanza hasta el nodo a eliminar (con guarda de fin de lista)
+    while(*lista && cmp((*lista)->info, d) != 0)
+        lista = &(*lista)->sig;
+
+    if(*lista == NULL)          // no se encontro la clave
         return 0;
-    }
 
-    int comp = cmp((*elim)->info,d);
-    while(comp!=0)
-    {
-        elim=&(*elim)->sig;
-        comp = cmp((*elim)->info,d);
-    }
-    if (comp==0)
-    {
-        auxSig=&(*elim)->sig;
-        free((*elim)->info);
-        free(*elim);
-        elim=auxSig;
-        return 1;
-    }
-    return 0;
-
+    muerto = *lista;
+    *lista = muerto->sig;       // reenlaza: el casillero ahora apunta al siguiente
+    free(muerto->info);
+    free(muerto);
+    return 1;
 }
 
 int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){

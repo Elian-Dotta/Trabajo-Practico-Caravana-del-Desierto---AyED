@@ -11,7 +11,7 @@ void crearLog(tLog *log)
 int  escribirEnLog(tLog *log, const char *msj)
 {
     int ret; // VARIABLE PARA GUARDAR EL RETORNO DE INSERTAR AL INICIO
-    unsigned tamMsj; // VARIABLE PARA CALCULAR EL TAMAÑO DEL MENSAJE INGRESADO
+    unsigned tamMsj; // VARIABLE PARA CALCULAR EL TAMAï¿½O DEL MENSAJE INGRESADO
     char aux[TAM_BUFFER]; // BUFFER PARA SACAR EL ELEMENTO
 
     if(msj[0] == '\0') // SI NO HAY MENSAJE DEVOLVEMOS ERROR, TAMBIEN CONSIDERE !msj COMO CONDICION
@@ -40,8 +40,11 @@ void mostrarLog(const tLog *log)
 void mostrarMensaje(const void *m)
 {
     const char *msj = m;
+    unsigned len = strlen(msj);
 
     mostrar(msj);
+    if(len == 0 || msj[len - 1] != '\n')   // un salto por mensaje (sin duplicar si ya lo trae)
+        mostrar("\n");
 }
 
 void vaciarLog(tLog *log)

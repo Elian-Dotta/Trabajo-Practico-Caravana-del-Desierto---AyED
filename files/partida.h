@@ -27,6 +27,9 @@
 #define MSJ_BANDIDODESAPARECE   "Un bandido ha desaparecido\n"
 #define MSJ_JUGADORGANA         "FELICITACIONES, GANASTE LA PARTIDA\n"
 #define MSJ_JUGADORPIERDE       "El jugador ha perdido la partida\n"
+#define MSJ_TURNO_PERDIDO       "Perdiste el turno por la tormenta de arena\n"
+#define MSJ_TORMENTA_PROTEGIDO  "El oasis te protegio de la tormenta\n"
+#define MSJ_BANDIDO_PROTEGIDO   "El oasis te protegio del ataque del bandido\n"
 
 typedef struct
 {
@@ -38,11 +41,13 @@ typedef struct
     tLog     log;
     tConfig  config;
     int      corriendo;
+    int      saltarTurno;     // el jugador pierde el proximo turno (tormenta)
+    int      enRecuperacion;  // el turno actual es el que se pierde (se recupera de la tormenta)
 }tPartida;
 
-void jugarPartida();// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
+void jugarPartida(tJugador *jugador);// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 
-int  inicializarPartida(tPartida *partida); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
+int  inicializarPartida(tPartida *partida, tJugador *jugador); // VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
 int  dibujarEstadoDelJuego(tPartida *partida);
 

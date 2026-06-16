@@ -26,4 +26,5 @@ void reiniciarEstado(tEstado *e)
     e->Oobtenido = 0;
     e->Operdido = 0;
     e->Tfinalizada = 0;
+    e->Tactiva = 0;          // se recalcula cada turno segun la casilla del jugador
 }

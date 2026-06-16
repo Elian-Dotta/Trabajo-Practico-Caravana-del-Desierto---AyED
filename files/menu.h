@@ -29,7 +29,7 @@
 
 void juego();
 
-void menuPrincipal();
+void menuPrincipal(tJugador *jugador);
 
 char menu(const char* msj, const char *opc, int conErr, const char *msjErr);
 

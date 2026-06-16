@@ -12,7 +12,7 @@ tCasilla crearCasilla()
 
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem  *elem = (tElem*)d;
 
     insertarAlFinalLista(casilla, elem, tamDato);
@@ -23,10 +23,21 @@ int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpIdElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
+
+    return 1;
+}
+
+// Igual que eliminarDeCasilla pero compara por TIPO (para las animaciones: ELIM por simbolo)
+int eliminarTipoDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
+{
+    tCasilla *casilla = *(tCasilla**)pl;
+    tElem  *elem = (tElem*)d;
+
+    eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem);
 
     return 1;
 }
@@ -45,11 +56,11 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -61,11 +72,11 @@ int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -77,11 +88,11 @@ int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = *(tCasilla**)pl;
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -106,6 +117,14 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     tElem *elemAct = (tElem*)a;
     tElem *elemNue = (tElem*)b;
 
+    if(elemAct->tipo_elem == SALIDA)  // EN LA SALIDA NO PUEDE APARECER NADA MAS QUE LA SALIDA
+        return 0;
+
+    // OASIS y TORMENTA no pueden estar en la misma casilla
+    if((elemAct->tipo_elem == OASIS    && elemNue->tipo_elem == TORMENTA) ||
+       (elemAct->tipo_elem == TORMENTA && elemNue->tipo_elem == OASIS))
+        return 0;
+
     if(elemAct->tipo_elem == INICIO && elemNue->tipo_elem == BANDIDO) // EVITAMOS QUE APAREZCAN BANDIDOS EN EL INICIO
        return 0;
 
@@ -118,21 +137,19 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
 int  cmpCasIdElem(const void *a, const void *b)
 {
     tCasilla *cas = (tCasilla*)a;
-    tElem *elem = (tElem*)b;
+    tElem *elem = (tElem*)b;   // sirve de clave de busqueda Y de destino del elemento hallado
 
-    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpIdElem);
-
-    return ret;
+    // 0 = la casilla contiene el elemento (match para la lista DE), 1 = no lo contiene
+    return buscarPorClaveEnLista(cas, elem, elem, sizeof(tElem), cmpIdElem) ? 0 : 1;
 }
 
 int  cmpCasTipoElem(const void *a, const void *b)
 {
     tCasilla *cas = (tCasilla*)a;
-    tElem *elem = (tElem*)b;
+    tElem *elem = (tElem*)b;   // sirve de clave de busqueda Y de destino del elemento hallado
 
-    int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpTipoElem);
-
-    return ret;
+    // 0 = la casilla contiene un elemento de ese tipo (match para la lista DE), 1 = no
+    return buscarPorClaveEnLista(cas, elem, elem, sizeof(tElem), cmpTipoElem) ? 0 : 1;
 }
 
 int  cmpIdElem(const void *a, const void *b)
@@ -148,7 +165,7 @@ int  cmpTipoElem(const void *a, const void *b)
     tElem *e1 = (tElem*)a;
     tElem *e2 = (tElem*)b;
 
-    return e1->tipo_elem == e2->tipo_elem;
+    return e1->tipo_elem - e2->tipo_elem;   // 0 si son del mismo tipo (convencion estandar)
 }
 
 int  cmpCasTipos(const void *a, const void *b)
@@ -160,11 +177,12 @@ int  cmpCasTipos(const void *a, const void *b)
         tiene2;
 
     elem.tipo_elem = tipos[0];
-    tiene1 = buscarPorClaveLista(cas, &elem, sizeof(tElem), cmpTipoElem);
+    tiene1 = buscarPorClaveEnLista(cas, &elem, NULL, 0, cmpTipoElem);
     elem.tipo_elem = tipos[1];
-    tiene2 = buscarPorClaveLista(cas, &elem, sizeof(tElem), cmpTipoElem);
+    tiene2 = buscarPorClaveEnLista(cas, &elem, NULL, 0, cmpTipoElem);
 
-    return tiene1 && tiene2;
+    // 0 = la casilla tiene ambos tipos (match para la lista DE), 1 = no
+    return (tiene1 && tiene2) ? 0 : 1;
 }
 
 void asignarNroCasilla(void *a, void *contexto)
@@ -263,54 +281,23 @@ void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int*
 
 void cambiarEstado(void *pl, void* estado)
 {
-    static int tieneoasis = 0, tienetormenta = 0;
+    // Solo detecta que hay en la casilla del jugador (setea los flags crudos del estado).
+    // La logica de inmunidad/turno perdido la maneja dibujarAnimacionEstado.
     tLista *lista = (tLista*)pl;
-    tEstado *est = (tEstado*)estado;
     tElem elem;
     elem.id_elem = JUGADORID;
 
     if(buscarPorClaveLista(lista, &elem, sizeof(tElem), cmpIdElem) != -1)
-    {
-         recorrerLista(lista, modEstado, estado);
-
-        if ((tienetormenta=1) && (est->Tactiva==0))
-        {
-            tienetormenta=0;
-            est->Tfinalizada=1;
-        }
-        else if (est->Tactiva==1)
-        {
-            tienetormenta=1;
-        }
-        if ((est->JpierdeVida==1)&&(tieneoasis==1))
-        {
-            if (est->Bandidos==1)
-            {
-                est->JpierdeVida=0;
-
-            }
-            tieneoasis=0;
-            est->Operdido=1;
-        }
-        if ((tieneoasis == 1) && (est->Oobtenido==0))
-        {
-            tieneoasis = 0;
-            est->Operdido = 1;
-        }
-        if (est->Oobtenido==1)
-        {
-            tieneoasis=1;
-        }
-    }
-
+        recorrerLista(lista, modEstado, estado);
 }
 
 
 
 void modEstado(void* est, void* e)
 {
-    tEstado *estado = (tEstado*)est;
-    tElem *casilla = (tElem*)e;         // DEBERIA DE LLAMARSE ELEMENTO.
+    // recorrerLista llama accion(info, contexto): 1er arg = elemento, 2do = estado
+    tElem   *casilla = (tElem*)est;     // el elemento de la casilla (mal llamado 'casilla')
+    tEstado *estado  = (tEstado*)e;     // el estado del juego (contexto)
 
     if (casilla->tipo_elem == BANDIDO)
     {

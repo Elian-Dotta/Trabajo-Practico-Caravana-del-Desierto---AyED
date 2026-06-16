@@ -57,7 +57,7 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
     int ret;
     tLinea buffer;
 
-    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 0, NULL))
+    if((ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 0, NULL)))
     {
         if(ranking->cantLineas == MAX_RANKING)
             sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
@@ -93,7 +93,9 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
         fread(&partida, sizeof(regPartida), 1, archPartidas);
     }
 
-    fseek(archPartidas, -1 * sizeof(regPartida), SEEK_CUR);
+    fseek(archPartidas, -(long)sizeof(regPartida), SEEK_CUR);
+
+    return 1;
 }
 
 void mostrarRanking(tRanking *ranking)
