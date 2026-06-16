@@ -100,7 +100,7 @@ int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
-
+    
     return 1;
 }
 
@@ -136,7 +136,11 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     #define VIDAEXTRA 'V'
     */
 
-    return prioridadElem(elemAct->tipo_elem) - prioridadElem(elemNue->tipo_elem);
+    // Un bandido nuevo nunca se considera "duplicado" (cmp != 0): asi pueden
+    // apilarse varios bandidos en una misma casilla (la excepcion a tipos unicos).
+    return elemNue->tipo_elem != BANDIDO
+           ? prioridadElem(elemAct->tipo_elem) - prioridadElem(elemNue->tipo_elem)
+           : -1;
 }
 
 int prioridadElem(char tipo)
