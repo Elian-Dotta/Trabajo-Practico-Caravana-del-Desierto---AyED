@@ -67,6 +67,8 @@ int  cmpIdElem(const void *a, const void *b);
 int  cmpTipoElem(const void *a, const void *b);
 int  cmpCasTipos(const void *a, const void *b);
 
+int prioridadElem(char tipo);
+
 void cambiarEstado(void *pl, void* estado);
 void modEstado(void* estado, void* casilla);
 

@@ -12,7 +12,7 @@ tCasilla crearCasilla()
 
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem  *elem = (tElem*)d;
 
     insertarAlFinalLista(casilla, elem, tamDato);
@@ -23,7 +23,7 @@ int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpIdElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
@@ -33,7 +33,7 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = *(tCasilla**)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem *elem = (tElem*)d;
     int ret;
 
@@ -45,11 +45,11 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -61,11 +61,11 @@ int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -77,11 +77,11 @@ int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    tCasilla *casilla = (tCasilla*)pl;
+    tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
     tElem *nue = ctxElem;
-    tElem *ref = ctxElem + sizeof(tElem);
+    tElem *ref = ctxElem + 1;
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
@@ -106,13 +106,40 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     tElem *elemAct = (tElem*)a;
     tElem *elemNue = (tElem*)b;
 
-    if(elemAct->tipo_elem == INICIO && elemNue->tipo_elem == BANDIDO) // EVITAMOS QUE APAREZCAN BANDIDOS EN EL INICIO
+    if(elemAct->tipo_elem == INICIO && elemNue->tipo_elem != JUGADOR) // EVITAMOS QUE APAREZCAN BANDIDOS EN EL INICIO
        return 0;
 
     if(elemAct->tipo_elem == elemNue->tipo_elem && elemNue->tipo_elem != BANDIDO) // EVITAMOS QUE APAREZCAN TIPOS REPETIDOS EXCEPTUANDO EL BANDIDO
         return 0;
 
-    return -1;
+    /*
+    #define INICIO 'I'
+    #define JUGADOR 'J'
+    #define SALIDA 'S'
+    #define BANDIDO 'B'
+    #define TORMENTA 'T'
+    #define PREMIO 'P'
+    #define OASIS 'O'
+    #define VIDAEXTRA 'V'
+    */
+
+    return prioridadElem(elemAct->tipo_elem) - prioridadElem(elemNue->tipo_elem);
+}
+
+int prioridadElem(char tipo)
+{
+    switch(tipo)
+    {
+        case INICIO:    return 1;
+        case SALIDA:    return 2;
+        case JUGADOR:   return 3;
+        case OASIS:     return 4;
+        case TORMENTA:  return 5;
+        case VIDAEXTRA: return 6;
+        case PREMIO:    return 7;
+        case BANDIDO:   return 8;
+        default:        return 999;
+    }
 }
 
 int  cmpCasIdElem(const void *a, const void *b)
@@ -122,7 +149,10 @@ int  cmpCasIdElem(const void *a, const void *b)
 
     int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpIdElem);
 
-    return ret;
+    if(ret != -1)
+        return 1;
+    else
+        return 0;
 }
 
 int  cmpCasTipoElem(const void *a, const void *b)
@@ -132,7 +162,10 @@ int  cmpCasTipoElem(const void *a, const void *b)
 
     int ret = buscarPorClaveLista(cas, elem, sizeof(tElem), cmpTipoElem);
 
-    return ret;
+    if(ret != -1)
+        return 1;
+    else
+        return 0;
 }
 
 int  cmpIdElem(const void *a, const void *b)
@@ -148,7 +181,7 @@ int  cmpTipoElem(const void *a, const void *b)
     tElem *e1 = (tElem*)a;
     tElem *e2 = (tElem*)b;
 
-    return e1->tipo_elem == e2->tipo_elem;
+    return prioridadElem(e1->tipo_elem) - prioridadElem(e2->tipo_elem);
 }
 
 int  cmpCasTipos(const void *a, const void *b)
@@ -232,7 +265,7 @@ void buscarYCalcularBandido(void *e, void *contexto)
         movimientoBandido.id   = elem->id_elem;
         movimientoBandido.cant = resultadoDado;
 
-        if(0 == buscarPorClaveLista(bandInteligentes, &elem->id_elem, sizeof(tElem),cmpIdElem))
+        if(buscarPorClaveLista(bandInteligentes, &elem->id_elem, sizeof(tElem),cmpIdElem) == -1)
         {
             movimientoBandido.dir = tirarDado(0,1)?'F':'B';
         }

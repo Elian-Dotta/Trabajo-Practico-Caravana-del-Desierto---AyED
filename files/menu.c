@@ -62,8 +62,10 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 
         limpiarBuffer();
 
-        if (scanf(" %c", &opcion) != 1)
+        if (scanf("%c", &opcion) != 1)
             opcion = '\0';
+
+        limpiarBuffer();
 
         opcion = (char) toupper((unsigned char) opcion);
 
@@ -77,7 +79,7 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 void ingresarDato(const char* msj, char *out)
 {
     mostrar(msj);
-    scanf(" %[^\n]", out);
+    scanf("%[^\n]", out);
     while (getchar() != '\n' && !feof(stdin));
 }
 

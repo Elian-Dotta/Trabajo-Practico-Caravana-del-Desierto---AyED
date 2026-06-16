@@ -163,14 +163,16 @@ int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
 {
     tNodo *nue;
 
-    while(*p)
-        p = &(*p)->sig;
     if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
        (nue->info = malloc(cantBytes)) == NULL)
     {
         free(nue);
         return 0;
     }
+
+    while(*p)
+        p = &(*p)->sig;
+
     memcpy(nue->info, d, cantBytes);
     nue->tamInfo = cantBytes;
     nue->sig = NULL;
@@ -207,30 +209,26 @@ int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
 
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
-    tLista *elim = lista,
-           *auxSig;
+    tNodo *elim;
 
-    if (elim==NULL)
+    while (*lista && cmp((*lista)->info, d) != 0)
+    {
+        lista = &(*lista)->sig;
+    }
+
+    if (!*lista)
     {
         return 0;
     }
 
-    int comp = cmp((*elim)->info,d);
-    while(comp!=0)
-    {
-        elim=&(*elim)->sig;
-        comp = cmp((*elim)->info,d);
-    }
-    if (comp==0)
-    {
-        auxSig=&(*elim)->sig;
-        free((*elim)->info);
-        free(*elim);
-        elim=auxSig;
-        return 1;
-    }
-    return 0;
+    elim = *lista;
+    *lista = elim->sig;
 
+    memcpy(d, elim->info, minimo(tamDato, elim->tamInfo));
+    free(elim->info);
+    free(elim);
+
+    return 1;
 }
 
 int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){

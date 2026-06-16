@@ -17,16 +17,20 @@ int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligente
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
 {
     tElem elem;
+    tCasilla cas;
     int contCas = 0;
+
 
     while(contCas < cantPos)
     {
-        insertarAlFinalDeListaDE(tablero, crearCasilla(), sizeof(tCasilla));
+        cas = crearCasilla();
+
+        insertarAlFinalDeListaDE(tablero, &cas, sizeof(tCasilla));
         if(contCas == 0)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = INICIO;
-            elem.nro_casilla = contCas;
+            elem.nro_casilla = contCas + 1;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
             elem.id_elem = *idElem;
@@ -40,7 +44,7 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = SALIDA;
-            elem.nro_casilla = contCas;
+            elem.nro_casilla = contCas + 1;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }

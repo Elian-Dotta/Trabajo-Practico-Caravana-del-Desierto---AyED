@@ -50,30 +50,30 @@ void mostrar(const char *msj)
 
 void mostrarEstadisticas(tJugador *j)
 {
-    printf("Vidas: %d\t", j->vida);
-    printf("\tPuntaje: %d\n", j->puntaje);
-    printf("Cantidad de movimientos: %d/n", j->cantMov);
+    printf("Vidas: %u\t", j->vida);
+    printf("\tPuntaje: %u\n", j->puntaje);
+    printf("Cantidad de movimientos: %u/n", j->cantMov);
 }
 
 void mostrarTitulo()
 {
-    printf("CARAVANA DEL DESIERTO\n");
+    printf("CARAVANA DEL DESIERTO");
 }
 
 
 void mostrarSeparador()
 {
     // PARA HACER VARIABLE USAR FOR
-    printf("\n-------------------------------------------\n");
+    printf("\n\n-------------------------------------------\n\n");
 }
 
 
 void mostrarHUD(tJugador* jugador, tEstado* estado)
 {
     //vidas, puntaje, cant mov, oasis si/no
-    printf("Vidas: %d\t",jugador->vida);
-    printf("\tPuntaje: %d\n",jugador->puntaje);
-    printf("Cantidad de movimientos: %d/n",jugador->cantMov);
+    printf("Vidas: %d\t", verVida(jugador));
+    printf("\tPuntaje: %d\n", verPuntaje(jugador));
+    printf("Cantidad de movimientos: %d\n", verMovimiento(jugador));
     printf("Protección de oasis: ");
     if(estado->Oobtenido==1)
     {

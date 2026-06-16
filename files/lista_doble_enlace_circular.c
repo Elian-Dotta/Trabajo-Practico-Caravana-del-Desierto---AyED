@@ -106,9 +106,7 @@ int insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo)
         nue->sig = (*pl)->sig;
         (*pl)->sig->ant = nue;
         (*pl)->sig = nue;
-
 //        accion((*pl)->info,contexto);
-        return 1;
     }
     *pl = nue;                       // el cursor queda en el nuevo nodo
     return 1;
