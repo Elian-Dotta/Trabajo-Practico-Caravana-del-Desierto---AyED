@@ -109,7 +109,7 @@ void mensajeIngresoCadena(int margenIzqConsola, int cantLugares, char* buffer, i
             buffer[i] = '\0';
 }
 
-void ingresarDatosJugador(char *buffer, const char *msj, int maxLenBuffer, int cantEspacios, int margenIzqConsola, int margenIzqTabla){
+void mensajeIngresarDatosJugador(char *buffer, const char *msj, int maxLenBuffer, int cantEspacios, int margenIzqConsola, int margenIzqTabla){
         mensajeSeparador(margenIzqConsola, cantEspacios, 1);
         mensajeLineaVacia(margenIzqConsola,cantEspacios);
         mensajeEnLinea(margenIzqConsola, cantEspacios, msj, margenIzqTabla);

@@ -47,7 +47,6 @@ int cmpClaveNickname(const void *a, const void *b)    // nickname (unico)
                   ((const tIndiceNickname *)b)->nickname);
 }
 
-
 // ---------------------------------------------------------------------------
 //  Indexar: arma el arbol leyendo el archivo de jugadores (desordenado)
 // ---------------------------------------------------------------------------

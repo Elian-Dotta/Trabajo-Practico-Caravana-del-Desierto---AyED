@@ -35,8 +35,6 @@ typedef struct
 } regPartida;
 
 
-
-
 // Revisa los homonimos de 'nombre' y resuelve si el jugador es uno existente o nuevo (Santiago).
 //   Devuelve 1 si el jugador dijo ser uno de los listados (deja *sel con su registro);
 //            0 si eligio NINGUNO (hay que darlo de alta).
@@ -50,7 +48,6 @@ void enlistarNickNames(void *idxNombre, void *contexto);
 // Accion para armar una linea del menu (la implementa Manuel).
 // Firma exigida por recorrerLista: (void *info, unsigned tamInfo, void *params)
 void armarMensaje(void *info, void *params);
-
 
 void guardarPartida(tJugador *jugador);
 

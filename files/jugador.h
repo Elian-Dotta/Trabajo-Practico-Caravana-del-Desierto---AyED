@@ -5,6 +5,7 @@
 
 #include "cola.h"
 #include "movimiento.h"
+#include "menu.h"
 
 #define TAM 128
 #define MAX_MOV_LINEA
@@ -42,7 +43,9 @@ const char* verNick(const tJugador *j);
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);
 
-void ingresarJugador(tJugador *j);
+int pedirNombreYMostrarHomonimos(tArbolBinBusq *arbolIdxNombre, const char *archJug, regJugador *sel, char *nombreOut);
+int pedirYRegistrarNickname(const char *nombre, tArbolBinBusq *arbolIdxNombre, tArbolBinBusq *arbolIdxNick, const char *archJug, const char *archIdxNombre, const char *archIdxNick, char *nicknameDest);
+void ingresarJugador(tJugador *jugador);
 
 
 #endif // JUGADOR_H_

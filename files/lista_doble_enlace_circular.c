@@ -28,41 +28,6 @@ int vaciarListaC(tListaDE *lista)
 }
 
 
-int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
-{
-    tNodoDE *auxNodo;
-
-    if( NULL == (auxNodo = (tNodoDE*)malloc(sizeof(tNodoDE)) ) || NULL == (auxNodo->info = (void*)malloc(tamDato)  )){
-        free(auxNodo);
-        return 0;
-    }
-
-    memcpy(auxNodo->info, dato, tamDato);
-
-    if(0 == tamDato){
-        auxNodo->info = NULL;
-        auxNodo->tamInfo = sizeof(void*);
-    }else
-        auxNodo->tamInfo = tamDato;
-
-    if(NULL == *lista){
-        auxNodo->sig = auxNodo;
-        auxNodo->ant = auxNodo;
-        *lista = auxNodo; // se insertaria al principio de lista
-    }else{
-        tNodoDE *ultimo  = (*lista)->ant;
-
-        auxNodo->ant = ultimo;
-        auxNodo->sig = *lista;
-
-        ultimo->sig = auxNodo;
-        (*lista)->ant = auxNodo;
-    }
-
-    return 1;
-}
-
-
 void crearListaDE(tListaDE *pl)
 {
     *pl = NULL;
@@ -77,8 +42,6 @@ int listaVaciaDE(const tListaDE *pl)
 
 
 int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp, Accion accion, void* contexto)
-
-
 
 
 int insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo)
@@ -217,20 +180,20 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
     }while(nodoActual != *pl);
 }
 
+//FUNCION SOLO USADA PARA POSICIONAR TABLERO, ELIAN HIZO UNA MEJOR
+    tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
 
-tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
+        tNodoDE *nodoActual = *lista;
+        if(NULL == *lista)
+            return NULL;
+        do{
+            if(0 == comparar(nodoActual->dato, clave))
+                return nodoActual;
+            nodoActual = nodoActual->proxNodo;
+        }while(nodoActual != *lista);
 
-    tNodoDE *nodoActual = *lista;
-    if(NULL == *lista)
         return NULL;
-    do{
-        if(0 == comparar(nodoActual->dato, clave))
-            return nodoActual;
-        nodoActual = nodoActual->proxNodo;
-    }while(nodoActual != *lista);
-
-    return NULL;
-}
+    }
 
 
 int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,

@@ -1,8 +1,6 @@
 #include "registro.h"
 
 
-
-
 int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug, regJugador *sel)
 {
     tLista nicknames;
@@ -36,17 +34,16 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
 }
 
 
+// FUNCION DE ACCION DE RECORRIDO DE ARBOL (RECIBE tArbolNodo->dato)
 void enlistarNickNames(void *idxNombre, void *contexto)
 {
-    tIndiceNombre *idx = (tIndiceNombre*)idxNombre;
+    tIndiceNombre *idx = (tIndiceNombre*)idxNombre; //ESTRUCTURA A tIndiceNombre
+    void **ctx = (void**)contexto;                  // DESREFERECIA EL CONTEXTO COMO SI FUERA UN VECTOR
+    tLista *nicknames = (tLista*)ctx[0];            //PRIMER ELEMENTO DEL VECTOR ES LA LISTA DE NICKNAMES
+    FILE *archJugadores = (FILE*)ctx[1];            // SEGUNDO ELEMENTO DEL VECTOR ES UN ARCHIVO DE JUGADORES
+    const char *nombre = (const char*)ctx[2];       //TERCER ELEMENTO DEL VECTOR ES EL NOMBRE QUE SE QUIERE ENLISTAR
+    regJugador registro;                            //AUXILIAR PARA GUARDAR EN NOMBRE Y NICKNAME DEL JUGADOR, regJugador(NOMBRE, NICKNAME)
 
-    void **ctx = (void**)contexto;
-
-    tLista *nicknames = (tLista*)ctx[0];
-    FILE *archJugadores = (FILE*)ctx[1];
-    const char *nombre = (const char*)ctx[2];
-
-    regJugador registro;
     char nickname[11];
 
     if(strcmp(idx->nombre, nombre) == 0)
