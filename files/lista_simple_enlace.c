@@ -142,6 +142,10 @@ void crearLista(tLista *p)
     *p = NULL;
 }
 
+int  listaVacia(tLista *p)
+{
+    return *p == NULL;
+}
 
 int vaciarLista(tLista *p)
 {
@@ -163,14 +167,16 @@ int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
 {
     tNodo *nue;
 
-    while(*p)
-        p = &(*p)->sig;
     if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
        (nue->info = malloc(cantBytes)) == NULL)
     {
         free(nue);
         return 0;
     }
+
+    while(*p)
+        p = &(*p)->sig;
+
     memcpy(nue->info, d, cantBytes);
     nue->tamInfo = cantBytes;
     nue->sig = NULL;
@@ -207,21 +213,25 @@ int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
 
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
-    tNodo *muerto;
+    tNodo *elim;
 
-    (void)tamDato;
-
-    // avanza hasta el nodo a eliminar (con guarda de fin de lista)
-    while(*lista && cmp((*lista)->info, d) != 0)
+    while (*lista && cmp((*lista)->info, d) != 0)
+    {
         lista = &(*lista)->sig;
+    }
 
-    if(*lista == NULL)          // no se encontro la clave
+    if (!*lista)
+    {
         return 0;
+    }
 
-    muerto = *lista;
-    *lista = muerto->sig;       // reenlaza: el casillero ahora apunta al siguiente
-    free(muerto->info);
-    free(muerto);
+    elim = *lista;
+    *lista = elim->sig;
+
+    memcpy(d, elim->info, minimo(tamDato, elim->tamInfo));
+    free(elim->info);
+    free(elim);
+
     return 1;
 }
 

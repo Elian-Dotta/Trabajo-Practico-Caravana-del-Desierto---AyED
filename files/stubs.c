@@ -14,4 +14,4 @@
 //void mostrarEstadisticas(tJugador *j)    { (void)j; }
 
 // --- jugador ---
-void ingresarJugador(tJugador *j)        { (void)j; }
+// ingresarJugador ahora esta implementada en registro.c

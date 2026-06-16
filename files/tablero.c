@@ -12,24 +12,25 @@ int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligente
     generarTablero(tablero, &idElem, config.cant_pos);
 
     distribuirElementos(tablero, &idElem, config, bandidosInteligentes);
-
-    return 1;
 }
 
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
 {
     tElem elem;
+    tCasilla cas;
     int contCas = 0;
+
 
     while(contCas < cantPos)
     {
-        tCasilla nuevaCasilla = crearCasilla();
-        insertarAlFinalDeListaDE(tablero, &nuevaCasilla, sizeof(tCasilla));
+        cas = crearCasilla();
+
+        insertarAlFinalDeListaDE(tablero, &cas, sizeof(tCasilla));
         if(contCas == 0)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = INICIO;
-            elem.nro_casilla = contCas;
+            elem.nro_casilla = contCas + 1;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
             elem.id_elem = *idElem;
@@ -43,13 +44,12 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         {
             elem.id_elem = *idElem;
             elem.tipo_elem = SALIDA;
-            elem.nro_casilla = contCas;
+            elem.nro_casilla = contCas + 1;
             actualizarPosRelativaListaDE(tablero, &elem, sizeof(tElem), 0, insertarEnCasilla);
             (*idElem)++;
         }
         contCas++;
     }
-    return 1;
 }
 
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tLista *bandidosInteligentes)
@@ -61,6 +61,18 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
                               config.max_tormenta };
 
     char elemTipo[] = { BANDIDO, PREMIO, VIDAEXTRA, OASIS, TORMENTA};
+
+    int disponibles[5];
+    int cantDisponibles = 0;
+
+    for(int i = 0; i < 5; i++)
+    {
+        if(elemFaltantes[i])
+        {
+            disponibles[cantDisponibles++] = i;
+        }
+    }
+
     int cantElem = 0,
         elemInsertados = 0,
         indiceElem,
@@ -72,12 +84,15 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
         cantElem += elemFaltantes[indiceElem];
     }
 
+    tLista numAleatorios;
+    crearLista(&numAleatorios);
+    int numAle;
     tElem elem;
 
     while(elemInsertados < cantElem)
     {
         posInsercion = rand() % config.cant_pos;
-        indiceElem = rand() % 5;
+        indiceElem = disponibles[rand() % cantDisponibles];
         if(elemFaltantes[indiceElem])
         {
             elem.id_elem = *contElem;
@@ -92,6 +107,22 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
                 (*contElem)++;                 // AVANZAMOS EL INDICE DE LOS ELEMENTOS
                 elemInsertados++;            // SUMAMOS UN ELEMENTO INSERTADO
             }
+        }
+
+        if(elemFaltantes[indiceElem] == 0)
+        {
+            int i;
+
+            for(i = 0; i < cantDisponibles; i++)
+            {
+                if(disponibles[i] == indiceElem)
+                    break;
+            }
+
+            for(; i < cantDisponibles - 1; i++)
+                disponibles[i] = disponibles[i + 1];
+
+            cantDisponibles--;
         }
     }
 
@@ -144,17 +175,10 @@ int  moverElementoPorId(tListaDE* tablero, int id, int mov, int tamTablero)
     elemAActualizar.id_elem = id;
 
     actualizarPorClaveListaDE(tablero, &elemAActualizar, sizeof(tElem), cmpCasIdElem, eliminarDeCasilla);
+    printf("ANTES: %d\n", elemAActualizar.nro_casilla);
+    printf("mov=%d\n", mov);
     elemAActualizar.nro_casilla = calcularNroCasilla(elemAActualizar.nro_casilla, mov, tamTablero);
-
-    // Los bandidos no pueden caer ni mostrarse en la salida (casilla tamTablero, 1-based):
-    // si el paso los deja ahi, los corremos una casilla mas en la misma direccion (ruta circular).
-    if(elemAActualizar.tipo_elem == BANDIDO && elemAActualizar.nro_casilla == tamTablero)
-    {
-        int paso = (mov >= 0) ? 1 : -1;
-        elemAActualizar.nro_casilla = calcularNroCasilla(elemAActualizar.nro_casilla, paso, tamTablero);
-        mov += paso;
-    }
-
+    printf("DESPUES: %d\n", elemAActualizar.nro_casilla);
     actualizarPosRelativaListaDE(tablero, &elemAActualizar, sizeof(tElem), mov, insertarEnCasilla);
 
     return 1;
@@ -191,8 +215,6 @@ int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, ch
     else
         actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarDerDeElemento);
     id++;
-
-    return 1;
 }
 
 int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
@@ -201,20 +223,14 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
     ctxElem[0].tipo_elem = elemNue;
     ctxElem[1].tipo_elem = elemAct;
 
-    // cambiarTipoElemento busca el elemento por tipo DENTRO de la casilla y lo cambia.
-    // (Usar cambiarTipo directo escribia sobre el puntero-cabeza de la casilla y corrompia el heap.)
     actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
-
-    return 1;
 }
 
 int  eliminarElemento(tTablero *tablero, char elemAct)
 {
     tElem elim;
     elim.tipo_elem = elemAct;
-    actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarTipoDeCasilla);
-
-    return 1;
+    actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasillaTipo);
 }
 
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
@@ -240,6 +256,9 @@ void obtenerMovimientoBandidos(tTablero *tablero, tCola *movimientos, tLista *ba
 
 void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes)
 {
+    tElem jugador;
+    jugador.id_elem = JUGADORID;
+
     recorrerListaDE(tablero, cambiarEstado, estado);
     eliminarPorClaveLista(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
@@ -249,7 +268,7 @@ int  compararEnteros(const void *a, const void *b){
    const int * n1 = a;
    const int * n2 = b;
 
-   return *n1 - *n2;
+   return n1 - n2;
 }
 
 #if 0   // DUPLICADO de posicionarTablero (void) de arriba -> desactivado para que compile
@@ -276,7 +295,7 @@ void mostrarTablero(tTablero* tablero)
 }
 /*
 void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
-
+/*
     Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
     para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
     Tiene los valores de parametros:

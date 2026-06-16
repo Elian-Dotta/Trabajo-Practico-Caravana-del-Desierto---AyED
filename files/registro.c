@@ -1,6 +1,82 @@
 #include "registro.h"
 
 
+// Lee una linea de stdin, descarta el '\n' y la acota a tam-1 caracteres.
+// Repite mientras la entrada sea vacia.
+static void leerTexto(const char *msj, char *out, int tam)
+{
+    char buffer[256];
+
+    do
+    {
+        mostrar(msj);
+        if(fgets(buffer, sizeof(buffer), stdin) == NULL)
+        {
+            out[0] = '\0';
+            return;
+        }
+        buffer[strcspn(buffer, "\n")] = '\0';   // saca el salto de linea
+    } while(buffer[0] == '\0');
+
+    strncpy(out, buffer, tam - 1);
+    out[tam - 1] = '\0';
+}
+
+
+// Pide el nombre del jugador. Si ya existe en los registros,
+// permite reconocerlo entre sus homonimos; si no, lo da de alta pidiendo un
+// nickname unico. Deja en *j el nombre y el nick definitivos.
+void ingresarJugador(tJugador *j)
+{
+    char            nombre[31];
+    char            nickname[11];
+    tArbolBinBusq   idxNombre;
+    tArbolBinBusq   idxNick;
+    tIndiceNombre   auxNombre;
+    tIndiceNickname auxNick;
+    regJugador      sel;
+    FILE           *fJug;
+    int             existe = 0;
+
+    limpiarPantalla();
+    mostrar("CARAVANA DEL DESIERTO\n\n");
+
+    // 1) pedir el nombre del jugador
+    leerTexto("Ingrese su nombre: ", nombre, sizeof(nombre));
+
+    // 2) cargar el indice de nombres persistido (si no existe, queda vacio)
+    cargarIndiceDesdeArchivo(&idxNombre, ARCHIDXNOMBRE, &auxNombre, sizeof(tIndiceNombre));
+
+    // 3) si hay registros, ofrecer los homonimos para reconocer al jugador
+    fJug = fopen(ARCHJUGADORES, "rb");
+    if(fJug)
+    {
+        existe = revisarUsuarioRepetido(&idxNombre, nombre, fJug, &sel);
+        fclose(fJug);
+    }
+
+    if(existe)
+    {
+        guardarNombreYNick(j, sel.nombre, sel.nickname);
+        return;
+    }
+
+    // 4) alta: pedir un nickname que no este en uso
+    cargarIndiceDesdeArchivo(&idxNick, ARCHIDXNICK, &auxNick, sizeof(tIndiceNickname));
+    do
+    {
+        leerTexto("Ingrese un nickname (unico, hasta 10 caracteres): ", nickname, sizeof(nickname));
+        strcpy(auxNick.nickname, nickname);
+        if(buscarElemArbolBinBusq(&idxNick, &auxNick, sizeof(tIndiceNickname), cmpClaveNickname))
+        {
+            mostrar("Ese nickname ya esta en uso. Pruebe con otro.\n");
+            nickname[0] = '\0';
+        }
+    } while(nickname[0] == '\0');
+
+    darDeAlta(nombre, nickname, &idxNombre, &idxNick, ARCHJUGADORES, ARCHIDXNOMBRE, ARCHIDXNICK);
+    guardarNombreYNick(j, nombre, nickname);
+}
 
 
 int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug, regJugador *sel)
@@ -47,7 +123,6 @@ void enlistarNickNames(void *idxNombre, void *contexto)
     const char *nombre = (const char*)ctx[2];
 
     regJugador registro;
-    char nickname[11];
 
     if(strcmp(idx->nombre, nombre) == 0)
     {
@@ -55,8 +130,9 @@ void enlistarNickNames(void *idxNombre, void *contexto)
         fseek(archJugadores, idx->indiceRegistro * sizeof(regJugador), SEEK_SET);
         fread(&registro, sizeof(regJugador), 1, archJugadores);
 
-        strcpy(nickname, registro.nickname);
-        insertarAlFinalLista(nicknames, nickname, sizeof(nickname));
+        // se guarda el registro COMPLETO (nombre + nick): armarMensaje y la
+        // seleccion en revisarUsuarioRepetido lo leen como regJugador entero.
+        insertarAlFinalLista(nicknames, &registro, sizeof(regJugador));
     }
 }
 
@@ -73,7 +149,14 @@ void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro) // EN LA
 void armarMensaje(void *jugador, void *msjBuffer)
 {
     void **buf = (void**)msjBuffer;
-    sprintf((char*)buf[0], "%d. %s %s\n", *(int*)buf[1], ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
+    char  *texto = (char*)buf[0];
+    int   *contador = (int*)buf[1];
+
+    // concatena al final del buffer y avanza el numero de opcion para que
+    // cada homonimo (y luego NINGUNO) tenga su propio numero correlativo.
+    sprintf(texto + strlen(texto), "%d. %s %s\n", *contador,
+            ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
+    (*contador)++;
 }
 
 int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxNombre, tArbolBinBusq* arbolIdxNick, const char* archJug, const char* archIdxNombre, const char *archIdxNick)
@@ -124,7 +207,13 @@ void guardarPartida(tJugador *jugador)
     FILE* part = fopen(ARCHPARTIDAS, "rb");
     if(!part)
     {
-        return;
+        // primera partida: crear el archivo vacio y continuar
+        part = fopen(ARCHPARTIDAS, "wb");
+        if(part)
+            fclose(part);
+        part = fopen(ARCHPARTIDAS, "rb");
+        if(!part)
+            return;
     }
 
     FILE* partTmp = fopen(ARCHPARTIDASTMP, "wb");

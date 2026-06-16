@@ -4,12 +4,13 @@
 typedef struct Estado
 {
     int Oobtenido,
-        Oactivo,
+        tieneOasis,
         Operdido,
         Tactiva,
+        tieneTormenta,
         Tfinalizada,
         BandAtaca,
-        IDBandDesaparecido,
+        IDBandDesaparecido[2],
         Bandidos,
         JganaPuntos,
         JganaVida,

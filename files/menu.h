@@ -10,12 +10,16 @@
 #include "ranking.h"
 
 #define MENU_JUEGO "\
------------------------------------\n\
-\tCARAVANA DEL DESIERTO\n\
------------------------------------\n\
-[J] Jugar nueva partida\n\
-[R] Ver ranking\n\
-[S] Salir\n"
+-----------------------------------------\n\
+-                                       -\n\
+-\t   CARAVANA DEL DESIERTO        -\n\
+-                                       -\n\
+-----------------------------------------\n\
+-\t[J] Jugar nueva partida         -\n\
+-\t   [R] Ver ranking              -\n\
+-\t     [S] Salir                  -\n\
+-                                       -\n\
+Ingrese una opcion:"
 
 #define OPC_JUEGO "JRS"
 
@@ -29,7 +33,7 @@
 
 void juego();
 
-void menuPrincipal(tJugador *jugador);
+void menuPrincipal();
 
 char menu(const char* msj, const char *opc, int conErr, const char *msjErr);
 

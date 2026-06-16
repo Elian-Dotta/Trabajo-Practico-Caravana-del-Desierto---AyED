@@ -6,10 +6,10 @@ void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned 
     int i;
     for( i = 1; i <= frame; i++)
     {
+        wait(1);
         posicionarTablero(t, IDAncla);
         anim(t, i);
         dibujarEscena(t, j, e, l);
-        pausaFrame();
     }
 }
 
@@ -40,14 +40,31 @@ void animPremio(tTablero *tablero, unsigned frame)
 
 void animOasisObtenido(tTablero *tablero, unsigned frame)
 {
-    // destello del oasis (!O!) sin escudos () para que no queden marcadores pegados
     switch(frame)
     {
         case 1:
             INSIZQ(OASIS, OASISACTIVO);
             INSDER(OASIS, OASISACTIVO);
             break;
+        case 2:
+            INSIZQ(JUGADOR, ESCUDOIZQ);
+            INSDER(JUGADOR, ESCUDODER);
+            break;
+        case 3:
+            ELIM(ESCUDOIZQ);
+            ELIM(ESCUDODER);
+            break;
+        case 4:
+            INSIZQ(JUGADOR, ESCUDOIZQ);
+            INSDER(JUGADOR, ESCUDODER);
+            break;
+        case 5:
+            ELIM(ESCUDOIZQ);
+            ELIM(ESCUDODER);
+            break;
         case 6:
+            INSIZQ(JUGADOR, ESCUDOIZQ);
+            INSDER(JUGADOR, ESCUDODER);
             ELIM(OASISACTIVO);
             ELIM(OASISACTIVO);
             break;
@@ -125,8 +142,8 @@ void animTorSeActiva(tTablero *tablero, unsigned frame)
             break;
         case 10:
             ELIM(ARENA1);
-            ELIM(ASTERISCO);   // limpia los asteriscos en vez de dejar las llaves {} pegadas
-            ELIM(ASTERISCO);
+            CAMELEM(ASTERISCO, ATURDIDOIZQ);
+            CAMELEM(ASTERISCO, ATURDIDODER);
             break;
 
     }
@@ -185,7 +202,6 @@ void animBandidoAtaca(tTablero *tablero, unsigned frame)
         case 3:
             CAMELEM(JUGMINUS, DESAPARECE);
             ELIM(PUNALIZQ);
-
             break;
     }
 }
