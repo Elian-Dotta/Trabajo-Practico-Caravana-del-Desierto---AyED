@@ -48,6 +48,11 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
         insertarEnRanking(ranking, &linea);
     }
 
+    // cerrar los archivos: si quedan abiertos, en Windows guardarPartida no
+    // puede hacer remove()/rename() de partida.bin y la partida no se guarda.
+    fclose(archPartidas);
+    fclose(archJugadores);
+
     return 1;
 }
 
