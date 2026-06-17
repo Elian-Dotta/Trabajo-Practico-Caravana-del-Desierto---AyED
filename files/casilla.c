@@ -474,7 +474,6 @@ void acumularTipoElem(void *elemVoid, void *bufVoid)
 }
 
 // Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
-// Escribe una casilla en el archivo
 void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
 {
     tCasilla *casilla = (tCasilla*)casillaVoid;

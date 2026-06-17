@@ -149,7 +149,6 @@ void crearLista(tLista *p)
     *p = NULL;
 }
 
-
 int  listaVacia(const tLista *p)
 {
     return *p == NULL;

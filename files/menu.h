@@ -9,7 +9,7 @@
 #include "partida.h"
 #include "ranking.h"
 
-#define MENU_JUEGO "\
+#define MENU_JUEGO "\n\
 -----------------------------------------\n\
 -                                       -\n\
 -\t   CARAVANA DEL DESIERTO        -\n\

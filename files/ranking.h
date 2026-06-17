@@ -10,8 +10,8 @@
 #define MAX_RANKING 10
 #define TAM_LINEA 128
 
-#define TITULO_RANKING "TOP| NICKNAME | NOMBRE                       | PUNTAJE\n"
-                    //  123|1234567890|123456789012345678901234567890|123
+#define TITULO_RANKING " TOP| NICKNAME | NOMBRE                       | PUNTAJE\n"
+                    //   123|1234567890|123456789012345678901234567890|123
 #define MENSAJE_SALIDA "Presione ENTER para salir..."
 
 // Ranking: lista de lineas y contador
