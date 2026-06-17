@@ -381,34 +381,18 @@ void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer){
 }
 
 //Accion para recorrido de ListaDE
-void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer){
+void convertirMapaACadenaVerticalConIndice(void *e1, void *contexto){
 
-    tCasilla  *auxCasilla = (tCasilla*)e1;
-    char      *buffer     = (char*)voidBuffer;
-    unsigned   longCad    =  strlen(buffer);
-    unsigned   indice     = 1;
+    tCasilla  *auxCasilla  = (tCasilla*)e1;
+    void     **ctx         = (void**)contexto;
+    char      *buffer      = (char*)ctx[0];
+    unsigned  *indice      = (unsigned*)ctx[1];
+    int       *cantDigitos = (int*)ctx[2];
 
-    if(!longCad) //la cadena no tiene nada inicaliza el indice
-        sprintf(buffer, "%02d. ", 1);
-    else{
-        char *auxIni   = buffer + longCad - 1;
-        int  auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
-
-        while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
-            auxIni--;
-            auxIndice--;
-        }
-
-        auxIni++; //porque al salir del while queda desplazado a una direccion sin digitos o fuera del area de control
-        indice = (unsigned)atoi(auxIni);
-        sprintf(buffer + strlen(buffer),"%s", ". ");
-    }
-
+    sprintf(buffer + strlen(buffer), "%0*d. ", *cantDigitos, *indice);
+    (*indice) += 1;
     recorrerLista(auxCasilla, accionCasillaACadena, buffer);
     sprintf(buffer + strlen(buffer),"%c", '\n'); //pone el salto de linea
-    sprintf(buffer + strlen(buffer), "%02d",indice + 1);
-        //pone el proximo valor de indice sin el punto para no agregar condiciones de exclusion
-        //cuando se llegue al final de la lista, creara un indicador "n" que no se usa, se debera borrar.
 }
 
 //Accion para recorrido de ListaDE
@@ -428,54 +412,19 @@ void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer){
 }
 
 //Accion para recorrido de ListaDE
-void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer){
+void convertirMapaACadenaHorizontalConIndice(void *e1, void *contexto){
 
-    tCasilla  *auxCasilla = (tCasilla*)e1;
-    char      *buffer     = (char*)voidBuffer;
-    unsigned   longCad    =  strlen(buffer);
-    unsigned   indice     = 1;
+    tCasilla  *auxCasilla  = (tCasilla*)e1;
+    void     **ctx         = (void**)contexto;
+    char      *buffer      = (char*)ctx[0];
+    unsigned  *indice      = (unsigned*)ctx[1];
+    int       *cantDigitos = (int*)ctx[2];
 
-    if(!longCad) //la cadena no tiene nada inicaliza el indice
-        sprintf(buffer, "%02d.[ ", 1);
-    else{
-        char *auxIni   = buffer + longCad - 1;
-        int  auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
-
-        while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
-            auxIni--;
-            auxIndice--;
-        }
-
-        auxIni++; //porque al salir del while queda desplazado a una direccion sin digitos o fuera del area de control
-        indice = (unsigned)atoi(auxIni);
-        sprintf(buffer + strlen(buffer),"%s", ".[");
-    }
-
+    sprintf(buffer + strlen(buffer), "%0*d. [ ", *cantDigitos, *indice);
+    (*indice)+=1;
     recorrerLista(auxCasilla, accionCasillaACadena, buffer);
     sprintf(buffer + strlen(buffer),"%s", " ]");
-    sprintf(buffer + strlen(buffer), " %02d",indice + 1);
-        //pone el proximo valor de indice sin el punto para no agregar condiciones de exclusion
-        //cuando se llegue al final de la lista, creara un indicador "n" que no se usa, se debera borrar.
 }
-
-void corregirCadenadeMapaConIndice(char *buffer){
-
-    unsigned longCad   = strlen(buffer);
-    char    *auxIni    = buffer + longCad - 1;
-    int      auxIndice = longCad - 1; //indica cuanto se puede desplazarse a izquierda en la cadena
-
-    if(!longCad)
-        return;
-
-    while(auxIndice >= 0 && isdigit((unsigned char)buffer[auxIndice])){
-        auxIni--;
-        auxIndice--;
-    }
-
-    auxIni++; // apunta al inicio del numero sobrante
-    *auxIni = '\0'; // corta la cadena
-}
-
 
 void destruirCasilla(void **pl, void* contexto)
 {

@@ -285,4 +285,53 @@ int  finalizarPartida(tPartida *p)
     destruirTablero(&p->tablero);
 }
 
+int guardarTableroEnArchivo(tTablero *tablero, tPartida *partida)
+{
+    int  cantCasillas, digitos, totalElementos, tamBuffer;
+    char *buffer;
+    if(!tablero || !(*tablero))
+        return 0;
+
+    cantCasillas = partida->config.cant_pos;
+    digitos = (int)log10(cantCasillas) + 1;
+
+    totalElementos =
+        partida->config.max_band +
+        partida->config.max_prem +
+        partida->config.max_vid_ext +
+        partida->config.max_oasis +
+        partida->config.max_tormenta +
+        3; // inicio + jugador + salida
+
+    tamBuffer =
+        (digitos + 3) * cantCasillas +   // "01. "
+        (2 * totalElementos) +           // " J"
+        cantCasillas +                   // '\n'
+        1;                               // '\0'
+    tamBuffer = tamBuffer * 2; //Para ser generosos con el buffer, por las animaciones...
+    buffer = (char*)malloc(tamBuffer);
+    if(!buffer)
+        return 0;
+
+    buffer[0] = '\0';
+
+    posicionarTablero(tablero, 0);
+
+    convertirMapaACadena(tablero, buffer, 0, 1, digitos);
+
+    FILE *fp = fopen(ARCH_CARAVANA, "w");
+    if(!fp)
+    {
+        free(buffer);
+        return 0;
+    }
+
+    fputs(buffer, fp);
+
+    fclose(fp);
+    free(buffer);
+
+    return 1;
+}
+
 

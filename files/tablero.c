@@ -253,7 +253,7 @@ void mostrarTablero(tTablero* tablero){
     mostrarListaDE(&tableroInicio, mostrarCasilla);
 }
 
-void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned conIndice, int digitos){
 /*
     Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
     para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
@@ -262,30 +262,31 @@ void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion,
     -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
     El buffer debe ser el adecuado en tam.
 */
-    if(NULL == *tablero || NULL == buffer)
+    unsigned indiceTemp = 1;
+    void *ctx[3] = {buffer, &indiceTemp, &digitos};
+
+    if(NULL == *tablero || NULL == buffer || digitos<1)
         return;
-    if(0 != indice && 1 != indice)
+    if(0 != conIndice && 1 != conIndice)
         return;
     if(0 != orientacion && 1 != orientacion)
         return;
 
     switch(orientacion){
         case 0: { // Vertical
-            if(!indice){
-                recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalSinIndice);
+            if(!conIndice){
+                recorrerListaDE(tablero, convertirMapaACadenaVerticalSinIndice, buffer);
                 return;
             }
-            recorrerListaDE(tablero, buffer, convertirMapaACadenaVerticalConIndice);
-            corregirCadenadeMapaConIndice(buffer);
+            recorrerListaDE(tablero, convertirMapaACadenaVerticalConIndice, ctx);
         }break;
 
         case 1: { // Horizontal
-            if(!indice){
-                recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalSinIndice);
+            if(!conIndice){
+                recorrerListaDE(tablero, convertirMapaACadenaHorizontalSinIndice, buffer);
                 return;
             }
-            recorrerListaDE(tablero, buffer, convertirMapaACadenaHorizontalConIndice);
-            corregirCadenadeMapaConIndice(buffer);
+            recorrerListaDE(tablero, convertirMapaACadenaHorizontalConIndice, ctx);
         }break;
     }
 }

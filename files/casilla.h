@@ -73,10 +73,9 @@ int elementoEnCasilla(const void *voidCasilla, int IDElemento);
 
 void accionCasillaACadena(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);
-void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer);
+void convertirMapaACadenaVerticalConIndice(void *e1, void *contexto);
 void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer);
-void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer);
-void corregirCadenadeMapaConIndice(char *buffer);
+void convertirMapaACadenaHorizontalConIndice(void *e1, void *contexto);
 
 void destruirCasilla(void **pl, void* contexto);
 

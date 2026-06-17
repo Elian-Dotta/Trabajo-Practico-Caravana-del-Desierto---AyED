@@ -12,6 +12,7 @@
 #include "consola.h"
 #include "animacion.h"
 
+#define ARCH_CARAVANA "caravana.txt"
 
 #define PASO 1
 
@@ -60,5 +61,7 @@ int  actualizarEstado(tPartida *partida);
 int  dibujarAnimacionEstado(tPartida *partida);
 
 int  finalizarPartida(tPartida *partida); // GUARDA EL RANKING ->
+
+int guardarTableroEnArchivo(tTablero *tablero, tPartida *partida);
 
 #endif // PARTIDA_H_

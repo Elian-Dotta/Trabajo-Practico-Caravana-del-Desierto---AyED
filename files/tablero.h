@@ -44,7 +44,7 @@ int  compararEnteros(const void *a, const void *b);
 tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
 
 void destruirTablero(tTablero *tablero);
-void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice);
+void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned conIndice, int digitos);
 //void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
 //int borrarMapa(tListaDE *lista);
 
