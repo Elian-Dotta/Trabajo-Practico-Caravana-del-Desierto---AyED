@@ -53,7 +53,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     crearCola(&p->movimientos);
 
     p->corriendo = 1;
-
+    /*
     mostrar("INICIANDO PARTIDA...\n");
     wait(1);
     mostrar("CARGANDO: 1%\n");
@@ -70,7 +70,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     wait(0.2);
     mostrar("CARGANDO: 100%\n");
     wait(0.1);
-
+    */
     return 1;
 }
 
@@ -94,10 +94,10 @@ int  procesarEntrada(tPartida *p)
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
 
         scanf("%c", &enter);
-        pasos = tirarDado(1, 6);
+        pasos = tirarDado(3, 3);
         wait(0.3);
 
-        sprintf(buffer, "Has sacado un %d!", pasos);
+        sprintf(buffer, "Has sacado un %d!\n", pasos);
         escribirEnLog(&p->log, buffer);
         asignarDado(&p->jugador, pasos);
 
@@ -223,44 +223,54 @@ int  dibujarAnimacionEstado(tPartida *p)
 
     int idAturIzq,
         idAturDer;
-    if(p->estado.JganaPuntos)
+    if(p->estado.JganaPuntos) // 1 - CHECKEAMOS SI EL JUGADOR CAYO EN UN PREMIO.
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
         aumentarPuntaje(&p->jugador);
         escribirEnLog(&p->log, MSJ_PUNTOS);
     }
 
-    if(p->estado.JganaVida)
+    if(p->estado.JganaVida) // 2 - CHECKEAMOS SI EL JUGADOR OBTUVO UNA VIDA EXTRA.
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRVIDAEX, animVidaExtra, JUGADORID);
         aumentarVida(&p->jugador);
         escribirEnLog(&p->log, MSJ_VIDA);
     }
 
+    // 3 - SI EL JUGADOR NO FUE ATACADO Y TIENE OASIS DEL TURNO ANTERIOR LO PIERDE DE FORMA PACIFICA.
     if(!p->estado.BandAtaca && p->estado.Operdido)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISPERDIDO);
     }
 
+    // 4 - SI EL JUGADOR CAE EN UN OASIS LO OBTIENE, SI TENIA DE ANTES LO OBTIENE DESPUES DE PERDERLO.
     if(p->estado.Oobtenido)
     {
+        if(p->estado.tieneOasis)
+        {   // 4.5 - SI EL JUGADOR TENIA OASIS LO PIERDE ANTES DE OBTENER UNO NUEVO, NO SE ACUMULAN OASIS.
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
+            escribirEnLog(&p->log, MSJ_OASISPERDIDO);
+        }
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISOB, animOasisObtenido, JUGADORID);
         escribirEnLog(&p->log, MSJ_OASISOBTENIDO);
     }
 
+    // 5 - ACTIVAMOS EL EFECTO DE LA TORMENTA.
     if(p->estado.Tactiva)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorSeActiva, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
     }
 
+    // 6 - FINALIZAMOS EL EFECTO DE LA TORMENTA
     if(p->estado.Tfinalizada)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
     }
 
+    // 7 - SI ESTAMOS EN LA CASILLA DE LA SALIDA, NO NOS PUEDEN ATACAR Y GANAMOS
     if(p->estado.Jgana)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana, JUGADORID);
@@ -268,36 +278,44 @@ int  dibujarAnimacionEstado(tPartida *p)
         p->estado.Jpierde = 0;
         p->corriendo = 0;
     }
-    else
+    else // 8 - SI NO GANAMOS PROCESAMOS ATAQUES DE BANDIDOS
     {
-        if(p->estado.BandAtaca)
+        // 9 - SI EL BANDIDO ATACA Y NO PERDEMOS OASIS, SIMPLEMENTE SE PIERDE VIDA Y EL JUGADOR SE MUEVE AL INICIO
+        if(p->estado.BandAtaca && !p->estado.Operdido)
         {
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
             escribirEnLog(&p->log, MSJ_BANDIDOATACA);
-        }
-
-        if(p->estado.BandAtaca && p->estado.Operdido)
+        } // 10 - SI EL BANDIDO ATACA Y PERDEMOS OASIS
+        else if(p->estado.BandAtaca && p->estado.Operdido)
         {
+            // 11 - EL BANDIDO ATACA
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
+            escribirEnLog(&p->log, MSJ_BANDIDOATACA);
+            // 12 - JUGADOR PIERDE EL OASIS
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
             escribirEnLog(&p->log, MSJ_OASISPERDIDO);
-
+            // 13 - SI HAY OTRO BANDIDO EN LA CASILLA, ESTE TAMBIEN ATACA AL JUGADOR
             if(p->estado.Bandidos > 1)
             {
-                if(p->estado.IDBandDesaparecido[0])
+                if(p->estado.IDBandDesaparecido[0]) // 14 - DESAPARECE EL PRIMER BANDIDO QUE ATACO.
                 {
                     ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
                     escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+                    // 15 - JUGADOR VUELVE A SU FORMA
+                    ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
                 }
+                // 16 - EL SEGUNDO BANDIDO ATACA AL JUGADOR QUE NO TIENE OASIS
                 ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
                 escribirEnLog(&p->log, MSJ_BANDIDOATACA);
             }
         }
-
+        // 17 - EL JUGADOR EFECTIVAMENTE PERDIO VIDA Y VUELVE A LA CASILLA INICIAL
         if(p->estado.JpierdeVida)
         {
             // El jugador vuelve al Campamento Inicial (casilla 1). 'posJug' esta en
             // sincronia con la casilla real, asi que este desplazamiento la lleva a 1.
             mov = (p->jugador.posJug - 1) * - 1;
+            // 18 - SI SUCEDIO EN UN TURNO QUE ESTABA ATURDIDO LLEVAMOS TAMBIEN EL EFECTO DE ATURDIMIENTO
             if(p->estado.Tactiva)
             {
                 idAturIzq = obtenerIdElementoPorTipo(&p->tablero, ATURDIDOIZQ);
@@ -312,18 +330,20 @@ int  dibujarAnimacionEstado(tPartida *p)
             // quedaba con el valor viejo y se desincronizaba de la casilla real (el
             // jugador "rebotaba"/teletransportaba en el medio del tablero).
             p->jugador.posJug = 1;
+            // 19 - JUGADOR VUELVE A SU FORMA EN LA CASILLA 1
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
             disminuirVida(&p->jugador);
             escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
-            if(verVida(&p->jugador)== 0)
+            if(verVida(&p->jugador)== 0) // 20 - SI LA VIDA LLEGA A CERO EL JUGADOR PIERDE
                 p->estado.Jpierde = 1;
 
         }
+        // 21 - SI PASO EL CASO 9, SIMPLEMENTE DESAPARECE EL PRIMER BANDIDO
         if(p->estado.IDBandDesaparecido[0] && !p->estado.Operdido)
         {
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
             escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
-        }
+        } // 22 - SI EL JUGADOR TENIA OASIS, ENTONCES PERDIO VIDA POR EL SEGUNDO BANDIDO ASI QUE DESAPARECE ESTE ULTIMO.
         else if(p->estado.IDBandDesaparecido[1])
         {
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[1]);
@@ -331,7 +351,7 @@ int  dibujarAnimacionEstado(tPartida *p)
         }
 
 
-
+        // 23 - POR ULTIMO TENEMOS EN CUENTA SI EL JUGADOR PERDIO LA PARTIDA.
         if(p->estado.Jpierde)
         {
             ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde, JUGADORID);
@@ -339,7 +359,7 @@ int  dibujarAnimacionEstado(tPartida *p)
             p->corriendo = 0;
         }
 
-        }
+    }
 
     reiniciarEstado(&p->estado);
 

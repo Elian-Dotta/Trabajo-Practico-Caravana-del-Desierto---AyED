@@ -1,3 +1,7 @@
+/// @file animacion.h
+///
+/// @date 2024-06-01
+
 #ifndef ANIMACION_H_
 #define ANIMACION_H_
 
@@ -13,6 +17,7 @@
 #define IZQ -1
 #define DER 1
 
+/// DEFINICION DE LOS ELEMENTOS DE ANIMACION DEL TABLERO
 #define ASTERISCO '*'
 #define ARENA1 '.'
 #define ARENA2 ':'
@@ -50,10 +55,10 @@
 #define CAMELEM(ACT, NUE) cambiarElemento(tablero, (ACT), (NUE))
 #define ELIM(ELIM) eliminarElemento(tablero, (ELIM))
 
-
+/// @brief Definicion del tipo Animacion, que es un puntero a funcion que recibe un tablero y un numero de frame, y no devuelve nada. Se utiliza para definir las animaciones de cambio de estado del juego.
 typedef void (*Animacion)(tTablero*, unsigned);
 
-
+// PROTOTIPOS DE LAS ANIMACIONES
 void animPremio           (tTablero *tablero, unsigned frame); // [ PJ ]-> [ *P*J ]-> [***J ]-> [ **J ]-> [ *j ]-> [ J ]
 void animOasisObtenido    (tTablero *tablero, unsigned frame); // [OJ] -> [!O!J] -> [!O!(J)] -> [!O!J] -> [!O!(J)]-> [!O!J] -> [O(J)]
 void animTorSeActiva      (tTablero *tablero, unsigned frame);
@@ -66,6 +71,15 @@ void animBandidoDesaparece(tTablero *tablero, unsigned frame);
 void animJugGana          (tTablero *tablero, unsigned frame);
 void animJugPierde        (tTablero *tablero, unsigned frame);
 
+
+/// @brief Funcion que ejecuta una animacion de cambio de estado del juego, recibiendo el tablero, el jugador, el estado, el log, el numero de frame, la animacion a ejecutar y el ID del ancla para posicionar el tablero. La funcion se encarga de esperar un segundo entre cada frame, posicionar el tablero en el ancla, ejecutar la animacion y dibujar la escena con el tablero, el jugador, el estado y el log actualizados.
+/// @param t
+/// @param j
+/// @param e
+/// @param l
+/// @param frame
+/// @param anim
+/// @param IDAncla
 void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim, unsigned IDAncla);
 
 

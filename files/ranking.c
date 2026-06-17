@@ -40,6 +40,11 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
 
     cargarIndiceDesdeArchivo(&arNicknames, ARCHIDXNICK, &idx, sizeof(idx));
 
+    fseek(archPartidas, 0, SEEK_END);
+    printf("Registros: %ld\n", ftell(archPartidas) / sizeof(regPartida));
+    rewind(archPartidas);
+    wait(5);
+
     while(obtenerLinea(archPartidas, archJugadores, &linea, &arNicknames))
     {
         insertarEnRanking(ranking, &linea);
@@ -116,7 +121,6 @@ void mostrarRanking(tRanking *ranking)
     recorrerLista(&ranking->ranking, mostrarLinea, &contador);
     mostrar(MENSAJE_SALIDA);
     while(getchar() != '\n');
-    getchar();
 }
 
 void mostrarLinea(void* linea, void *contexto)

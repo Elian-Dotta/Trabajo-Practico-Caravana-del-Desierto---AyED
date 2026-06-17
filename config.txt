@@ -1,7 +1,7 @@
 cantidad de posiciones:10
 vidas iniciales:10
-bandidos:20
+bandidos:10
 cantidad maxima de premios:0
 cantidad vidas extras:0
-cantidad oasis:0
-cantidad tormentas:9
+cantidad oasis:9
+cantidad tormentas:0

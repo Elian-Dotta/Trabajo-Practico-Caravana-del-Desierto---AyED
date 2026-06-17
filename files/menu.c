@@ -103,6 +103,8 @@ int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
         if(scanf("%d", &opcion) != 1)
             opcion = 0;
 
+        limpiarBuffer();
+
         valido = (opcion >= 1 && opcion <= cantOpciones);
         priVez = 0;
     } while(!valido);

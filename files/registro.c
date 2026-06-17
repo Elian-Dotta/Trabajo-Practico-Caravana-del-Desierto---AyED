@@ -6,16 +6,17 @@
 static void leerTexto(const char *msj, char *out, int tam)
 {
     char buffer[256];
-    fflush(stdin);
     do
     {
         mostrar(msj);
+        //fflush(stdout);
         if(fgets(buffer, sizeof(buffer), stdin) == NULL)
         {
             out[0] = '\0';
             return;
         }
         buffer[strcspn(buffer, "\n")] = '\0';   // saca el salto de linea
+
     } while(buffer[0] == '\0');
 
     strncpy(out, buffer, tam - 1);
@@ -55,6 +56,7 @@ void ingresarJugador(tJugador *j)
         existe = revisarUsuarioRepetido(&idxNombre, nombre, fJug, &sel);
         fclose(fJug);
     }
+
 
     if(existe)
     {
@@ -98,6 +100,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     // 2) armar el texto del menu recorriendo la lista
     buffer[0] = '\0';
     void *ctxMsg[2] = { buffer, &contador };
+    sprintf(buffer + strlen(buffer), "\nSu nombre ya se encuentra registrado.\nPor favor, seleccione su usuario.\n");
     sprintf(buffer + strlen(buffer), "N. |Nickname  |Nombre\n");
     recorrerLista(&nicknames, armarMensaje, ctxMsg);
     sprintf(buffer + strlen(buffer), "%d. NINGUNO\n", contador);
@@ -293,6 +296,8 @@ void guardarPartida(tJugador *jugador)
     fclose(part);
     fclose(partTmp);
 
+    printf("HOLA\n");
+    wait(10);
     remove(ARCHPARTIDAS);
     rename(ARCHPARTIDASTMP, ARCHPARTIDAS);
 }
