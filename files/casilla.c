@@ -100,7 +100,7 @@ int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
-    
+
     return 1;
 }
 
@@ -425,6 +425,32 @@ void modEstado(void* e, void* est)
             estado->Jgana = 1;
             break;
     }
+}
+
+void acumularTipoElem(void *elemVoid, void *bufVoid)
+{
+    tElem *elem = (tElem*)elemVoid;
+    char  *buf  = (char*)bufVoid;
+    unsigned n  = strlen(buf);
+
+    buf[n]     = elem->tipo_elem;
+    buf[n + 1] = '\0';
+}
+
+// Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
+void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
+{
+    tCasilla *casilla = (tCasilla*)casillaVoid;
+    FILE     *arch    = (FILE*)archVoid;
+    char      contenido[TAM_BUFFER];
+
+    contenido[0] = '\0';
+    recorrerLista(casilla, acumularTipoElem, contenido);
+
+    if(contenido[0] == '\0')
+        fprintf(arch, "[.]");          // posicion vacia / ruta despejada
+    else
+        fprintf(arch, "[%s]", contenido);
 }
 
 

@@ -12,6 +12,8 @@ int  crearTablero(tTablero* tablero, tConfig config, tLista *bandidosInteligente
     generarTablero(tablero, &idElem, config.cant_pos);
 
     distribuirElementos(tablero, &idElem, config, bandidosInteligentes);
+
+    return 1;
 }
 
 int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
@@ -50,6 +52,8 @@ int  generarTablero(tListaDE* tablero, int *idElem, int cantPos)
         }
         contCas++;
     }
+
+    return 1;
 }
 
 int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tLista *bandidosInteligentes)
@@ -86,7 +90,6 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
 
     tLista numAleatorios;
     crearLista(&numAleatorios);
-    int numAle;
     tElem elem;
 
     while(elemInsertados < cantElem)
@@ -212,6 +215,7 @@ int  insertarAlLadoDeElemento(tTablero *tablero, int direccion, char elemRef, ch
     else
         actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, insertarDerDeElemento);
     id++;
+    return 1;
 }
 
 int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
@@ -221,6 +225,7 @@ int  cambiarElemento(tTablero *tablero, char elemAct, char elemNue)
     ctxElem[1].tipo_elem = elemAct;
 
     actualizarPosRelativaListaDE(tablero, ctxElem, sizeof(ctxElem), 0, cambiarTipoElemento);
+    return 1;
 }
 
 int  eliminarElemento(tTablero *tablero, char elemAct)
@@ -228,6 +233,7 @@ int  eliminarElemento(tTablero *tablero, char elemAct)
     tElem elim;
     elim.tipo_elem = elemAct;
     actualizarPosRelativaListaDE(tablero, &elim, sizeof(elim), 0, eliminarDeCasillaTipo);
+    return 1;
 }
 
 int  elementosJuntos(tTablero *tablero, const char tipo1, const char tipo2)
@@ -253,9 +259,6 @@ void obtenerMovimientoBandidos(tTablero *tablero, tCola *movimientos, tLista *ba
 
 void  actualizarEstadoDelJugador(tTablero* tablero, tEstado *estado, tLista *bandinteligentes)
 {
-    tElem jugador;
-    jugador.id_elem = JUGADORID;
-
     recorrerListaDE(tablero, cambiarEstado, estado);
     eliminarPorClaveLista(bandinteligentes, &estado->IDBandDesaparecido, sizeof(estado->IDBandDesaparecido), compararEnteros);
 }
@@ -292,31 +295,7 @@ void mostrarTablero(tTablero* tablero)
 }
 
 // Acumula en 'buf' los caracteres de los elementos de una casilla.
-static void acumularTipoElem(void *elemVoid, void *bufVoid)
-{
-    tElem *elem = (tElem*)elemVoid;
-    char  *buf  = (char*)bufVoid;
-    unsigned n  = strlen(buf);
 
-    buf[n]     = elem->tipo_elem;
-    buf[n + 1] = '\0';
-}
-
-// Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
-static void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
-{
-    tCasilla *casilla = (tCasilla*)casillaVoid;
-    FILE     *arch    = (FILE*)archVoid;
-    char      contenido[TAM_BUFFER];
-
-    contenido[0] = '\0';
-    recorrerLista(casilla, acumularTipoElem, contenido);
-
-    if(contenido[0] == '\0')
-        fprintf(arch, "[.]");          // posicion vacia / ruta despejada
-    else
-        fprintf(arch, "[%s]", contenido);
-}
 
 int generarArchivoTablero(tTablero* tablero, const char *path)
 {
@@ -336,7 +315,7 @@ int generarArchivoTablero(tTablero* tablero, const char *path)
 }
 /*
 void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
-/*
+
     Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
     para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
     Tiene los valores de parametros:

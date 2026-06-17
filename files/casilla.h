@@ -83,6 +83,9 @@ int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento);
 int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado);
 
+void acumularTipoElem(void *elemVoid, void *bufVoid);
+void escribirCasillaArchivo(void *casillaVoid, void *archVoid);
+
 /*
 void accionCasillaACadena(void *e1, void *voidBuffer);
 void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);

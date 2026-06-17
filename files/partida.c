@@ -70,6 +70,8 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     wait(0.2);
     mostrar("CARGANDO: 100%\n");
     wait(0.1);
+
+    return 1;
 }
 
 int  dibujarEstadoDelJuego(tPartida *p)
@@ -121,6 +123,7 @@ int  procesarEntrada(tPartida *p)
 int actualizarMovimientos(tPartida *p)
 {
     obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPosJugador(&p->jugador), p->config.cant_pos);
+    return 1;
 }
 
 
@@ -154,8 +157,8 @@ int  dibujarAnimacionMov(tPartida *p)
         if(movActual.id == JUGADORID)
         {
             posJug = verPosJugador(&p->jugador);
-            if(posJug == 1 && movActual.dir == 'B' ||
-               posJug == p->config.cant_pos && movActual.dir == 'F')
+            if((posJug == 1 && movActual.dir == 'B') ||
+               (posJug == p->config.cant_pos && movActual.dir == 'F'))
                 cambiarDireccion(&movActual);
             modificarPosJug(&p->jugador, movActual.dir);
         }
@@ -209,6 +212,7 @@ int  dibujarAnimacionMov(tPartida *p)
 int  actualizarEstado(tPartida *p)
 {
     actualizarEstadoDelJugador(&p->tablero, &p->estado, &p->bandInteligentes);
+    return 1;
 }
 
 int  dibujarAnimacionEstado(tPartida *p)
@@ -331,6 +335,8 @@ int  dibujarAnimacionEstado(tPartida *p)
     }
 
     reiniciarEstado(&p->estado);
+
+    return 1;
 }
 
 int  finalizarPartida(tPartida *p)
@@ -346,6 +352,8 @@ int  finalizarPartida(tPartida *p)
     vaciarLog(&p->log);
 
     destruirTablero(&p->tablero);
+
+    return 1;
 }
 
 

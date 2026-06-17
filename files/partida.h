@@ -17,7 +17,6 @@
 
 #define PASO 1
 
-#define TAM 50
 
 #define MSJ_PUNTOS              "El jugador ha obtenido un premio\n"
 #define MSJ_VIDA                "El jugador ha obtenido una vida extra\n"

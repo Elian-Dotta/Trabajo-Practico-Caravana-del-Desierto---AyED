@@ -59,7 +59,7 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
 
     // conDup=1: dos jugadores pueden tener el MISMO puntaje y ambos deben
     // figurar (cmpLinea solo ordena por puntaje, no identifica al jugador).
-    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL))
+    if((ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL)))
     {
         if(ranking->cantLineas == MAX_RANKING)
             sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
