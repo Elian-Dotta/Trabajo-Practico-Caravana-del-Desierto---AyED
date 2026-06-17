@@ -85,7 +85,12 @@ void mostrarHUD(tJugador* jugador, tEstado* estado)
         printf("NO\n");
     printf("Tapado por Arena: ");
     if(estado->tieneTormenta == 1)
-        printf("SI");
+        printf("SI\n");
+    else
+        printf("NO\n");
+    printf("Dado obtenido: ");
+    if(verDado(jugador))
+        printf("%d", verDado(jugador));
     else
         printf("NO");
 }

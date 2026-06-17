@@ -6,7 +6,7 @@
 static void leerTexto(const char *msj, char *out, int tam)
 {
     char buffer[256];
-
+    fflush(stdin);
     do
     {
         mostrar(msj);
@@ -39,7 +39,8 @@ void ingresarJugador(tJugador *j)
     int             existe = 0;
 
     limpiarPantalla();
-    mostrar("CARAVANA DEL DESIERTO\n\n");
+    mostrar("\nBIENVENIDO A LA CARAVANA DEL DESIERTO\n\n");
+    mostrar("-----LOGIN DE USUARIO-----\n");
 
     // 1) pedir el nombre del jugador
     leerTexto("Ingrese su nombre: ", nombre, sizeof(nombre));
@@ -91,12 +92,16 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     void *ctxArbol[3] = { &nicknames, fJug, (void *)nombre };
     recorrerEnOrdenSimpleArbolBinBusq(indice, ctxArbol, enlistarNickNames);
 
+    if(listaVacia(&nicknames))
+        return 0;
+
     // 2) armar el texto del menu recorriendo la lista
     buffer[0] = '\0';
     void *ctxMsg[2] = { buffer, &contador };
+    sprintf(buffer + strlen(buffer), "N. |Nickname  |Nombre\n");
     recorrerLista(&nicknames, armarMensaje, ctxMsg);
     sprintf(buffer + strlen(buffer), "%d. NINGUNO\n", contador);
-
+    sprintf(buffer + strlen(buffer), "Elija el nickname que le corresponda: ");
     // 3) mostrar el menu y leer la eleccion
     op = menuNum(buffer, contador, 1, "Opcion invalida\n");
 
@@ -154,7 +159,7 @@ void armarMensaje(void *jugador, void *msjBuffer)
 
     // concatena al final del buffer y avanza el numero de opcion para que
     // cada homonimo (y luego NINGUNO) tenga su propio numero correlativo.
-    sprintf(texto + strlen(texto), "%d. %s %s\n", *contador,
+    sprintf(texto + strlen(texto), "%d. |%-10s|%-30s\n", *contador,
             ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
     (*contador)++;
 }

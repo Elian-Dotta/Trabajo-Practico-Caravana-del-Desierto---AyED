@@ -6,6 +6,7 @@ void inicializarJugador(tJugador* j)
     j->cantMov = 0;
     j->puntaje = 0;
     j->posJug = 1;
+    j->dado = 0;
     crearCola(&j->hisMovJugador);
 }
 
@@ -77,6 +78,17 @@ const char* verNick(const tJugador *j)
 {
     return j->nickname;
 }
+
+void asignarDado(tJugador *j, int dado)
+{
+    j->dado = dado;
+}
+
+int  verDado(const tJugador *j)
+{
+    return j->dado;
+}
+
 
 void guardarMovimientoJugador(tJugador *j, tMovimiento *mov)
 {
