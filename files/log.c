@@ -1,17 +1,20 @@
+// === Modulo log: mensajes bajo la escena ===
 #include "log.h"
 
 #include "consola.h"
 
+// Inicializa el log de mensajes
 void crearLog(tLog *log)
 {
     log->cantMsj = 0;
     crearLista(&log->mensajes);
 }
 
+// Agrega un mensaje al log
 int  escribirEnLog(tLog *log, const char *msj)
 {
     int ret; // VARIABLE PARA GUARDAR EL RETORNO DE INSERTAR AL INICIO
-    unsigned tamMsj; // VARIABLE PARA CALCULAR EL TAMAÑO DEL MENSAJE INGRESADO
+    unsigned tamMsj; // VARIABLE PARA CALCULAR EL TAMAï¿½O DEL MENSAJE INGRESADO
     char aux[TAM_BUFFER]; // BUFFER PARA SACAR EL ELEMENTO
 
     if(msj[0] == '\0') // SI NO HAY MENSAJE DEVOLVEMOS ERROR, TAMBIEN CONSIDERE !msj COMO CONDICION
@@ -32,6 +35,7 @@ int  escribirEnLog(tLog *log, const char *msj)
     return ret;
 }
 
+// Imprime todos los mensajes
 void mostrarLog(const tLog *log)
 {
     if(listaVacia(&log->mensajes))
@@ -39,6 +43,7 @@ void mostrarLog(const tLog *log)
     mostrarLista(&log->mensajes, mostrarMensaje);
 }
 
+// Callback: imprime un mensaje
 void mostrarMensaje(const void *m)
 {
     const char *msj = m;
@@ -46,6 +51,7 @@ void mostrarMensaje(const void *m)
     mostrar(msj);
 }
 
+// Libera los mensajes del log
 void vaciarLog(tLog *log)
 {
     vaciarLista(&log->mensajes);

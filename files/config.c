@@ -1,8 +1,10 @@
+// === Modulo config: lee la configuracion ===
 #include "config.h"
 #define TAM 100
 #define ERROR 0
 #define OK 1
 
+// Lee parametros desde config.txt
 int cargarConfig(tConfig *t)
 {
     FILE *arch;

@@ -1,3 +1,4 @@
+// === Ranking: top de jugadores ===
 #ifndef RANKING_H_
 #define RANKING_H_
 
@@ -13,12 +14,14 @@
                     //  123|1234567890|123456789012345678901234567890|123
 #define MENSAJE_SALIDA "Presione ENTER para salir..."
 
+// Ranking: lista de lineas y contador
 typedef struct
 {
     tLista ranking;
     unsigned cantLineas;
 }tRanking;
 
+// Linea del ranking (nick, nombre, puntaje)
 typedef struct
 {
     char    nickname[11];

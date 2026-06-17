@@ -1,15 +1,19 @@
+// === Modulo cola: FIFO de movimientos ===
 #include "cola.h"
 
 #define minimo(X,Y) ((X) <= (Y) ? (X) : (Y))
 
+// Inicializa una cola vacia
 void crearCola(tCola *p)
 {
     p->pri = NULL;
     p->ult = NULL;
 }
 
+// Indica si no hay memoria
 int colaLlena(const tCola *p, unsigned cantBytes)
 {
+    (void)p;
     tNodo *aux = (tNodo *)malloc(sizeof(tNodo));
     void *info = malloc(cantBytes);
     free(aux);
@@ -17,6 +21,7 @@ int colaLlena(const tCola *p, unsigned cantBytes)
     return aux == NULL || info == NULL;
 }
 
+// Encola un dato al final
 int ponerEnCola(tCola *p, const void *d, unsigned cantBytes)
 {
     tNodo *nue = (tNodo *)malloc(sizeof(tNodo));
@@ -37,6 +42,7 @@ int ponerEnCola(tCola *p, const void *d, unsigned cantBytes)
     return 1;
 }
 
+// Copia el primero sin sacarlo
 int verPrimeroCola(const tCola *p, void *d, unsigned cantBytes)
 {
     if(p->pri == NULL)
@@ -46,11 +52,13 @@ int verPrimeroCola(const tCola *p, void *d, unsigned cantBytes)
     return 1;
 }
 
+// Indica si la cola esta vacia
 int colaVacia(const tCola *p)
 {
     return p->pri == NULL;
 }
 
+// Desencola el primer dato
 int sacarDeCola(tCola *p, void *d, unsigned cantBytes)
 {
     tNodo *aux = p->pri;
@@ -65,6 +73,7 @@ int sacarDeCola(tCola *p, void *d, unsigned cantBytes)
     return 1;
 }
 
+// Libera todos los nodos
 void vaciarCola(tCola *p)
 {
     while(p->pri)

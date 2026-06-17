@@ -1,12 +1,14 @@
+// === Modulo registro: alta de jugadores y guardado de partidas ===
 #include "registro.h"
 
 
 // Lee una linea de stdin, descarta el '\n' y la acota a tam-1 caracteres.
 // Repite mientras la entrada sea vacia.
+// Lee una linea acotada de stdin
 static void leerTexto(const char *msj, char *out, int tam)
 {
     char buffer[256];
-
+    fflush(stdin);
     do
     {
         mostrar(msj);
@@ -26,6 +28,7 @@ static void leerTexto(const char *msj, char *out, int tam)
 // Pide el nombre del jugador. Si ya existe en los registros,
 // permite reconocerlo entre sus homonimos; si no, lo da de alta pidiendo un
 // nickname unico. Deja en *j el nombre y el nick definitivos.
+// Pide nombre y da de alta
 void ingresarJugador(tJugador *j)
 {
     char            nombre[31];
@@ -39,7 +42,8 @@ void ingresarJugador(tJugador *j)
     int             existe = 0;
 
     limpiarPantalla();
-    mostrar("CARAVANA DEL DESIERTO\n\n");
+    mostrar("\nBIENVENIDO A LA CARAVANA DEL DESIERTO\n\n");
+    mostrar("-----LOGIN DE USUARIO-----\n");
 
     // 1) pedir el nombre del jugador
     leerTexto("Ingrese su nombre: ", nombre, sizeof(nombre));
@@ -79,6 +83,7 @@ void ingresarJugador(tJugador *j)
 }
 
 
+// Resuelve homonimos del nombre
 int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug, regJugador *sel)
 {
     tLista nicknames;
@@ -91,12 +96,16 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     void *ctxArbol[3] = { &nicknames, fJug, (void *)nombre };
     recorrerEnOrdenSimpleArbolBinBusq(indice, ctxArbol, enlistarNickNames);
 
+    if(listaVacia(&nicknames))
+        return 0;
+
     // 2) armar el texto del menu recorriendo la lista
     buffer[0] = '\0';
     void *ctxMsg[2] = { buffer, &contador };
+    sprintf(buffer + strlen(buffer), "N. |Nickname  |Nombre\n");
     recorrerLista(&nicknames, armarMensaje, ctxMsg);
     sprintf(buffer + strlen(buffer), "%d. NINGUNO\n", contador);
-
+    sprintf(buffer + strlen(buffer), "Elija el nickname que le corresponda: ");
     // 3) mostrar el menu y leer la eleccion
     op = menuNum(buffer, contador, 1, "Opcion invalida\n");
 
@@ -112,6 +121,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
 }
 
 
+// Junta los homonimos en una lista
 void enlistarNickNames(void *idxNombre, void *contexto)
 {
     tIndiceNombre *idx = (tIndiceNombre*)idxNombre;
@@ -136,6 +146,7 @@ void enlistarNickNames(void *idxNombre, void *contexto)
     }
 }
 
+// Arma entrada de indice por nick
 void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro) // EN LA BUSQUEDA NO NECESITO EL NRO DE REGISTRO.
 {
     tIndiceNickname *i = (tIndiceNickname*)idx;
@@ -146,6 +157,7 @@ void asigJugNick(void *idx, const void *jug, unsigned long nroRegistro) // EN LA
 }
 
 
+// Callback: arma una linea del menu
 void armarMensaje(void *jugador, void *msjBuffer)
 {
     void **buf = (void**)msjBuffer;
@@ -154,11 +166,12 @@ void armarMensaje(void *jugador, void *msjBuffer)
 
     // concatena al final del buffer y avanza el numero de opcion para que
     // cada homonimo (y luego NINGUNO) tenga su propio numero correlativo.
-    sprintf(texto + strlen(texto), "%d. %s %s\n", *contador,
+    sprintf(texto + strlen(texto), "%d. |%-10s|%-30s\n", *contador,
             ((regJugador*)jugador)->nickname, ((regJugador*)jugador)->nombre);
     (*contador)++;
 }
 
+// Registra un jugador nuevo
 int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxNombre, tArbolBinBusq* arbolIdxNick, const char* archJug, const char* archIdxNombre, const char *archIdxNick)
 {
     tIndiceNombre indNombre;
@@ -197,6 +210,7 @@ int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxN
     return 1;
 }
 
+// Guarda la partida agrupada por nick
 void guardarPartida(tJugador *jugador)
 {
     long cantRegistros;

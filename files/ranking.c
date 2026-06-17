@@ -1,3 +1,4 @@
+// === Modulo ranking: top de jugadores por puntaje ===
 #include "ranking.h"
 
 void ranking() // FUNCION QUE CONTROLA EL FLUJO COMPLETO DEL RANKING
@@ -11,12 +12,14 @@ void ranking() // FUNCION QUE CONTROLA EL FLUJO COMPLETO DEL RANKING
     mostrarRanking(&ranking); // POR ULTIMO LO MUESTRA
 }
 
+// Inicializa el ranking vacio
 void inicializarRanking(tRanking *ranking)
 {
     crearLista(&ranking->ranking);
     ranking->cantLineas = 0;
 }
 
+// Arma el ranking desde los archivos
 int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char *archJug)
 {
     FILE* archPartidas;
@@ -48,6 +51,7 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
     return 1;
 }
 
+// Inserta linea ordenada por puntaje
 int insertarEnRanking(tRanking *ranking, tLinea *linea)
 {
     if(linea->nombre[0] == '\0' ||
@@ -59,7 +63,7 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
 
     // conDup=1: dos jugadores pueden tener el MISMO puntaje y ambos deben
     // figurar (cmpLinea solo ordena por puntaje, no identifica al jugador).
-    if(ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL))
+    if((ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL)))
     {
         if(ranking->cantLineas == MAX_RANKING)
             sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
@@ -70,6 +74,7 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
     return ret;
 }
 
+// Suma el puntaje total de un jugador
 int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolBinBusq *indice)
 {
     regPartida partida;
@@ -108,6 +113,7 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
     return 1;
 }
 
+// Muestra el ranking en pantalla
 void mostrarRanking(tRanking *ranking)
 {
     limpiarPantalla();
@@ -115,10 +121,10 @@ void mostrarRanking(tRanking *ranking)
     mostrar(TITULO_RANKING);
     recorrerLista(&ranking->ranking, mostrarLinea, &contador);
     mostrar(MENSAJE_SALIDA);
-    while(getchar() != '\n');
-    getchar();
+    while(getchar() != '\n');   // espera un unico ENTER para salir
 }
 
+// Callback: imprime una linea
 void mostrarLinea(void* linea, void *contexto)
 {
     tLinea *l = (tLinea*)linea;
@@ -130,12 +136,14 @@ void mostrarLinea(void* linea, void *contexto)
     (*contador)++;
 }
 
+// Libera el ranking
 void destruirRanking(tRanking *ranking)
 {
     vaciarLista(&ranking->ranking);
     ranking->cantLineas = 0;
 }
 
+// Ordena por puntaje descendente
 int cmpLinea(void *a, void *b) // ORDEN ASCENDENTE
 {
     tLinea *l1 = (tLinea*)a;

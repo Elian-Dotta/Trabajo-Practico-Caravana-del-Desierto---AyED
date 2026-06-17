@@ -1,5 +1,7 @@
+// === Modulo estado: flags del turno ===
 #include "estado.h"
 
+// Pone todos los flags en cero
 void inicializarEstado(tEstado *e)
 {
     e->BandAtaca = 0;
@@ -18,6 +20,7 @@ void inicializarEstado(tEstado *e)
     e->Tfinalizada = 0;
 }
 
+// Resetea flags entre turnos
 void reiniciarEstado(tEstado *e)
 {
     e->BandAtaca = 0;

@@ -1,3 +1,4 @@
+// === Registro: archivos de jugadores y partidas ===
 #ifndef REGISTRO_H_
 #define REGISTRO_H_
 
@@ -20,12 +21,14 @@
 
 // MODULO USADO PARA EL GUARDADO DE PARTIDA Y JUGADOR.
 
+// Registro de jugador (nombre y nickname)
 typedef struct
 {
     char nombre[31];
     char nickname[11];
 } regJugador;        // REGISTRO DEL ARCHIVO JUGADORES
 
+// Registro de partida (nick, puntaje, movimientos)
 typedef struct
 {
     char nickname[11];

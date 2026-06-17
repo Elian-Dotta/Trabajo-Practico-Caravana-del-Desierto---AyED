@@ -1,7 +1,9 @@
+// === Modulo partida: coordina el loop del juego ===
 #include "partida.h"
 #include "menu.h"
 
 // INICIALIZA, FINALIZA Y MANEJA EL LOOP DEL JUEGO
+// Inicializa y corre el loop
 void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL LOOP
 {
     tPartida partida;
@@ -29,6 +31,7 @@ void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL 
 // FUNCIONES LLAMADAS POR JUGAR PARTIDA
 
 
+// Carga config y arma el tablero
 int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y GENERAR EL TABLERO
 
 {
@@ -70,14 +73,18 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     wait(0.2);
     mostrar("CARGANDO: 100%\n");
     wait(0.1);
+
+    return 1;
 }
 
+// Dibuja la escena del turno
 int  dibujarEstadoDelJuego(tPartida *p)
 {
     dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
     return 1;
 }
 
+// Tira dado y encola movimiento
 int  procesarEntrada(tPartida *p)
 {
     tMovimiento mov;
@@ -95,8 +102,9 @@ int  procesarEntrada(tPartida *p)
         pasos = tirarDado(1, 6);
         wait(0.3);
 
-        sprintf(buffer, "Obtuviste un %d\n", pasos);
+        sprintf(buffer, "Has sacado un %d!", pasos);
         escribirEnLog(&p->log, buffer);
+        asignarDado(&p->jugador, pasos);
 
         escribirEnLog(&p->log, "Ingrese direccion (Adelante 'F' / Atras 'B'): \n");
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
@@ -118,12 +126,15 @@ int  procesarEntrada(tPartida *p)
     return 1;
 }
 
+// Encola movimientos de los bandidos
 int actualizarMovimientos(tPartida *p)
 {
     obtenerMovimientoBandidos(&p->tablero, &p->movimientos, &p->bandInteligentes, verPosJugador(&p->jugador), p->config.cant_pos);
+    return 1;
 }
 
 
+// Anima los movimientos encolados
 int  dibujarAnimacionMov(tPartida *p)
 {
     // HAY QUE DESENCOLAR LOS MOVIMIENTOS, E IR RESTANDOLES UNO PARA PROCESAR MOVIMIENTO POR MOVIMIENTO EN CADA FRAME
@@ -154,8 +165,8 @@ int  dibujarAnimacionMov(tPartida *p)
         if(movActual.id == JUGADORID)
         {
             posJug = verPosJugador(&p->jugador);
-            if(posJug == 1 && movActual.dir == 'B' ||
-               posJug == p->config.cant_pos && movActual.dir == 'F')
+            if((posJug == 1 && movActual.dir == 'B') ||
+               (posJug == p->config.cant_pos && movActual.dir == 'F'))
                 cambiarDireccion(&movActual);
             modificarPosJug(&p->jugador, movActual.dir);
         }
@@ -199,25 +210,28 @@ int  dibujarAnimacionMov(tPartida *p)
             escribirEnLog(&p->log, buffer);
         }
 
-        wait(1);
+        wait(0.7);
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
     }
 
     return 1;
 }
 
+// Calcula el nuevo estado del juego
 int  actualizarEstado(tPartida *p)
 {
     actualizarEstadoDelJugador(&p->tablero, &p->estado, &p->bandInteligentes);
+    return 1;
 }
 
+// Anima los cambios de estado
 int  dibujarAnimacionEstado(tPartida *p)
 {
 
     int mov;
 
-    int idFlechaIzq,
-        idFlechaDer;
+    int idAturIzq,
+        idAturDer;
     if(p->estado.JganaPuntos)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
@@ -248,71 +262,12 @@ int  dibujarAnimacionEstado(tPartida *p)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORACT, animTorSeActiva, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAACTIVA);
-        idFlechaIzq = obtenerIdElementoPorTipo(&p->tablero, FLECHAIZQ);
-        idFlechaDer = obtenerIdElementoPorTipo(&p->tablero, FLECHADER);
     }
 
     if(p->estado.Tfinalizada)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRTORFIN, animTorFinaliza, JUGADORID);
         escribirEnLog(&p->log, MSJ_TORMENTAFINALIZADA);
-    }
-
-    if(p->estado.BandAtaca)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
-        escribirEnLog(&p->log, MSJ_BANDIDOATACA);
-    }
-
-
-    if(p->estado.BandAtaca && p->estado.Operdido)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
-        escribirEnLog(&p->log, MSJ_OASISPERDIDO);
-
-        if(p->estado.Bandidos > 1)
-        {
-            if(p->estado.IDBandDesaparecido[0])
-            {
-                ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
-                escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
-            }
-            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
-            escribirEnLog(&p->log, MSJ_BANDIDOATACA);
-        }
-    }
-
-    if(p->estado.JpierdeVida)
-    {
-        // El jugador vuelve al Campamento Inicial (casilla 1). 'posJug' esta en
-        // sincronia con la casilla real, asi que este desplazamiento la lleva a 1.
-        mov = (p->jugador.posJug - 1) * - 1;
-        moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
-        if(p->estado.Tactiva)
-        {
-            moverElementoPorId(&p->tablero, idFlechaIzq, mov, p->config.cant_pos);
-            moverElementoPorId(&p->tablero, idFlechaDer, mov, p->config.cant_pos);
-        }
-        // Mantener la posicion logica sincronizada con la ficha: sin esto, 'posJug'
-        // quedaba con el valor viejo y se desincronizaba de la casilla real (el
-        // jugador "rebotaba"/teletransportaba en el medio del tablero).
-        p->jugador.posJug = 1;
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
-        disminuirVida(&p->jugador);
-        escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
-        if(verVida(&p->jugador)== 0)
-            p->estado.Jpierde = 1;
-
-    }
-    if(p->estado.IDBandDesaparecido[0] && !p->estado.Operdido)
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
-        escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
-    }
-    else if(p->estado.IDBandDesaparecido[1])
-    {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[1]);
-        escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
     }
 
     if(p->estado.Jgana)
@@ -322,17 +277,85 @@ int  dibujarAnimacionEstado(tPartida *p)
         p->estado.Jpierde = 0;
         p->corriendo = 0;
     }
-
-    if(p->estado.Jpierde)
+    else
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde, JUGADORID);
-        escribirEnLog(&p->log, MSJ_JUGADORPIERDE);
-        p->corriendo = 0;
-    }
+        if(p->estado.BandAtaca)
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
+            escribirEnLog(&p->log, MSJ_BANDIDOATACA);
+        }
+
+        if(p->estado.BandAtaca && p->estado.Operdido)
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FROASISPE, animOasisPerdido, JUGADORID);
+            escribirEnLog(&p->log, MSJ_OASISPERDIDO);
+
+            if(p->estado.Bandidos > 1)
+            {
+                if(p->estado.IDBandDesaparecido[0])
+                {
+                    ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
+                    escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+                }
+                ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDAT, animBandidoAtaca, JUGADORID);
+                escribirEnLog(&p->log, MSJ_BANDIDOATACA);
+            }
+        }
+
+        if(p->estado.JpierdeVida)
+        {
+            // El jugador vuelve al Campamento Inicial (casilla 1). 'posJug' esta en
+            // sincronia con la casilla real, asi que este desplazamiento la lleva a 1.
+            mov = (p->jugador.posJug - 1) * - 1;
+            if(p->estado.Tactiva)
+            {
+                idAturIzq = obtenerIdElementoPorTipo(&p->tablero, ATURDIDOIZQ);
+                idAturDer = obtenerIdElementoPorTipo(&p->tablero, ATURDIDODER);
+                moverElementoPorId(&p->tablero, idAturIzq, mov, p->config.cant_pos);
+                moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
+                moverElementoPorId(&p->tablero, idAturDer, mov, p->config.cant_pos);
+            }
+            else
+                moverElementoPorId(&p->tablero, JUGADORID, mov, p->config.cant_pos);
+            // Mantener la posicion logica sincronizada con la ficha: sin esto, 'posJug'
+            // quedaba con el valor viejo y se desincronizaba de la casilla real (el
+            // jugador "rebotaba"/teletransportaba en el medio del tablero).
+            p->jugador.posJug = 1;
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGCAS1, animJugadorDaniado, JUGADORID);
+            disminuirVida(&p->jugador);
+            escribirEnLog(&p->log, MSJ_JUGADORDANIADO);
+            if(verVida(&p->jugador)== 0)
+                p->estado.Jpierde = 1;
+
+        }
+        if(p->estado.IDBandDesaparecido[0] && !p->estado.Operdido)
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[0]);
+            escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+        }
+        else if(p->estado.IDBandDesaparecido[1])
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRBANDES, animBandidoDesaparece, p->estado.IDBandDesaparecido[1]);
+            escribirEnLog(&p->log, MSJ_BANDIDODESAPARECE);
+        }
+
+
+
+        if(p->estado.Jpierde)
+        {
+            ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGPIERDE, animJugPierde, JUGADORID);
+            escribirEnLog(&p->log, MSJ_JUGADORPIERDE);
+            p->corriendo = 0;
+        }
+
+        }
 
     reiniciarEstado(&p->estado);
+
+    return 1;
 }
 
+// Cierra la partida y guarda
 int  finalizarPartida(tPartida *p)
 {
     dibujarFinDePartida(&p->tablero, &p->jugador, &p->log);
@@ -346,6 +369,8 @@ int  finalizarPartida(tPartida *p)
     vaciarLog(&p->log);
 
     destruirTablero(&p->tablero);
+
+    return 1;
 }
 
 

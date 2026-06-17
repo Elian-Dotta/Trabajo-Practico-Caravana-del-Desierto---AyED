@@ -1,3 +1,4 @@
+// === Partida: coordina el loop del juego ===
 #ifndef PARTIDA_H_
 #define PARTIDA_H_
 
@@ -17,7 +18,6 @@
 
 #define PASO 1
 
-#define TAM 50
 
 #define MSJ_PUNTOS              "El jugador ha obtenido un premio\n"
 #define MSJ_VIDA                "El jugador ha obtenido una vida extra\n"
@@ -31,6 +31,7 @@
 #define MSJ_JUGADORGANA         "FELICITACIONES, GANASTE LA PARTIDA"
 #define MSJ_JUGADORPIERDE       "El jugador ha perdido la partida"
 
+// Estado completo de una partida
 typedef struct
 {
     tTablero tablero;

@@ -1,7 +1,9 @@
+// === Modulo casilla: elementos dentro de una posicion ===
 #include "casilla.h"
 #include "consola.h"
 #include "animacion.h"
 
+// Crea una casilla vacia
 tCasilla crearCasilla()
 {
     tCasilla cas;
@@ -11,8 +13,10 @@ tCasilla crearCasilla()
     return cas;
 }
 
+// Callback: inserta elemento al final
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem  *elem = (tElem*)d;
 
@@ -22,8 +26,10 @@ int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 }
 
 
+// Callback: elimina elemento por id
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem  *elem = (tElem*)d;
 
@@ -32,8 +38,10 @@ int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
     return 1;
 }
 
+// Inserta evitando tipos duplicados
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *elem = (tElem*)d;
     int ret;
@@ -45,8 +53,10 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     return ret;
 }
 
+// Inserta a la izquierda de otro
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista; (void)tamDato;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
@@ -61,8 +71,10 @@ int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     return ret;
 }
 
+// Inserta a la derecha de otro
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista; (void)tamDato;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
@@ -78,8 +90,10 @@ int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDa
 }
 
 
+// Cambia el tipo de un elemento
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista; (void)tamDato;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
@@ -94,18 +108,22 @@ int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato
     return ret;
 }
 
+// Callback: elimina elemento por tipo
 int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
+    (void)tamLista;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem  *elem = (tElem*)d;
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
-    
+
     return 1;
 }
 
+// Callback: reemplaza el tipo
 int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
 {
+    (void)tamElem; (void)tamDato;
     tElem *elemAct = *act;
     tElem *elemNue = d;
 
@@ -114,6 +132,7 @@ int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
     return 1;
 }
 
+// Reglas de que puede convivir
 int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGLAS NUEVAS DESDE ACA
 {
     tElem *elemAct = (tElem*)a;
@@ -143,6 +162,7 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
            : -1;
 }
 
+// Prioridad de dibujo de cada tipo
 int prioridadElem(char tipo)
 {
     switch(tipo)
@@ -180,6 +200,7 @@ int prioridadElem(char tipo)
     }
 }
 
+// Compara: casilla contiene ese id
 int  cmpCasIdElem(const void *a, const void *b)
 {
     tCasilla *cas = (tCasilla*)a;
@@ -193,6 +214,7 @@ int  cmpCasIdElem(const void *a, const void *b)
         return 1;
 }
 
+// Compara: casilla contiene ese tipo
 int  cmpCasTipoElem(const void *a, const void *b)
 {
     tCasilla *cas = (tCasilla*)a;
@@ -206,6 +228,7 @@ int  cmpCasTipoElem(const void *a, const void *b)
         return 1;
 }
 
+// Compara dos elementos por id
 int  cmpIdElem(const void *a, const void *b)
 {
     tElem *e1 = (tElem*)a;
@@ -214,6 +237,7 @@ int  cmpIdElem(const void *a, const void *b)
     return e1->id_elem - e2->id_elem;
 }
 
+// Compara dos elementos por tipo
 int  cmpTipoElem(const void *a, const void *b)
 {
     tElem *e1 = (tElem*)a;
@@ -222,6 +246,7 @@ int  cmpTipoElem(const void *a, const void *b)
     return prioridadElem(e1->tipo_elem) - prioridadElem(e2->tipo_elem);
 }
 
+// Compara: casilla tiene ambos tipos
 int  cmpCasTipos(const void *a, const void *b)
 {
     tCasilla* cas = (tCasilla*)a;
@@ -238,6 +263,7 @@ int  cmpCasTipos(const void *a, const void *b)
     return tiene1 && tiene2;
 }
 
+// Numera la casilla y sus elementos
 void asignarNroCasilla(void *a, void *contexto)
 {
     tCasilla *casilla = (tCasilla*)a;
@@ -247,6 +273,7 @@ void asignarNroCasilla(void *a, void *contexto)
     (*nroCasilla)++;
 }
 
+// Asigna numero de casilla al elemento
 void asignarNroCasElem(void *a, void *contexto)
 {
     tElem *elem = (tElem*)a;
@@ -256,6 +283,7 @@ void asignarNroCasElem(void *a, void *contexto)
 }
 
 
+// Callback: dibuja una casilla
 void mostrarCasilla(const void *pl)
 {
     const tCasilla *casilla = (const tCasilla*)pl;
@@ -267,6 +295,7 @@ void mostrarCasilla(const void *pl)
     mostrar(buffer);
 }
 
+// Callback: dibuja un elemento
 void mostrarElemento(const void *elemVoid)
 {
     tElem *elem = (tElem*)elemVoid;
@@ -276,6 +305,7 @@ void mostrarElemento(const void *elemVoid)
 }
 
 
+// Recorre la casilla buscando bandidos
 void calcularMovBandido(void *pl, void* contexto)
 {
     tCasilla *cas = (tCasilla*)pl;
@@ -283,6 +313,7 @@ void calcularMovBandido(void *pl, void* contexto)
     recorrerLista(cas, buscarYCalcularBandido, contexto);
 }
 
+// Genera el movimiento de un bandido
 void buscarYCalcularBandido(void *e, void *contexto)
 {
     tElem *elem = (tElem*)e;
@@ -316,6 +347,7 @@ void buscarYCalcularBandido(void *e, void *contexto)
     }
 }
 
+// Menor distancia en ruta circular
 int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado){
     // DEVUELVE LA MENOR DISTANCIA ENTRE DOS ELEMENTOS, SI ESA MENOR DISTANCIA SE ENCUENTRA
     // YENDO DE DE LA POS ACTUAL A IZQUIERDA, LA DEVUELVE EN NEGATIVO
@@ -326,12 +358,14 @@ int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantida
     return der < izq? der : (-1)*izq;
 }
 
+// Distancias por izquierda y derecha
 void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int* der, int* izq)
 {
     *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas; //distancia yendo de izquierda a derecha
     *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas; //distancia yendo de derecha a izquierda
 }
 
+// Actualiza el estado segun la casilla
 void cambiarEstado(void *pl, void* estado)
 {
     tLista *lista = (tLista*)pl;
@@ -388,6 +422,7 @@ void cambiarEstado(void *pl, void* estado)
 
 
 
+// Aplica el efecto de cada elemento
 void modEstado(void* e, void* est)
 {
     tEstado *estado = (tEstado*)est;
@@ -427,9 +462,39 @@ void modEstado(void* e, void* est)
     }
 }
 
+// Callback: acumula tipos en buffer
+void acumularTipoElem(void *elemVoid, void *bufVoid)
+{
+    tElem *elem = (tElem*)elemVoid;
+    char  *buf  = (char*)bufVoid;
+    unsigned n  = strlen(buf);
 
+    buf[n]     = elem->tipo_elem;
+    buf[n + 1] = '\0';
+}
+
+// Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
+// Escribe una casilla en el archivo
+void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
+{
+    tCasilla *casilla = (tCasilla*)casillaVoid;
+    FILE     *arch    = (FILE*)archVoid;
+    char      contenido[TAM_BUFFER];
+
+    contenido[0] = '\0';
+    recorrerLista(casilla, acumularTipoElem, contenido);
+
+    if(contenido[0] == '\0')
+        fprintf(arch, "[.]");          // posicion vacia / ruta despejada
+    else
+        fprintf(arch, "[%s]", contenido);
+}
+
+
+// Libera los elementos de la casilla
 void destruirCasilla(void **pl, void* contexto)
 {
+    (void)contexto;
     tCasilla *cas = (tCasilla*)pl;
     vaciarLista(cas);
 }

@@ -1,8 +1,10 @@
+// === Movimiento: dado y desplazamientos ===
 #ifndef MOVIMIENTO_H_
 #define MOVIMIENTO_H_
 
 #include <stdlib.h>
 
+// Movimiento (id, direccion, cantidad)
 typedef struct
 {
     int  id;

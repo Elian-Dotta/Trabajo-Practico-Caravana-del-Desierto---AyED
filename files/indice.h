@@ -1,3 +1,4 @@
+// === Indice: entradas del ABB de jugadores ===
 #ifndef INDICE_H_
 #define INDICE_H_
 
@@ -5,12 +6,14 @@
 #include <stdlib.h>
 #include "arbol.h"
 
+// Entrada de indice por nombre
 typedef struct
 {
     char     nombre[31];
     unsigned indiceRegistro;
 } tIndiceNombre;     // clave de busqueda: nombre ; valor: indice de registro en jugadores
 
+// Entrada de indice por nickname
 typedef struct
 {
     char     nickname[11];

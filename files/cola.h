@@ -1,3 +1,4 @@
+// === Cola: FIFO de movimientos ===
 #ifndef COLA_H_
 #define COLA_H_
 
@@ -6,6 +7,7 @@
 #include "nodos.h"
 
 
+// Cola con puntero al primero y ultimo
 typedef struct
 {
     tNodo *pri,

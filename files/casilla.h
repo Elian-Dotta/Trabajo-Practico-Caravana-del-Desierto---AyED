@@ -1,3 +1,4 @@
+// === Casilla: elementos dentro de una posicion ===
 #ifndef CASILLA_H_
 #define CASILLA_H_
 
@@ -25,6 +26,7 @@
 
 typedef tLista tCasilla;
 
+// Elemento del tablero (tipo, id, casilla)
 typedef struct
 {
     int  id_elem;
@@ -82,6 +84,9 @@ int compararIDtElem(const void *voidE1, const void *voidE2);
 int compararTipotElem(const void *voidE1, const void *voidE2);
 int elementoEnCasilla(const void *voidCasilla, const void* voidIDElemento);
 int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantidadCasillas, int dado);
+
+void acumularTipoElem(void *elemVoid, void *bufVoid);
+void escribirCasillaArchivo(void *casillaVoid, void *archVoid);
 
 /*
 void accionCasillaACadena(void *e1, void *voidBuffer);

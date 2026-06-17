@@ -1,3 +1,4 @@
+// === Modulo menu: menus genericos e ingreso ===
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -5,6 +6,7 @@
 #include "menu.h"
 #include "consola.h"
 
+// Inicia jugador y menu principal
 void juego()
 {
     //mostrar("Caravana Del Desierto\n");
@@ -18,6 +20,7 @@ void juego()
     menuPrincipal(&jugador);
 }
 
+// Bucle del menu principal
 void menuPrincipal(tJugador *jugador)
 {
     char opcion;
@@ -45,6 +48,7 @@ void menuPrincipal(tJugador *jugador)
 
 }
 
+// Menu generico que valida la opcion
 char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 {
     char opcion;
@@ -76,6 +80,7 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
     return opcion;
 }
 
+// Lee un texto del usuario
 void ingresarDato(const char* msj, char *out)
 {
     mostrar(msj);
@@ -85,6 +90,7 @@ void ingresarDato(const char* msj, char *out)
 
 
 
+// Menu generico de opciones numericas
 int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
 {
     int opcion;
@@ -102,6 +108,8 @@ int menuNum(const char* msj, int cantOpciones, int conErr, const char *msjErr)
 
         if(scanf("%d", &opcion) != 1)
             opcion = 0;
+
+        limpiarBuffer(); // consume el resto de la linea (evita el '\n' que rompia el fgets siguiente)
 
         valido = (opcion >= 1 && opcion <= cantOpciones);
         priVez = 0;

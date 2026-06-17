@@ -1,9 +1,11 @@
+// === Modulo animacion: secuencias de cambio de estado ===
 #include "animacion.h"
 
 
+// Reproduce una animacion cuadro a cuadro
 void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned frame, Animacion anim, unsigned IDAncla)
 {
-    int i;
+    unsigned i;
     for( i = 1; i <= frame; i++)
     {
         wait(1);
@@ -13,6 +15,7 @@ void ejecutarAnimacion (tTablero *t, tJugador *j, tEstado *e, tLog *l, unsigned 
     }
 }
 
+// Animacion: captura de premio
 void animPremio(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -38,6 +41,7 @@ void animPremio(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: oasis obtenido (escudo)
 void animOasisObtenido(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -71,6 +75,7 @@ void animOasisObtenido(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: oasis perdido
 void animOasisPerdido(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -94,6 +99,7 @@ void animOasisPerdido(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: tormenta se activa
 void animTorSeActiva(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -148,6 +154,7 @@ void animTorSeActiva(tTablero *tablero, unsigned frame)
 
     }
 }
+// Animacion: tormenta finaliza
 void animTorFinaliza(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -163,6 +170,7 @@ void animTorFinaliza(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: vida extra
 void animVidaExtra(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -187,6 +195,7 @@ void animVidaExtra(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: bandido ataca
 void animBandidoAtaca(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -206,6 +215,7 @@ void animBandidoAtaca(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: bandido desaparece
 void animBandidoDesaparece(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -222,6 +232,7 @@ void animBandidoDesaparece(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: el jugador gana
 void animJugGana(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -245,6 +256,7 @@ void animJugGana(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: jugador danado
 void animJugadorDaniado(tTablero *tablero, unsigned frame)
 {
     switch(frame)
@@ -258,6 +270,7 @@ void animJugadorDaniado(tTablero *tablero, unsigned frame)
     }
 }
 
+// Animacion: el jugador pierde
 void animJugPierde(tTablero *tablero, unsigned frame)
 {
     switch(frame)

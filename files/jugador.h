@@ -1,3 +1,4 @@
+// === Jugador: datos y primitivas ===
 #ifndef JUGADOR_H_
 #define JUGADOR_H_
 
@@ -11,12 +12,14 @@
 #define TAM 128
 #define MAX_MOV_LINEA 10
 
+// Datos del jugador y su historico
 typedef struct sJugador
 {
     unsigned vida,
              puntaje,
              cantMov,
              posJug;
+    int      dado;
     char     nombre[31],
              nickname[11];
     tCola    hisMovJugador;
@@ -42,6 +45,9 @@ unsigned verPosJugador(const tJugador *j);
 void guardarNombreYNick(tJugador *j, const char *nombre, const char* nick);
 const char* verNombre(const tJugador *j);
 const char* verNick(const tJugador *j);
+
+void asignarDado(tJugador *j, int dado);
+int  verDado(const tJugador *j);
 
 void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
 void mostrarMovimientosJugador(tJugador *j);

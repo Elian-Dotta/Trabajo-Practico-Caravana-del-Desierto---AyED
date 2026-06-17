@@ -1,3 +1,4 @@
+// === Nodos: estructuras base de listas y arbol ===
 #ifndef NODOS_H
 #define NODOS_H
 

@@ -1,3 +1,4 @@
+// === Config: parametros del juego ===
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
@@ -5,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Parametros leidos de config.txt
 typedef struct
 {
     int cant_pos;

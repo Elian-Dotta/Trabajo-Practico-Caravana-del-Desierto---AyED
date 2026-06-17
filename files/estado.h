@@ -1,6 +1,8 @@
+// === Estado: flags del turno ===
 #ifndef ESTADO_H_
 #define ESTADO_H_
 
+// Flags del estado del juego
 typedef struct Estado
 {
     int Oobtenido,

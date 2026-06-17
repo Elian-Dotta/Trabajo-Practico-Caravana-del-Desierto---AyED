@@ -1,3 +1,4 @@
+// === Log: mensajes bajo la escena ===
 #ifndef LOG_H_
 #define LOG_H_
 
@@ -10,6 +11,7 @@
 
 #define MAX_MSJ 6
 
+// Log de mensajes de la partida
 typedef struct
 {
     tLista   mensajes; // DEBE SER UNA LISTA PARA NO LIBERAR LOS ELEMENTOS YA QUE DEBEN SER MOSTRADOS DE NUEVO

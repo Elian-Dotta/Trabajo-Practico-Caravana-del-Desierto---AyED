@@ -1,6 +1,8 @@
+// === Modulo consola: render y encapsula printf ===
 #include "consola.h"
 
 
+// Dibuja tablero, HUD y log
 void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *log)
 {
     limpiarPantalla();
@@ -22,6 +24,7 @@ void dibujarEscena(tTablero *tablero, tJugador *jugador, tEstado *estado, tLog *
     mostrarLog(log);
 }
 
+// Pantalla final con estadisticas
 void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log)
 {
     limpiarPantalla();
@@ -46,12 +49,14 @@ void dibujarFinDePartida(tTablero *tablero, tJugador *jugador, tLog *log)
     getchar();
 }
 
+// Encapsula printf de un texto
 void mostrar(const char *msj)
 {
     if(msj[0] != '\0')
         printf("%s", msj);
 }
 
+// Muestra vidas, puntaje y movimientos
 void mostrarEstadisticas(tJugador *j)
 {
     printf("Vidas: %u\t", j->vida);
@@ -59,12 +64,14 @@ void mostrarEstadisticas(tJugador *j)
     printf("Cantidad de movimientos: %u", j->cantMov);
 }
 
+// Imprime el titulo del juego
 void mostrarTitulo()
 {
     printf("CARAVANA DEL DESIERTO");
 }
 
 
+// Imprime una linea separadora
 void mostrarSeparador()
 {
     // PARA HACER VARIABLE USAR FOR
@@ -72,6 +79,7 @@ void mostrarSeparador()
 }
 
 
+// Muestra vidas, puntaje, oasis, tormenta
 void mostrarHUD(tJugador* jugador, tEstado* estado)
 {
     //vidas, puntaje, cant mov, oasis si/no
@@ -85,18 +93,25 @@ void mostrarHUD(tJugador* jugador, tEstado* estado)
         printf("NO\n");
     printf("Tapado por Arena: ");
     if(estado->tieneTormenta == 1)
-        printf("SI");
+        printf("SI\n");
+    else
+        printf("NO\n");
+    printf("Dado obtenido: ");
+    if(verDado(jugador))
+        printf("%d", verDado(jugador));
     else
         printf("NO");
 }
 
 
+// Descarta lo que queda en stdin
 void limpiarBuffer(void)
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+// Limpia la pantalla de la consola
 void limpiarPantalla()
 {
     printf("\033[2J\033[H");

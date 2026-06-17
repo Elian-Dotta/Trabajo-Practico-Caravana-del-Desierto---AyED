@@ -1,7 +1,9 @@
+// === Modulo arbol: ABB (indice de jugadores) ===
 #include <stdio.h>
 #include "arbol.h"
 
 
+// Inicializa el arbol vacio
 void crearArbolBinBusq(tArbolBinBusq *p)
 {
     *p = NULL;
@@ -48,6 +50,7 @@ void recorrerEnOrdenSimpleArbolBinBusq(const tArbolBinBusq *p, void *params,
 }
 
 
+// Busca el nodo de una clave
 static tNodoArbol **buscarNodoArbolBinBusq(const tArbolBinBusq *p, const void *d, Cmp cmp)
 {
     int rc;
@@ -65,6 +68,7 @@ static tNodoArbol **buscarNodoArbolBinBusq(const tArbolBinBusq *p, const void *d
 }
 
 
+// Busca y copia un elemento
 int buscarElemArbolBinBusq(const tArbolBinBusq *p, void *d, unsigned tam, Cmp cmp)
 {
     if(!(p = buscarNodoArbolBinBusq(p, d, cmp)))
@@ -74,6 +78,7 @@ int buscarElemArbolBinBusq(const tArbolBinBusq *p, void *d, unsigned tam, Cmp cm
 }
 
 
+// Lee un registro del archivo
 static unsigned leerDesdeArchivoBin(void **d, void *pf, unsigned pos, void *params)
 {
     unsigned tam = *((unsigned *)params);
@@ -115,6 +120,7 @@ static int cargarDesdeDatosOrdenadosRec(tArbolBinBusq *p, void *ds,
 }
 
 
+// Carga el arbol desde archivo ordenado
 int cargarArchivoBinOrdenadoArbolBinBusq(tArbolBinBusq *p, const char *path,
                                          unsigned tamInfo)
 {

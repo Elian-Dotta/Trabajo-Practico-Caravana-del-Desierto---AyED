@@ -1,6 +1,7 @@
 #include "lista_simple_enlace.h"
 
 
+
 int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar){
 
     tNodo *nuevoNodo;
@@ -22,6 +23,7 @@ int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompara
 }
 
 /*
+// Saca un nodo por clave
 int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, int (*comparar)(const void*, const void*)){
 
     Esta es una funcion que recibe una lista, recibe la direccion de memoria de un puntero a nodo de destino y una funcion de comparacion.
@@ -48,6 +50,7 @@ int desenlazarNodoPorClave(tLista *lista, tNodo **destNodo, const void *clave, i
 */
 
 /*
+// Reinserta un nodo en orden
 int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*, const void*)){
 
     Funcion que recibe por parametro la lista, la direccion de memoria de un nodo y una funcion de comparacion.
@@ -70,6 +73,7 @@ int enlazarNodoOrdenado(tLista *lista, tNodo *nodo, int (*comparar)(const void*,
     return 1;
 }
 */
+
 
 void recorrerLista(tLista *lista, Accion accion, void *contexto) // LUCAS
 { //Nombre anterior, mapLista
@@ -118,6 +122,7 @@ void mostrarLista(const tLista *lista, Mostrar mostrar)
 }
 */
 
+
 int mostrarLista(const tLista *p, Mostrar mostrar) // ME QUEDO CON ESTA IMPLEMENTACION QUE DEVUELVE EL NUMERO DE MOSTRADOS.
 {
     int cant = 0;
@@ -131,10 +136,12 @@ int mostrarLista(const tLista *p, Mostrar mostrar) // ME QUEDO CON ESTA IMPLEMEN
     return cant;
 }
 
+
 unsigned minimo(unsigned a, unsigned b)
 {
     return a < b ? a : b;
 }
+
 
 
 void crearLista(tLista *p)
@@ -142,10 +149,12 @@ void crearLista(tLista *p)
     *p = NULL;
 }
 
-int  listaVacia(tLista *p)
+
+int  listaVacia(const tLista *p)
 {
     return *p == NULL;
 }
+
 
 int vaciarLista(tLista *p)
 {
@@ -161,6 +170,7 @@ int vaciarLista(tLista *p)
     }
     return cant;
 }
+
 
 
 int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
@@ -185,6 +195,7 @@ int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
 }
 
 
+
 int sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes)
 {
     tNodo *aux = *p;
@@ -198,6 +209,7 @@ int sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes)
     return 1;
 }
 
+
 int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
 {
     if(*p == NULL)
@@ -210,6 +222,7 @@ int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
     *p = NULL;
     return 1;
 }
+
 
 int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
 {
@@ -235,6 +248,7 @@ int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
     return 1;
 }
 
+
 int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){
     tNodo *aux = *lista;
     while(aux){
@@ -247,6 +261,7 @@ int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato
     }
     return 0;
 }
+
 
 int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
 {
@@ -262,6 +277,7 @@ int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
     memcpy(dest, aux->info, minimo(tam, aux->tamInfo));
     return 1;
 }
+
 
 
 int insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum)
@@ -292,6 +308,7 @@ int insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCo
 }
 
 
+
 int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos)
 {
     tNodo *nue;
@@ -315,6 +332,7 @@ int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos)
 }
 
 
+
 int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum)
 {
     while(pos > 0 && *lista)
@@ -329,6 +347,7 @@ int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, A
 
     return 1;
 }
+
 
 
 int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)

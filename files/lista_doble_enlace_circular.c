@@ -1,5 +1,7 @@
+// === Modulo ListaDE: lista circular doble ===
 #include "lista_doble_enlace_circular.h"
 /*
+// Libera la lista (auxiliar)
 int vaciarListaC(tListaDE *lista)
 {
 
@@ -28,6 +30,7 @@ int vaciarListaC(tListaDE *lista)
 }
 */
 
+
 int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 {
     tNodoDE *auxNodo;
@@ -48,7 +51,7 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
     if(NULL == *lista){
         auxNodo->sig = auxNodo;
         auxNodo->ant = auxNodo;
-        *lista = auxNodo; // se insertaria al principio de lista
+        *lista = auxNodo;
     }else{
         tNodoDE *ultimo  = (*lista)->ant;
 
@@ -64,12 +67,12 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 
 
 
+
 void crearListaDE(tListaDE *pl)
 {
     *pl = NULL;
 }
 
-//int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp)
 
 int listaVaciaDE(const tListaDE *pl)
 {
@@ -95,22 +98,23 @@ int insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo)
     memcpy(nue->info, d, tamInfo);
     nue->tamInfo = tamInfo;
 
-    if(*pl == NULL)                  // lista vacia: el nodo se apunta a si mismo
+    if(*pl == NULL)
     {
         nue->sig = nue;
         nue->ant = nue;
     }
-    else                            // insertar entre el cursor y su siguiente
+    else
     {
         nue->ant = *pl;
         nue->sig = (*pl)->sig;
         (*pl)->sig->ant = nue;
         (*pl)->sig = nue;
-//        accion((*pl)->info,contexto);
+
     }
-    *pl = nue;                       // el cursor queda en el nuevo nodo
+    *pl = nue;
     return 1;
 }
+
 
 
 int vaciarListaDE(tListaDE *pl)
@@ -121,7 +125,7 @@ int vaciarListaDE(tListaDE *pl)
     if(aux == NULL)
         return 0;
 
-    (*pl)->ant->sig = NULL;          // rompo la circularidad para recorrer lineal
+    (*pl)->ant->sig = NULL;
     while(aux)
     {
         tNodoDE *sig = aux->sig;
@@ -199,6 +203,7 @@ int actualizarPosRelativaListaDE(tListaDE *pl, void *d, unsigned tamInfo,
 
 int buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp)
 {
+    (void)tam;
     tNodoDE *aux = *pl;
     int primero = 1;
 
@@ -216,6 +221,7 @@ int buscarPorClaveListaDE(tListaDE *pl, const void *clave, unsigned tam, Cmp cmp
     }
     return 0;
 }
+
 
 
 void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto){
