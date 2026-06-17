@@ -1,6 +1,6 @@
-cantidad de posiciones:30
-vidas iniciales:1
-bandidos:10
+cantidad de posiciones:10
+vidas iniciales:2
+bandidos:3
 cantidad maxima de premios:4
 cantidad vidas extras:2
 cantidad oasis:2
