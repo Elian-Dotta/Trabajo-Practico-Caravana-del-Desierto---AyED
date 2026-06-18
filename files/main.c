@@ -1,9 +1,10 @@
+// === Modulo main: punto de entrada ===
 #include "main.h"
 
+// Arranca el juego
 int main()
 {
-    printf("Caravana Del Desierto\n");
-    //LLAMA A MENU
+    juego();
 
     return 0;
 }

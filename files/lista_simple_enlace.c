@@ -1,0 +1,277 @@
+#include "lista_simple_enlace.h"
+
+
+
+int insertarOrdenado(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar){
+
+    tNodo *nuevoNodo;
+
+    while((*lista) && comparar((*lista)->info, dato)<0) // Por default ordena de menor a mayor
+        lista = &(*lista)->sig;
+
+
+    if( NULL==(nuevoNodo=(tNodo*)malloc(sizeof(tNodo))) || NULL==(nuevoNodo->info=(void*)malloc(tamDato)) ){
+        free(nuevoNodo);
+        return 0;
+    } //CREAR_NODO(nuevoNodo,tamDato); // Usando Macro
+
+    memcpy(nuevoNodo->info, dato, tamDato);
+    nuevoNodo->tamInfo=tamDato;
+    nuevoNodo->sig = *lista;
+    *lista = nuevoNodo;
+    return 1;
+}
+
+void recorrerLista(tLista *lista, Accion accion, void *contexto)
+{ //Nombre anterior, mapLista
+    tNodo *aux = *lista;
+    while(aux)
+    {
+        accion(aux->info, contexto);
+        aux = aux->sig;
+    }
+}
+
+int mostrarLista(const tLista *p, Mostrar mostrar)
+{
+    int cant = 0;
+
+    while(*p)
+    {
+        mostrar((*p)->info);
+        p = &(*p)->sig;
+        cant++;
+    }
+    return cant;
+}
+
+
+unsigned minimo(unsigned a, unsigned b)
+{
+    return a < b ? a : b;
+}
+
+
+
+void crearLista(tLista *p)
+{
+    *p = NULL;
+}
+
+int  listaVacia(const tLista *p)
+{
+    return *p == NULL;
+}
+
+
+int vaciarLista(tLista *p)
+{
+    int cant = 0;
+    while(*p)
+    {
+        tNodo *aux = *p;
+
+        cant++;
+        *p = aux->sig;
+        free(aux->info);
+        free(aux);
+    }
+    return cant;
+}
+
+
+
+int insertarAlFinalLista(tLista *p, const void *d, unsigned cantBytes)
+{
+    tNodo *nue;
+
+    if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+       (nue->info = malloc(cantBytes)) == NULL)
+    {
+        free(nue);
+        return 0;
+    }
+
+    while(*p)
+        p = &(*p)->sig;
+
+    memcpy(nue->info, d, cantBytes);
+    nue->tamInfo = cantBytes;
+    nue->sig = NULL;
+    *p = nue;
+    return 1;
+}
+
+
+
+int sacarPrimeroLista(tLista *p, void *d, unsigned cantBytes)
+{
+    tNodo *aux = *p;
+
+    if(aux == NULL)
+        return 0;
+    *p = aux->sig;
+    memcpy(d, aux->info, minimo(cantBytes, aux->tamInfo));
+    free(aux->info);
+    free(aux);
+    return 1;
+}
+
+
+int sacarUltimoLista(tLista *p, void *d, unsigned cantBytes)
+{
+    if(*p == NULL)
+        return 0;
+    while((*p)->sig)
+        p = &(*p)->sig;
+    memcpy(d, (*p)->info, minimo(cantBytes, (*p)->tamInfo));
+    free((*p)->info);
+    free(*p);
+    *p = NULL;
+    return 1;
+}
+
+
+int eliminarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
+{
+    tNodo *elim;
+
+    while (*lista && cmp((*lista)->info, d) != 0)
+    {
+        lista = &(*lista)->sig;
+    }
+
+    if (!*lista)
+    {
+        return 0;
+    }
+
+    elim = *lista;
+    *lista = elim->sig;
+
+    memcpy(d, elim->info, minimo(tamDato, elim->tamInfo));
+    free(elim->info);
+    free(elim);
+
+    return 1;
+}
+
+
+int buscarPorClaveEnLista(const tLista *lista, const void* clave, void *destDato, unsigned tamDest, tCompararFn comparar){
+    tNodo *aux = *lista;
+    while(aux){
+        if(0 == comparar(aux->info, clave)){
+            if(destDato)
+                memcpy(destDato, aux->info, minimo(tamDest, aux->tamInfo));
+            return 1;
+        }
+        aux = aux->sig;
+    }
+    return 0;
+}
+
+
+int buscarPorPosicionLista(tLista *lista, void *dest, unsigned tam, int pos)
+{
+    tNodo *aux = *lista;
+
+    while(pos > 0 && aux)
+    {
+        aux = aux->sig;
+        pos--;
+    }
+    if(aux == NULL)
+        return 0;
+    memcpy(dest, aux->info, minimo(tam, aux->tamInfo));
+    return 1;
+}
+
+
+
+int insertarOrdenadoLista(tLista *lista, const void *dato, unsigned tamDato, tCompararFn comparar, int conDup, Acumular acum)
+{
+    tNodo *nue;
+
+    while(*lista && comparar((*lista)->info, dato) < 0)
+        lista = &(*lista)->sig;
+
+    if(!conDup && *lista && comparar((*lista)->info, dato) == 0)
+    {
+        if(acum)
+            return acum(&(*lista)->info, &(*lista)->tamInfo, (void *)dato, tamDato);
+        return 0;
+    }
+
+    if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+       (nue->info = malloc(tamDato)) == NULL)
+    {
+        free(nue);
+        return 0;
+    }
+    memcpy(nue->info, dato, tamDato);
+    nue->tamInfo = tamDato;
+    nue->sig = *lista;
+    *lista = nue;
+    return 1;
+}
+
+
+
+int insertarEnPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos)
+{
+    tNodo *nue;
+
+    while(pos > 0 && *lista)
+    {
+        lista = &(*lista)->sig;
+        pos--;
+    }
+    if((nue = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+       (nue->info = malloc(tamDato)) == NULL)
+    {
+        free(nue);
+        return 0;
+    }
+    memcpy(nue->info, d, tamDato);
+    nue->tamInfo = tamDato;
+    nue->sig = *lista;
+    *lista = nue;
+    return 1;
+}
+
+
+
+int actualizarPosLista(tLista *lista, void *d, unsigned tamDato, unsigned pos, Acumular acum)
+{
+    while(pos > 0 && *lista)
+    {
+        lista = &(*lista)->sig;
+        pos--;
+    }
+    if(*lista == NULL)
+        return 0;
+
+    acum(&(*lista)->info, &(*lista)->tamInfo, d, tamDato);
+
+    return 1;
+}
+
+
+
+int buscarPorClaveLista(tLista *lista, void *d, unsigned tamDato, Cmp cmp)
+{
+    tNodo *aux = *lista;
+    int pos = 0;
+
+    while(aux)
+    {
+        if(cmp(aux->info, d) == 0)
+        {
+            memcpy(d, aux->info, minimo(aux->tamInfo,tamDato));
+            return pos;
+        }
+        aux = aux->sig;
+        pos++;
+    }
+    return -1;
+}

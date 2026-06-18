@@ -1,6 +1,58 @@
+// === Jugador: datos y primitivas ===
 #ifndef JUGADOR_H_
 #define JUGADOR_H_
 
+#include <stdio.h>
+#include <string.h>
+
+#include "cola.h"
+#include "movimiento.h"
+
+
+#define TAM 128
+#define MAX_MOV_LINEA 10
+
+// Datos del jugador y su historico
+typedef struct sJugador
+{
+    unsigned vida,
+             puntaje,
+             cantMov,
+             posJug;
+    int      dado;
+    char     nombre[31],
+             nickname[11];
+    tCola    hisMovJugador;
+}tJugador;
+
+
+void inicializarJugador(tJugador* j);
+
+void asignarVida(tJugador *j, const unsigned vida);
+void aumentarVida(tJugador* j);
+void disminuirVida(tJugador* j);
+unsigned verVida(const tJugador* j);
+
+void aumentarPuntaje(tJugador *j);
+unsigned verPuntaje(const tJugador *j);
+
+void aumentarMovimiento(tJugador *j);
+unsigned verMovimiento(const tJugador *j);
+
+void modificarPosJug(tJugador *j, int dir);
+unsigned verPosJugador(const tJugador *j);
+
+void guardarNombreYNick(tJugador *j, const char *nombre, const char* nick);
+const char* verNombre(const tJugador *j);
+const char* verNick(const tJugador *j);
+
+void asignarDado(tJugador *j, int dado);
+int  verDado(const tJugador *j);
+
+void guardarMovimientoJugador(tJugador *j, tMovimiento* mov);
+void mostrarMovimientosJugador(tJugador *j);
+
+void ingresarJugador(tJugador *j);
 
 
 #endif // JUGADOR_H_

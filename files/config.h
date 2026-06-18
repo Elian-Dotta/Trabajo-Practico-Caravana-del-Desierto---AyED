@@ -1,6 +1,12 @@
+// === Config: parametros del juego ===
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Parametros leidos de config.txt
 typedef struct
 {
     int cant_pos;
@@ -11,5 +17,7 @@ typedef struct
     int max_oasis;
     int max_tormenta;
 }tConfig;
+
+int cargarConfig(tConfig* config);
 
 #endif // CONFIG_H_
