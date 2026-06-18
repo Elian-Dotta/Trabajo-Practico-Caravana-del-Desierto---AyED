@@ -144,17 +144,6 @@ int  cmpRestriccionCasilla(const void *a, const void *b) // PODEMOS AGREGAR REGL
     if(elemNue->tipo_elem != BANDIDO && elemAct->tipo_elem == elemNue->tipo_elem)  // EVITAMOS QUE APAREZCAN TIPOS REPETIDOS EXCEPTUANDO EL BANDIDO
         return 0;
 
-    /*
-    #define INICIO 'I'
-    #define JUGADOR 'J'
-    #define SALIDA 'S'
-    #define BANDIDO 'B'
-    #define TORMENTA 'T'
-    #define PREMIO 'P'
-    #define OASIS 'O'
-    #define VIDAEXTRA 'V'
-    */
-
     // Un bandido nuevo nunca se considera "duplicado" (cmp != 0): asi pueden
     // apilarse varios bandidos en una misma casilla (la excepcion a tipos unicos).
     return elemNue->tipo_elem != BANDIDO
@@ -426,7 +415,7 @@ void cambiarEstado(void *pl, void* estado)
 void modEstado(void* e, void* est)
 {
     tEstado *estado = (tEstado*)est;
-    tElem *casilla = (tElem*)e;         // DEBERIA DE LLAMARSE ELEMENTO.
+    tElem *casilla = (tElem*)e;
 
     switch(casilla->tipo_elem)
     {
@@ -470,23 +459,32 @@ void acumularTipoElem(void *elemVoid, void *bufVoid)
     unsigned n  = strlen(buf);
 
     buf[n]     = elem->tipo_elem;
-    buf[n + 1] = '\0';
+    buf[n + 1] = ' ';
+    buf[n + 2] = '\0';
 }
 
 // Escribe una casilla en el archivo: [contenido] o [.] si esta vacia.
-void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
+void escribirCasillaArchivo(void *casillaVoid, void *ctxVoid)
 {
     tCasilla *casilla = (tCasilla*)casillaVoid;
-    FILE     *arch    = (FILE*)archVoid;
+
+    void **ctx = (void**)ctxVoid;
+
+    FILE     *arch    = (FILE*)ctx[0];
+    int *contador     = (int*)ctx[1];
     char      contenido[TAM_BUFFER];
 
+    (*contador)++;
     contenido[0] = '\0';
     recorrerLista(casilla, acumularTipoElem, contenido);
-
+    fprintf(arch, "%02d:", *contador);
     if(contenido[0] == '\0')
-        fprintf(arch, "[.]");          // posicion vacia / ruta despejada
+        fprintf(arch, ".\n");          // posicion vacia / ruta despejada
     else
-        fprintf(arch, "[%s]", contenido);
+    {
+        contenido[strlen(contenido) - 1] = '\0';
+        fprintf(arch, "[%s]\n", contenido);
+    }
 }
 
 

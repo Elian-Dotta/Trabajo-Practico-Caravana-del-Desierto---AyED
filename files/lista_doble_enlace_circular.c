@@ -1,35 +1,5 @@
 // === Modulo ListaDE: lista circular doble ===
 #include "lista_doble_enlace_circular.h"
-/*
-// Libera la lista (auxiliar)
-int vaciarListaC(tListaDE *lista)
-{
-
-    tNodoDE *actualNodo = *lista;
-    int cont = 0;
-
-    if(NULL == actualNodo)
-        return 0;
-
-    actualNodo = actualNodo->sig;
-
-    while(actualNodo != *lista){
-        tNodoDE *auxNodo = actualNodo;
-        free(auxNodo->info);
-        free(auxNodo);
-        actualNodo = actualNodo->sig;
-        cont++;
-    }
-
-    free(actualNodo->info);
-    free(actualNodo);
-
-    *lista = NULL;
-
-    return ++cont;
-}
-*/
-
 
 int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 {
@@ -66,8 +36,6 @@ int insertarAlFinalHead(tListaDE *lista, const void *dato, unsigned tamDato)
 }
 
 
-
-
 void crearListaDE(tListaDE *pl)
 {
     *pl = NULL;
@@ -81,7 +49,6 @@ int listaVaciaDE(const tListaDE *pl)
 
 
 int buscarPorClaveListaDE(tListaDE *lista, const void* clave, unsigned tam, Cmp cmp);
-
 
 
 
@@ -116,7 +83,6 @@ int insertarAlFinalDeListaDE(tListaDE *pl, const void *d, unsigned tamInfo)
 }
 
 
-
 int vaciarListaDE(tListaDE *pl)
 {
     tNodoDE *aux = *pl;
@@ -139,38 +105,6 @@ int vaciarListaDE(tListaDE *pl)
     return cant;
 }
 
-/*
-void mostrarListaDE(tListaDE *pl, Mostrar mostrar)
-{
-    tNodoDE *aux = *pl;
-    int primero = 1;
-
-    if(aux == NULL)
-        return;
-    while(primero || aux != *pl)
-    {
-        primero = 0;
-        mostrar(aux->info);
-        aux = aux->sig;
-    }
-}
-*/
-/*
-void recorrerListaDE(tListaDE *pl, Accion accion, void *contexto)
-{
-    tNodoDE *aux = *pl;
-    int primero = 1;
-
-    if(aux == NULL)
-        return;
-    while(primero || aux != *pl)
-    {
-        primero = 0;
-        accion(aux->info, contexto);
-        aux = aux->sig;
-    }
-}
-*/
 
 int actualizarPorClaveListaDE(tListaDE *pl, void *d, unsigned tamInfo, Cmp cmp, Acumular acum)
 {
@@ -251,21 +185,6 @@ void mostrarListaDE(tListaDE *pl, Mostrar mostrar){
     }while(nodoActual != *pl);
 }
 
-/*
-tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
-
-    tNodoDE *nodoActual = *lista;
-    if(NULL == *lista)
-        return NULL;
-    do{
-        if(0 == comparar(nodoActual->dato, clave))
-            return nodoActual;
-        nodoActual = nodoActual->proxNodo;
-    }while(nodoActual != *lista);
-
-    return NULL;
-}
-*/
 
 tNodoDE* buscarNodoPorClaveEnListaDE(const tListaDE *lista, const void* clave, Cmp comparar){
 

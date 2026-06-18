@@ -56,7 +56,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     crearCola(&p->movimientos);
 
     p->corriendo = 1;
-    /*
+
     mostrar("INICIANDO PARTIDA...\n");
     wait(1);
     mostrar("CARGANDO: 1%\n");
@@ -73,7 +73,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
     wait(0.2);
     mostrar("CARGANDO: 100%\n");
     wait(0.1);
-    */
+
     return 1;
 }
 
@@ -99,7 +99,7 @@ int  procesarEntrada(tPartida *p)
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
 
         scanf("%c", &enter);
-        pasos = tirarDado(1, 6);
+        pasos = tirarDado(6, 6);
         wait(0.3);
 
         sprintf(buffer, "Has sacado un %d!\n", pasos);

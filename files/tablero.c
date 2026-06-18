@@ -139,40 +139,6 @@ int  distribuirElementos(tTablero* tablero, int *contElem, tConfig config, tList
 
     return 1;
 
-/* // VERSION ANTERIOR, CON UNICO ELEMENTO POR CASILLA
-     CON NUMEROS ALEATORIOS PREDEFINIDOS PARA LA POSICION
-     CON ACCESO POR INDICE SIMIL VECTOR
-     CON LOGICA ANCLADA A LA FUNCION DE GENERACION
-
-    while(elemInsertados < cantElem)
-    {
-        numAle = (rand() % config.cant_pos - 1 ) + 1;
-        if(insertarOrdenado(&numAleatorios, &numAle, sizeof(int), cmpInt, 0, NULL))
-            elemInsertados++;
-    }
-
-    elemInsertados = 0;
-
-    while(elemInsertados < cantElem)
-    {
-        sacarDeCola(&numAleatorios, &pos, sizeof(int));
-        i = rand() % 5;
-        if(elemFaltantes[i])
-        {
-            elemFaltantes[i]--;
-            elem.id_elem = *idElem;
-            (*idElem)++;
-            elem.tipo_elem = elemTipo[i];
-
-            actualizarPosLista(tablero, &elem, sizeof(tElem), pos, insertarEnCasilla);
-            elemInsertados++;
-        }
-        else
-        {
-            ponerEnCola(&numAleatorios, &pos, sizeof(int));
-        }
-    }
-*/
 
 }
 
@@ -285,18 +251,6 @@ int  compararEnteros(const void *a, const void *b){
    return n1 - n2;
 }
 
-#if 0   // DUPLICADO de posicionarTablero (void) de arriba -> desactivado para que compile
-tTablero posicionarTablero(tTablero* tablero, int idElemPosicion){ //Recordar que tTablero es tNodo*
-/*
-    Funcion que devuelve la direccion de memoria del nodo que tiene en su listaSE un tElem de ID "idPosicion".
-        -> Para posicionar el nodoDE al inicio, este nodo sera aquel que en su listaSE (dentro del campo dato) tiene un elemento con ID 0.
-*/
-    if(NULL == *tablero)
-        return NULL;
-
-    return buscarNodoPorClaveEnListaDE(tablero, &idElemPosicion, elementoEnCasilla);
-}
-#endif
 
 // Muestra el tablero por pantalla
 void mostrarTablero(tTablero* tablero)
@@ -315,6 +269,8 @@ void mostrarTablero(tTablero* tablero)
 // Vuelca el tablero a caravana.txt
 int generarArchivoTablero(tTablero* tablero, const char *path)
 {
+    void *ctx[2];
+    int contador = 0;
     FILE *arch;
 
     if(NULL == *tablero)
@@ -322,51 +278,18 @@ int generarArchivoTablero(tTablero* tablero, const char *path)
     if((arch = fopen(path, "wt")) == NULL)
         return 0;
 
+    ctx[0] = arch;
+    ctx[1] = &contador;
+
     posicionarTablero(tablero, 0);     // arrancar desde el Inicio
-    recorrerListaDE(tablero, escribirCasillaArchivo, arch);
+    recorrerListaDE(tablero, escribirCasillaArchivo, ctx);
     fprintf(arch, "\n");
 
     fclose(arch);
     return 1;
 }
-/*
-void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice){
 
-    Esta es una funcion que recibe un buffer y transforma el tablero en una cadena de texto, que puede usarse
-    para mostrarla por stdout o bien para escribir el archivo caravana.txt de diferentes formas.
-    Tiene los valores de parametros:
-    -> Valores de Orientacion: 0 (Vertical) - 1 (Horizontal)
-    -> Valores de Indice: 0 (Sin habilitar) - 1 (Habilitado)
-    El buffer debe ser el adecuado en tam.
 
-    if(NULL == *tablero || NULL == buffer)
-        return;
-    if(0 != indice && 1 != indice)
-        return;
-    if(0 != orientacion && 1 != orientacion)
-        return;
-
-    switch(orientacion){
-        case 0: { // Vertical
-            if(!indice){
-                recorrerListaDE(tablero, convertirMapaACadenaVerticalSinIndice, buffer);
-                return;
-            }
-            recorrerListaDE(tablero, convertirMapaACadenaVerticalConIndice, buffer);
-            corregirCadenadeMapaConIndice(buffer);
-        }break;
-
-        case 1: { // Horizontal
-            if(!indice){
-                recorrerListaDE(tablero, convertirMapaACadenaHorizontalSinIndice, buffer);
-                return;
-            }
-            recorrerListaDE(tablero, convertirMapaACadenaHorizontalConIndice, buffer);
-            corregirCadenadeMapaConIndice(buffer);
-        }break;
-    }
-}
-*/
 // Libera el tablero completo
 void destruirTablero(tTablero *tablero)
 {
