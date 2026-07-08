@@ -16,13 +16,17 @@ void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL 
 
         procesarEntrada(&partida); // JUGADOR TIRA DADO Y ELIGE DIRECCION, SE ENCOLAN LOS MOVIMIENTOS
 
-        actualizarMovimientos(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
+        if(partida.corriendo)
+        {
+            actualizarMovimientos(&partida); // SE CALCULA Y ENCOLAN LOS MOVIMIENTO DE LOS BANDIDOS
 
-        dibujarAnimacionMov(&partida); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
+            dibujarAnimacionMov(&partida); // SE DESENCOLA LOS MOVIMIENTOS Y SE LOS DIBUJA PASO A PASO
 
-        actualizarEstado(&partida); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
+            actualizarEstado(&partida); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
 
-        dibujarAnimacionEstado(&partida); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
+            dibujarAnimacionEstado(&partida); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
+
+        }
     }
 
     finalizarPartida(&partida); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
@@ -92,6 +96,7 @@ int  procesarEntrada(tPartida *p)
     int         pasos;
     char        dir;
     char        buffer[TAM];
+    int         priVez = 1;
     if(!p->estado.tieneTormenta)
     {
         // 1) pedir ENTER y tirar el dado (1 a 6)
@@ -99,27 +104,54 @@ int  procesarEntrada(tPartida *p)
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
 
         scanf("%c", &enter);
-        pasos = tirarDado(6, 6);
+        pasos = tirarDado(1, 6);
         wait(0.3);
 
         sprintf(buffer, "Has sacado un %d!\n", pasos);
         escribirEnLog(&p->log, buffer);
         asignarDado(&p->jugador, pasos);
 
-        escribirEnLog(&p->log, "Ingrese direccion (Adelante 'F' / Atras 'B'): \n");
+        escribirEnLog(&p->log, "Ingrese direccion (Adelante 'F' / Atras 'B' / Salir 'S'): \n");
         dibujarEscena(&p->tablero, &p->jugador, &p->estado, &p->log);
 
+
+        /*
+            CAS 1, DADO N. 1 - N. LA RESTA ES IGUAL O MENOR A 0 -> REPETIR PEDIDO
+            posJug <= 6 -> Puede haber problema
+            si el dado es mayor o igual a posJug -> MOVIMIENTO INVALIDO
+            PEDIR DE NUEVO LA DIRECCION
+            1 <= 4 si -> MAL
+            4 <= 4 si -> MAL
+            4 <= 5 si -> MAL
+            4 <= 3 NO -> BIEN
+
+        */
+        do
+        {
+            if(!priVez)
+                mostrar("No puede pasarse del inicio, vuelva a ingresar\n");
+
+            dir = menu("",
+                    "FBS", 1, "Direccion invalida\n");
+
+
+            priVez = 0;
+        }while(verPosJugador(&p->jugador) <= pasos && dir == 'B');
         // 2) pedir la direccion (el menu valida que sea 'F' o 'B')
-        dir = menu("",
-                   "FB", 1, "Direccion invalida\n");
 
         // 3) armar el movimiento del jugador y encolarlo
-        mov.id   = JUGADORID;
-        mov.dir  = dir;
-        mov.cant = pasos;
-        aumentarMovimiento(&p->jugador);
-        guardarMovimientoJugador(&p->jugador, &mov);
-        ponerEnCola(&p->movimientos, &mov, sizeof(mov));
+        if(dir == 'S')
+            p->corriendo = 0;
+        else
+        {
+            mov.id   = JUGADORID;
+            mov.dir  = dir;
+            mov.cant = pasos;
+            aumentarMovimiento(&p->jugador);
+            guardarMovimientoJugador(&p->jugador, &mov);
+            ponerEnCola(&p->movimientos, &mov, sizeof(mov));
+        }
+
     }
 
 
@@ -165,8 +197,7 @@ int  dibujarAnimacionMov(tPartida *p)
         if(movActual.id == JUGADORID)
         {
             posJug = verPosJugador(&p->jugador);
-            if((posJug == 1 && movActual.dir == 'B') ||
-               (posJug == p->config.cant_pos && movActual.dir == 'F'))
+            if(posJug == p->config.cant_pos && movActual.dir == 'F')
                 cambiarDireccion(&movActual);
             modificarPosJug(&p->jugador, movActual.dir);
         }
@@ -284,6 +315,7 @@ int  dibujarAnimacionEstado(tPartida *p)
     {
         ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRJUGGANA, animJugGana, JUGADORID);
         escribirEnLog(&p->log, MSJ_JUGADORGANA);
+        aumentarPuntaje(&p->jugador);
         p->estado.Jpierde = 0;
         p->corriendo = 0;
     }

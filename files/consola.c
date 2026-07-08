@@ -114,5 +114,6 @@ void limpiarBuffer(void)
 // Limpia la pantalla de la consola
 void limpiarPantalla()
 {
-    printf("\033[2J\033[H");
+    //printf("\033[2J\033[H");
+    system("cls");
 }
