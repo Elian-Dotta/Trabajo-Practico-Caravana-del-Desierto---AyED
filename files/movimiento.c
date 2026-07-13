@@ -21,9 +21,9 @@ void cambiarDireccion(tMovimiento *mov)
 int calcularNroCasilla(int nroCasilla, int mov, int tamTablero)
 {
     int nuevaPos = nroCasilla + mov;
-    if(nuevaPos < 1)
+    if(nuevaPos < 1) //se paso por el principio va al final
         return tamTablero;
-    else if(nuevaPos > tamTablero)
+    else if(nuevaPos > tamTablero) //se paso por el final va al principio
         return 1;
     else
         return nuevaPos;

@@ -17,7 +17,7 @@ static void leerTexto(const char *msj, char *out, int tam)
             out[0] = '\0';
             return;
         }
-        buffer[strcspn(buffer, "\n")] = '\0';   // saca el salto de linea
+        buffer[strcspn(buffer, "\n")] = '\0';   // saca el salto de linea, //devuelve cuantos caracteres hay hasta el \n
 
     } while(buffer[0] == '\0');
 
@@ -56,18 +56,18 @@ void ingresarJugador(tJugador *j)
     fJug = fopen(ARCHJUGADORES, "rb");
     if(fJug)
     {
-        existe = revisarUsuarioRepetido(&idxNombre, nombre, fJug, &sel);
+        existe = revisarUsuarioRepetido(&idxNombre, nombre, fJug, &sel); //busca y lista los repetidos
         fclose(fJug);
     }
 
 
     if(existe)
     {
-        guardarNombreYNick(j, sel.nombre, sel.nickname);
+        guardarNombreYNick(j, sel.nombre, sel.nickname); //copio en j los nombre y nickname
         return;
     }
 
-    // 4) alta: pedir un nickname que no este en uso
+    // cargar indice de nicknames
     cargarIndiceDesdeArchivo(&idxNick, ARCHIDXNICK, &auxNick, sizeof(tIndiceNickname));
     do
     {
@@ -96,7 +96,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     // 1) juntar homonimos: recorre el indice por nombre; la accion encola los que coinciden
     crearLista(&nicknames);
     void *ctxArbol[3] = { &nicknames, fJug, (void *)nombre };
-    recorrerEnOrdenSimpleArbolBinBusq(indice, ctxArbol, enlistarNickNames);
+    recorrerEnOrdenSimpleArbolBinBusq(indice, ctxArbol, enlistarNickNames); //recorro el arbol indice y guardo en la lista los que tengan el mismo nombre
 
     if(listaVacia(&nicknames))
         return 0;
@@ -104,7 +104,7 @@ int revisarUsuarioRepetido(tArbolBinBusq *indice, const char *nombre, FILE *fJug
     // 2) armar el texto del menu recorriendo la lista
     buffer[0] = '\0';
     void *ctxMsg[2] = { buffer, &contador };
-    sprintf(buffer + strlen(buffer), "\nSu nombre ya se encuentra registrado.\nPor favor, seleccione su usuario.\n");
+    sprintf(buffer + strlen(buffer)/* para escribir al final*/, "\nSu nombre ya se encuentra registrado.\nPor favor, seleccione su usuario.\n");
     sprintf(buffer + strlen(buffer), "N. |Nickname  |Nombre\n");
     recorrerLista(&nicknames, armarMensaje, ctxMsg);
     sprintf(buffer + strlen(buffer), "%d. NINGUNO\n", contador);
@@ -139,9 +139,9 @@ void enlistarNickNames(void *idxNombre, void *contexto)
 
     if(strcmp(idx->nombre, nombre) == 0)
     {
-        fflush(archJugadores);
+        fflush(archJugadores);//empujo el buffer
         fseek(archJugadores, idx->indiceRegistro * sizeof(regJugador), SEEK_SET);
-        fread(&registro, sizeof(regJugador), 1, archJugadores);
+        fread(&registro, sizeof(regJugador), 1, archJugadores); //copio el registro
 
         // se guarda el registro COMPLETO (nombre + nick): armarMensaje y la
         // seleccion en revisarUsuarioRepetido lo leen como regJugador entero.
@@ -192,11 +192,13 @@ int darDeAlta(const char* nombre, const char *nickname, tArbolBinBusq* arbolIdxN
     strcpy(indNombre.nombre, nombre);
     strcpy(indNick.nickname, nickname);
 
-
+    //voy al final
     fseek(fJug, 0, SEEK_END);
 
+    //calculo posicion
     int pos = (ftell(fJug)/sizeof(regJugador));
 
+    //guardo en variables
     indNombre.indiceRegistro = pos;
     indNick.indiceRegistro = pos;
 
@@ -249,21 +251,21 @@ void guardarPartida(tJugador *jugador)
 
     while(estado == 1)
     {
-        if(strcmp(verNick(jugador), reg.nickname) != 0)
+        if(strcmp(verNick(jugador), reg.nickname) != 0) //copio en el archivo temporal hasta encontrar el mismo nickname
         {
-            fwrite(&reg, sizeof(regPartida), 1, partTmp);
+            fwrite(&reg, sizeof(regPartida), 1, partTmp); //voy pasando al nuevo archivo
             fread(&reg, sizeof(regPartida), 1, part);
         }
         else
         {
-            estado = 2; // AVANZANDO NICK
+            estado = 2; // Encontre el nickname
         }
 
         if(feof(part))
             estado = 3; // ENCONTRADA POSICION INSERCION
     }
 
-    while(estado == 2)
+    while(estado == 2) //sea el mismo nickname
     {
         if(strcmp(verNick(jugador), reg.nickname) == 0)
         {
@@ -272,7 +274,7 @@ void guardarPartida(tJugador *jugador)
         }
         else
         {
-            estado = 4; // ENCONTRADA POSICION INSERCION PERO FALTA INSERTAR UN REGISTRO EXTRA LEIDO
+            estado = 4; // ENCONTRADA POSICION INSERCION PERO FALTA INSERTAR EL REGISTRO QUE YA LEI
         }
 
         if(feof(part))
@@ -282,11 +284,11 @@ void guardarPartida(tJugador *jugador)
     {
 
         // SE ENCONTRO LA POSICION DE INSERCION
-        regGuardar.nroPartida = cantRegistros + 1;
-        strcpy(regGuardar.nickname, verNick(jugador));
-        regGuardar.puntaje = verPuntaje(jugador);
-        regGuardar.cantMovimientos = verMovimiento(jugador);
-        fwrite(&regGuardar, sizeof(regPartida), 1, partTmp);
+        regGuardar.nroPartida = cantRegistros + 1; //identificador de partida
+        strcpy(regGuardar.nickname, verNick(jugador)); //copio nickname
+        regGuardar.puntaje = verPuntaje(jugador); //copio puntaje
+        regGuardar.cantMovimientos = verMovimiento(jugador); //copio movimientos
+        fwrite(&regGuardar, sizeof(regPartida), 1, partTmp); //escribo archivo
 
 
     }

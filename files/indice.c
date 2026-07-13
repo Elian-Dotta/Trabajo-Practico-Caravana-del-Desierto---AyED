@@ -52,10 +52,7 @@ int cmpClaveNickname(const void*a, const void*b)
 //  Indexar: arma el arbol leyendo el archivo de jugadores (desordenado)
 // ---------------------------------------------------------------------------
 // Construye el arbol desde el archivo
-int indexarArchivoJugadores(const char *pathJugadores, tArbolBinBusq *p,
-                            void *aux, unsigned tamAux,
-                            void *indice, unsigned tamIdx,
-                            Asignacion asig, Cmp cmp)
+int indexarArchivoJugadores(const char *pathJugadores, tArbolBinBusq *p, void *aux, unsigned tamAux, void *indice, unsigned tamIdx, Asignacion asig, Cmp cmp)
 {
     FILE          *fp;
     unsigned long  nroReg = 0;
@@ -88,7 +85,7 @@ static void escribirNodo(void *info, void *params)
     fwrite(info, c->tam, 1, c->fp);
 }
 
-// Guarda el indice ordenado en disco
+// Guarda el indice ordenado en el archivo
 int guardarArchivoIndice(tArbolBinBusq *pa, const char *pathIndice, unsigned tamIdx)
 {
     FILE       *fp;
@@ -125,11 +122,11 @@ int buscarEnArchivoConIndice(FILE *fp, const tArbolBinBusq *pa, void *aux, unsig
 {
     unsigned nroReg;
 
-    asig(indice, aux, 0);                       // arma la entrada de indice desde aux (nroReg=0)
-    if(!buscarElemArbolBinBusq(pa, indice, tamIdx, cmp))
+    asig(indice, aux, 0);  //copio el registro de aux en el indice
+    if(!buscarElemArbolBinBusq(pa, indice, tamIdx, cmp)) //busco por indice en el arbol
         return 0;                               // no existe
     // 'indice' quedo con la entrada hallada; indiceRegistro es su ULTIMO campo (unsigned)
-    nroReg = *(unsigned *)((char *)indice + tamIdx - sizeof(unsigned));
+    nroReg = *(unsigned *)((char *)indice + tamIdx - sizeof(unsigned)); //obtengo el numero de registro
     fseek(fp, (long)nroReg * tamAux, SEEK_SET);
     fread(aux, tamAux, 1, fp);
     return 1;

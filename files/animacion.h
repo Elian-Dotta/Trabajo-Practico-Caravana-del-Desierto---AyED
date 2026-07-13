@@ -72,7 +72,7 @@ void animJugGana          (tTablero *tablero, unsigned frame);
 void animJugPierde        (tTablero *tablero, unsigned frame);
 
 
-/// @brief Funcion que ejecuta una animacion de cambio de estado del juego, recibiendo el tablero, el jugador, el estado, el log, el numero de frame, la animacion a ejecutar y el ID del ancla para posicionar el tablero. La funcion se encarga de esperar un segundo entre cada frame, posicionar el tablero en el ancla, ejecutar la animacion y dibujar la escena con el tablero, el jugador, el estado y el log actualizados.
+/// @brief Funcion que ejecuta una animacion de cambio de estado del juego, recibiendo el tablero, el jugador, el estado, el log, el numero de frame, la animacion a ejecutar y el ID del ancla para posicionar el tablero.  La funcion se encarga de esperar un segundo entre cada frame, posicionar el tablero en el ancla, ejecutar la animacion y dibujar la escena con el tablero, el jugador, el estado y el log actualizados.
 /// @param t
 /// @param j
 /// @param e

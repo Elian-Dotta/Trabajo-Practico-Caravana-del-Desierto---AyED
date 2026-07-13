@@ -13,12 +13,12 @@ tCasilla crearCasilla()
     return cas;
 }
 
-// Callback: inserta elemento al final
+// Funcion para insertar en casilla(lista)
 int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    (void)tamLista;
-    tCasilla *casilla = (tCasilla*)(*pl);
-    tElem  *elem = (tElem*)d;
+    (void)tamLista; //no se usa
+    tCasilla *casilla = (tCasilla*)(*pl); //casteo el puntero a lista a un puntero a tCasilla
+    tElem  *elem = (tElem*)d; //casteo el dato a elemento de la casilla
 
     insertarAlFinalLista(casilla, elem, tamDato);
 
@@ -53,81 +53,85 @@ int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDa
     return ret;
 }
 
-// Inserta a la izquierda de otro
+// Callback de insertarAlLadoDeElemento (caso IZQ): mete 'nue' a la IZQUIERDA de 'ref'.
+// Recibe punteros genericos (void*) porque el motor de la lista es generico;
+// adentro los castea a los tipos reales. 'd' apunta al paquete ctxElem[2].
 int insertarIzqDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
-    (void)tamLista; (void)tamDato;
-    tCasilla *casilla = (tCasilla*)(*pl);
-    tElem *ctxElem = (tElem*)d;
+    (void)tamLista; (void)tamDato;          // no se usan: el molde del callback los exige igual
+    tCasilla *casilla = (tCasilla*)(*pl);    // la lista de esta casilla (tipo real)
+    tElem *ctxElem = (tElem*)d;              // el paquete de 2 elementos
 
-    tElem *nue = ctxElem;
-    tElem *ref = ctxElem + 1;
+    tElem *nue = ctxElem;                    // ctxElem[0] = el caracter nuevo a insertar
+    tElem *ref = ctxElem + 1;               // ctxElem[1] = el elemento de referencia
 
     int ret;
-    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem); // ¿en que posicion esta 'ref'?
 
-    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos);
+    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos); // inserta EN esa pos -> empuja 'ref' a la derecha
 
     return ret;
 }
 
-// Inserta a la derecha de otro
+// Callback de insertarAlLadoDeElemento (caso DER): mete 'nue' a la DERECHA de 'ref'.
+// Identico al anterior, pero inserta en pos+1 (justo despues de la referencia).
 int insertarDerDeElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
     (void)tamLista; (void)tamDato;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
-    tElem *nue = ctxElem;
-    tElem *ref = ctxElem + 1;
+    tElem *nue = ctxElem;                    // [0] = nuevo
+    tElem *ref = ctxElem + 1;               // [1] = referencia
 
     int ret;
     int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
 
-    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos + 1);
+    ret = insertarEnPosLista(casilla, nue, sizeof(tElem), pos + 1); // pos+1 = a la derecha de 'ref'
 
     return ret;
 }
 
 
-// Cambia el tipo de un elemento
+// Callback de cambiarElemento: reemplaza el TIPO de 'ref' por el de 'nue' (misma celda).
 int cambiarTipoElemento(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
     (void)tamLista; (void)tamDato;
     tCasilla *casilla = (tCasilla*)(*pl);
     tElem *ctxElem = (tElem*)d;
 
-    tElem *nue = ctxElem;
-    tElem *ref = ctxElem + 1;
+    tElem *nue = ctxElem;                    // [0] = tipo nuevo
+    tElem *ref = ctxElem + 1;               // [1] = tipo a buscar
 
     int ret;
-    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem);
+    int pos = buscarPorClaveLista(casilla, ref, sizeof(tElem), cmpTipoElem); // ubica el elemento a cambiar
 
-    ret = actualizarPosLista(casilla, nue, sizeof(tElem), pos, cambiarTipo);
+    ret = actualizarPosLista(casilla, nue, sizeof(tElem), pos, cambiarTipo); // aplica el cambio con el callback cambiarTipo
 
     return ret;
 }
 
-// Callback: elimina elemento por tipo
+// Callback de eliminarElemento: borra de la casilla el primer elemento del tipo dado.
 int eliminarDeCasillaTipo(void **pl, unsigned *tamLista, void *d, unsigned tamDato)
 {
     (void)tamLista;
     tCasilla *casilla = (tCasilla*)(*pl);
-    tElem  *elem = (tElem*)d;
+    tElem  *elem = (tElem*)d;                // el elemento (solo importa su tipo_elem)
 
     eliminarPorClaveLista(casilla, elem, tamDato, cmpTipoElem); // LA FUNCION QUE ELIMINAR DEBE DEVOLVER EL DATO POR EL MISMO PARAMETRO
 
     return 1;
 }
 
-// Callback: reemplaza el tipo
+// Callback usado por cambiarTipoElemento: pisa el tipo del elemento encontrado.
+// 'act' apunta al elemento que ya esta en la lista; 'd' trae el tipo nuevo.
 int cambiarTipo(void **act, unsigned *tamElem, void *d, unsigned tamDato)
 {
     (void)tamElem; (void)tamDato;
-    tElem *elemAct = *act;
-    tElem *elemNue = d;
+    tElem *elemAct = *act;                   // el elemento existente en la casilla
+    tElem *elemNue = d;                      // el que trae el tipo nuevo
 
-    elemAct->tipo_elem = elemNue->tipo_elem;
+    elemAct->tipo_elem = elemNue->tipo_elem; // el cambio real: solo se pisa la letra del tipo
 
     return 1;
 }
@@ -331,10 +335,10 @@ void buscarYCalcularBandido(void *e, void *contexto)
     {
         resultadoDado = tirarDado(1, 6);
 
-        movimientoBandido.id   = elem->id_elem;
+        movimientoBandido.id   = elem->id_elem; //guardo el id del bandido que se va a mover
         movimientoBandido.cant = resultadoDado;
 
-        if(buscarPorClaveLista(bandInteligentes, &elem->id_elem, sizeof(tElem),cmpIdElem) == -1)
+        if(buscarPorClaveLista(bandInteligentes, &elem->id_elem, sizeof(tElem),cmpIdElem) == -1) //reviso si el bandido es inteligente en la lista de bandidos inteligentes
         {
             movimientoBandido.dir = tirarDado(0,1)?'F':'B';
         }
@@ -353,9 +357,9 @@ int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantida
     // YENDO DE DE LA POS ACTUAL A IZQUIERDA, LA DEVUELVE EN NEGATIVO
     int der, izq;
     distanciasEntreElementos(posElem1, posElem2, cantidadCasillas, &der, &izq);
-    der = abs(der - dado);
-    izq = abs(izq - dado);
-    return der < izq? der : (-1)*izq;
+    der = abs(der - dado); // le resto el dado para ver porque lado es mas viable
+    izq = abs(izq - dado); // los hago positivos
+    return der < izq? der : (-1)*izq;  //multiplica por -1 para ir a la izquierda
 }
 
 // Distancias por izquierda y derecha
@@ -363,6 +367,7 @@ void distanciasEntreElementos(int posElem1, int posElem2, int cantCasillas, int*
 {
     *der = (posElem2 - posElem1 + cantCasillas) % cantCasillas; //distancia yendo de izquierda a derecha
     *izq = (posElem1 - posElem2 + cantCasillas) % cantCasillas; //distancia yendo de derecha a izquierda
+    // el %cantCasillas es por si da una vuelta
 }
 
 // Actualiza el estado segun la casilla
@@ -373,48 +378,48 @@ void cambiarEstado(void *pl, void* estado)
     tElem elem;
     elem.id_elem = JUGADORID;
 
-    if(buscarPorClaveLista(lista, &elem, sizeof(tElem), cmpIdElem) != -1)
+    if(buscarPorClaveLista(lista, &elem, sizeof(tElem), cmpIdElem) != -1) //busca al jugador
     {
-         recorrerLista(lista, modEstado, estado);
+         recorrerLista(lista, modEstado, estado); //recorre la lista y actualiza el estado
 
-        if ((est->tieneOasis == 1))
+        if ((est->tieneOasis == 1)) //// si YA tenias oasis de antes
         {
-            est->tieneOasis = 0;
-            est->Operdido = 1;
+            est->tieneOasis = 0;    //lo perdes
+            est->Operdido = 1;   // marca "perdido el oasis"
         }
-        if (est->Oobtenido==1)
+        if (est->Oobtenido==1) //si obtuvo el oasis lo activo
         {
             est->tieneOasis=1;
         }
-        if(est->tieneOasis && est->Tactiva)
+        if(est->tieneOasis && est->Tactiva)  // si tiene oasis y hay tormenta, se desactiva
         {
             est->Tactiva = 0;
         }
-        if((est->tieneTormenta==1) && (est->Tactiva==0))
+        if((est->tieneTormenta==1) && (est->Tactiva==0)) //estabas aturdido y ya NO hay tormenta
         {
-            est->tieneTormenta=0;
-            est->Tfinalizada=1;
+            est->tieneTormenta=0;   // te recuperas
+            est->Tfinalizada=1;  // marca "sali de la tormenta"
         }
-        else if (est->Tactiva==1)
+        else if (est->Tactiva==1)   // hay tormenta en la casilla
         {
-            if(est->tieneTormenta==1)
+            if(est->tieneTormenta==1)   // y ademas ya estabas aturdido
             {
                 est->Tactiva = 0;
-                est->tieneTormenta = 0;
+                est->tieneTormenta = 0; // se cancela / termin�s aturdimiento
                 est->Tfinalizada = 1;
             }
             else
-                est->tieneTormenta=1;
+                est->tieneTormenta=1;   // reci�n ahora qued�s aturdido
 
         }
-        if ((est->JpierdeVida == 1)&&(est->tieneOasis==1))
+        if ((est->JpierdeVida == 1)&&(est->tieneOasis==1))  // ibas a perder vida PERO ten�s escudo
         {
-            if (est->Bandidos==1)
+            if (est->Bandidos==1)   // si era un solo bandido
             {
-                est->JpierdeVida=0;
+                est->JpierdeVida=0;  // NO perd�s vida
 
             }
-            est->tieneOasis=0;
+            est->tieneOasis=0;  // pero el escudo se consume
             est->Operdido=1;
         }
     }
@@ -423,7 +428,7 @@ void cambiarEstado(void *pl, void* estado)
 
 
 // Aplica el efecto de cada elemento
-void modEstado(void* e, void* est)
+void modEstado(void* e, void* est) //obtiene estado de jugador y casilla
 {
     tEstado *estado = (tEstado*)est;
     tElem *casilla = (tElem*)e;         // DEBERIA DE LLAMARSE ELEMENTO.
@@ -431,33 +436,33 @@ void modEstado(void* e, void* est)
     switch(casilla->tipo_elem)
     {
         case BANDIDO:
-            estado->JpierdeVida = 1;
-            if(!estado->IDBandDesaparecido[0])
-                estado->IDBandDesaparecido[0] = casilla->id_elem;
-            else if(!estado->IDBandDesaparecido[1])
-                estado->IDBandDesaparecido[1] = casilla->id_elem;
-            estado->Bandidos++;
-            estado->BandAtaca = 1;
+            estado->JpierdeVida = 1; //digo que va a perder una vida
+            if(!estado->IDBandDesaparecido[0])  //solo puede atacar dos a la vez para que no protega el oasis
+                estado->IDBandDesaparecido[0] = casilla->id_elem;  //agrego el id de bandido desaparecido
+            else if(!estado->IDBandDesaparecido[1]) //solo puede atacar dos a la vez
+                estado->IDBandDesaparecido[1] = casilla->id_elem;   //agrego el id de bandido desaparecido
+            estado->Bandidos++; //cuento la cantidad de bandidos para saber si protege oasis
+            estado->BandAtaca = 1; //flag bandido ataca
             break;
 
         case OASIS:
-            estado->Oobtenido = 1;
+            estado->Oobtenido = 1; //hay oasis
             break;
 
         case PREMIO:
-            estado->JganaPuntos = 1;
+            estado->JganaPuntos = 1; //hay puntos
             break;
 
         case VIDAEXTRA:
-            estado->JganaVida = 1;
+            estado->JganaVida = 1; //hay vida
             break;
 
         case TORMENTA:
-            estado->Tactiva = 1;
+            estado->Tactiva = 1; //hay tormenta
             break;
 
         case SALIDA:
-            estado->Jgana = 1;
+            estado->Jgana = 1; //hay salida
             break;
     }
 }
@@ -467,7 +472,7 @@ void acumularTipoElem(void *elemVoid, void *bufVoid)
 {
     tElem *elem = (tElem*)elemVoid;
     char  *buf  = (char*)bufVoid;
-    unsigned n  = strlen(buf);
+    unsigned n  = strlen(buf); //devuelve la cantidad de caracteres, osea la pos final
 
     buf[n]     = elem->tipo_elem;
     buf[n + 1] = '\0';
@@ -483,10 +488,17 @@ void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
     contenido[0] = '\0';
     recorrerLista(casilla, acumularTipoElem, contenido);
 
+    (*contador)++; //para enumerar las casillas
+    contenido[0] = '\0';
+    recorrerLista(casilla, acumularTipoElem, contenido);
+    fprintf(arch, "%02d:", *contador); //printea numero de casilla
     if(contenido[0] == '\0')
         fprintf(arch, "[.]");          // posicion vacia / ruta despejada
     else
         fprintf(arch, "[%s]", contenido);
+    {
+        fprintf(arch, "[%s]\n", contenido);
+    }
 }
 
 

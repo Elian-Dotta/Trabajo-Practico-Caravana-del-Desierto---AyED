@@ -22,7 +22,7 @@ void jugarPartida(tJugador *jugador)// VA A INICIALIZAR Y LUEGO VA A MANEJAR EL 
 
         actualizarEstado(&partida); // SE ACTUALIZA EL ESTADO DE JUEGO EN LA POSICION FINAL DE LOS ELEMENTOS, SE PASAN BOOLEANOS CON EL ESTADO DEL JUEGO A LA SIG FUNCION
 
-        dibujarAnimacionEstado(&partida); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS
+        dibujarAnimacionEstado(&partida); // SE ANIMA EL CAMBIO DE ESTADO DE ACUERDO A LO QUE INDIQUEN LOS BOOLEANOS Y se actualiza el estado
     }
 
     finalizarPartida(&partida); // DEBERIA IMPRIMIR EL HISTORICO DE MOVIMIENTOS DEL JUGADOR Y GUARDAR EN ARCHIVO LAS ESTADISTICAS DE LA PARTIDA
@@ -39,7 +39,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
 
     cargarConfig(&p->config);
 
-    crearLista(&p->bandInteligentes);
+    crearLista(&p->bandInteligentes); //creo lista de bandidos inteligentes
 
     crearLog(&p->log);
 
@@ -47,7 +47,7 @@ int  inicializarPartida(tPartida *p, tJugador *jugador)// VA A CARGAR TCONFIG Y 
 
     generarArchivoTablero(&p->tablero, ARCH_CARAVANA); // consigna c: volcar el tablero a caravana.txt
 
-    inicializarEstado(&p->estado);
+    inicializarEstado(&p->estado); // seteo los estados en 0
 
     p->jugador = *jugador;
 
@@ -118,7 +118,7 @@ int  procesarEntrada(tPartida *p)
         mov.dir  = dir;
         mov.cant = pasos;
         aumentarMovimiento(&p->jugador);
-        guardarMovimientoJugador(&p->jugador, &mov);
+        guardarMovimientoJugador(&p->jugador, &mov); //guardo en la cola historial de movimiento dentro de jugador
         ponerEnCola(&p->movimientos, &mov, sizeof(mov));
     }
 
@@ -148,7 +148,7 @@ int  dibujarAnimacionMov(tPartida *p)
     int idEscudoIzq,
         idEscudoDer;
 
-    if(p->estado.tieneOasis)
+    if(p->estado.tieneOasis) //si tiene oasis obtengo los id de los escudos
     {
         idEscudoIzq = obtenerIdElementoPorTipo(&p->tablero, ESCUDOIZQ);
         idEscudoDer = obtenerIdElementoPorTipo(&p->tablero, ESCUDODER);
@@ -165,18 +165,19 @@ int  dibujarAnimacionMov(tPartida *p)
         if(movActual.id == JUGADORID)
         {
             posJug = verPosJugador(&p->jugador);
-            if((posJug == 1 && movActual.dir == 'B') ||
+            if((posJug == 1 && movActual.dir == 'B') || //cambio la direccion si es el final o el inicio
                (posJug == p->config.cant_pos && movActual.dir == 'F'))
                 cambiarDireccion(&movActual);
             modificarPosJug(&p->jugador, movActual.dir);
         }
 
+
         // movRelativo = mov.dir == 'F'? 1 : -1; // ESTA FORMA UTILIZA EL CAMPO DE LA ESTRUCTURA Y DEJA EL CODIGO MEDIO CRIPTICO AL USAR EL OPERADOR TERNARIO
         movRelativo = PASO * calcularDireccion(movActual.dir); // DEVUELVE 1 O -1 PARA MULTIPLICAR EL NUMERO DE CASILLAS POR LA DIRECCION
+        //PASO es cuantas casillas se mueve por turno
 
 
-
-        if(movActual.id == JUGADORID && p->estado.tieneOasis &&
+        if(movActual.id == JUGADORID && p->estado.tieneOasis && //si tiene oasis muevo los escudos con el
            idEscudoIzq != -1 && idEscudoDer != -1)
         {
             moverElementoPorId(&p->tablero, idEscudoIzq, movRelativo, p->config.cant_pos);
@@ -190,7 +191,7 @@ int  dibujarAnimacionMov(tPartida *p)
 
         movActual.cant-= PASO;
 
-        if(movActual.cant > 0)
+        if(movActual.cant > 0) //vuelvo a guardar el movimiento para la siguiente ejecucion
         {
             /*
             if(movActual.id == JUGADORID && (elementosJuntos(&p->tablero, JUGADOR, INICIO) ||
@@ -201,7 +202,7 @@ int  dibujarAnimacionMov(tPartida *p)
         }
         if(movActual.id == JUGADORID)
         {
-            snprintf(buffer, TAM, "Jugador se movio a la %s\n", movActual.dir == 'F'? "derecha" : "izquierda");
+            snprintf(buffer,TAM, "Jugador se movio a la %s\n", movActual.dir == 'F'? "derecha" : "izquierda");
             escribirEnLog(&p->log, buffer);
         }
         else
@@ -234,7 +235,7 @@ int  dibujarAnimacionEstado(tPartida *p)
         idAturDer;
     if(p->estado.JganaPuntos) // 1 - CHECKEAMOS SI EL JUGADOR CAYO EN UN PREMIO.
     {
-        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO, animPremio, JUGADORID);
+        ejecutarAnimacion(&p->tablero, &p->jugador, &p->estado, &p->log, FRPREMIO /*cuantos frames dura la animacion*/, animPremio, JUGADORID);
         aumentarPuntaje(&p->jugador);
         escribirEnLog(&p->log, MSJ_PUNTOS);
     }
@@ -323,7 +324,7 @@ int  dibujarAnimacionEstado(tPartida *p)
         {
             // El jugador vuelve al Campamento Inicial (casilla 1). 'posJug' esta en
             // sincronia con la casilla real, asi que este desplazamiento la lleva a 1.
-            mov = (p->jugador.posJug - 1) * - 1;
+            mov = (p->jugador.posJug - 1) * - 1; //calculo el movimiento hacia atras
             // 18 - SI SUCEDIO EN UN TURNO QUE ESTABA ATURDIDO LLEVAMOS TAMBIEN EL EFECTO DE ATURDIMIENTO
             if(p->estado.Tactiva)
             {
@@ -378,7 +379,7 @@ int  dibujarAnimacionEstado(tPartida *p)
 // Cierra la partida y guarda
 int  finalizarPartida(tPartida *p)
 {
-    dibujarFinDePartida(&p->tablero, &p->jugador, &p->log);
+    dibujarFinDePartida(&p->tablero, &p->jugador, &p->log); //muestra la pantalla final
 
     guardarPartida(&p->jugador);
 

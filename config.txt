@@ -5,3 +5,4 @@ cantidad maxima de premios:0
 cantidad vidas extras:0
 cantidad oasis:9
 cantidad tormentas:0
+

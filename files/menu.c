@@ -13,9 +13,9 @@ void juego()
 
     tJugador jugador;
 
-    inicializarJugador(&jugador);
+    inicializarJugador(&jugador); //carga el jugador, jugador.c
 
-    ingresarJugador(&jugador);
+    ingresarJugador(&jugador); //pide nombre y nickname, busca equivalencia y guarda
 
     menuPrincipal(&jugador);
 }
@@ -71,9 +71,9 @@ char menu(const char *msj, const char *opc, int conErr, const char *msjErr)
 
         limpiarBuffer();
 
-        opcion = (char) toupper((unsigned char) opcion);
+        opcion = (char) toupper((unsigned char) opcion); //por si insertan ñ
 
-        valido = (strchr(opc, opcion) != NULL);
+        valido = (strchr(opc, opcion) != NULL); //busco la opcion en las opciones opc
         priVez = 0;
     } while (!valido);
 

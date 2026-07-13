@@ -45,7 +45,7 @@ int generarRankingDeArchivo(tRanking *ranking, const char* archPart, const char 
 
     while(obtenerLinea(archPartidas, archJugadores, &linea, &arNicknames))
     {
-        insertarEnRanking(ranking, &linea);
+        insertarEnRanking(ranking, &linea); //inserta la linea de la suma de puntos
     }
 
     // cerrar los archivos: si quedan abiertos, en Windows guardarPartida no
@@ -68,10 +68,10 @@ int insertarEnRanking(tRanking *ranking, tLinea *linea)
 
     // conDup=1: dos jugadores pueden tener el MISMO puntaje y ambos deben
     // figurar (cmpLinea solo ordena por puntaje, no identifica al jugador).
-    if((ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL)))
+    if((ret = insertarOrdenadoLista(&ranking->ranking, linea, sizeof(tLinea), (tCompararFn)cmpLinea, 1, NULL))) //voy insertando ordenado
     {
         if(ranking->cantLineas == MAX_RANKING)
-            sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea));
+            sacarUltimoLista(&ranking->ranking, &buffer, sizeof(tLinea)); //si ya alcance el maximo voy sacando el ultimo
         else
             ranking->cantLineas++;
     }
@@ -100,20 +100,20 @@ int obtenerLinea(FILE* archPartidas, FILE *archJugadores, tLinea *linea, tArbolB
     // la clave de busqueda va en 'aux' (jugador): buscarEnArchivoConIndice
     // arma la entrada de indice a partir de el con asigJugNick.
     strcpy(jugador.nickname, nickAprocesar);
-    if(buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname))
+    if(buscarEnArchivoConIndice(archJugadores, indice, &jugador, sizeof(regJugador), &idx, sizeof(tIndiceNickname), asigJugNick, cmpClaveNickname)) //busco en un archivo con el indice y lo copio en jugador
         strcpy(linea->nombre, jugador.nombre);
 
     // las partidas de un mismo nick estan agrupadas: sumar todas sus puntajes
     do
     {
-        linea->puntaje += partida.puntaje;
+        linea->puntaje += partida.puntaje; //voy sumando los puntajes mientras sean el mismo nickname
     }
     while(fread(&partida, sizeof(regPartida), 1, archPartidas) == 1 &&
           strcmp(nickAprocesar, partida.nickname) == 0);
 
     // si se leyo un registro de OTRO nick, retroceder para procesarlo despues
     if(!feof(archPartidas))
-        fseek(archPartidas, -1L * (long)sizeof(regPartida), SEEK_CUR);
+        fseek(archPartidas, -1L * (long)sizeof(regPartida), SEEK_CUR); //L es tipo long
 
     return 1;
 }

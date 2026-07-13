@@ -9,7 +9,7 @@ void inicializarJugador(tJugador* j)
     j->puntaje = 0;
     j->posJug = 1;
     j->dado = 0;
-    crearCola(&j->hisMovJugador);
+    crearCola(&j->hisMovJugador); //crea historial de  jugador
 }
 
 // Establece las vidas iniciales
