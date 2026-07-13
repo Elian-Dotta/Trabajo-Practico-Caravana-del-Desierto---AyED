@@ -485,8 +485,10 @@ void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
     FILE     *arch    = (FILE*)archVoid;
     char      contenido[TAM_BUFFER];
 
+
     contenido[0] = '\0';
     recorrerLista(casilla, acumularTipoElem, contenido);
+
 
     (*contador)++; //para enumerar las casillas
     contenido[0] = '\0';
@@ -496,7 +498,9 @@ void escribirCasillaArchivo(void *casillaVoid, void *archVoid)
         fprintf(arch, "[.]");          // posicion vacia / ruta despejada
     else
         fprintf(arch, "[%s]", contenido);
+
     {
+        contenido[strlen(contenido) - 1] = '\0'; //agrega el \0  para sacar el espacio al final
         fprintf(arch, "[%s]\n", contenido);
     }
 }
