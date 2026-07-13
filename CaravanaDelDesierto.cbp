@@ -104,9 +104,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="files/registro.h" />
-		<Unit filename="files/stubs.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="files/tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>

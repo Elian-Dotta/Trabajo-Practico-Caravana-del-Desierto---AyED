@@ -114,8 +114,6 @@ void limpiarBuffer(void)
 // Limpia la pantalla de la consola
 void limpiarPantalla()
 {
-    printf("\033[2J\033[H");
-    //\033	Es el carácter ESC (escape, código 27 en octal). Marca el inicio de una secuencia de control. También se escribe como \e o \x1b.
-    //\033[2J	2J = "Erase in Display" con parámetro 2 → borra toda la pantalla.
-    //\033[H	H = "Cursor Position" sin parámetros → mueve el cursor a la posición inicial (fila 1, columna 1, la esquina superior izquierda).
+    //printf("\033[2J\033[H");
+    system("cls");
 }

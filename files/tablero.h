@@ -64,13 +64,4 @@ int  cmpInt(const void *a, const void *b);
 
 void destruirTablero(tTablero *tablero);
 
-//int  compararEnteros(const void *a, const void *b);
-//tTablero posicionarTablero(tTablero* tablero, int idElemPosicion);
-
-//void convertirMapaACadena(tTablero *tablero, char *buffer, unsigned orientacion, unsigned indice);
-//void mostrarMapa(const tListaDE *lista, void(*mostrar)(const void *));
-//int borrarMapa(tListaDE *lista);
-
-//int  agregarElemento();
-
 #endif // TABLERO_H_

@@ -34,17 +34,12 @@ typedef struct
     int  nro_casilla;
 }tElem; // Se pasa aca la definicion para corregir la inclusion circular.
 
-/* // LA CASILLA NO DEBE CONOCER EL TABLERO
-int crearCasillas(tListaDE *lista, unsigned cantCasillas);
-int borrarListasElementosCasillas(tListaDE *lista);
-int borrarCasillas(tListaDE *lista);
-int insertarElementoCasilla(tListaDE *lista, const tElem *elem, unsigned casilla);
-*/
+
 
 tCasilla crearCasilla();
 
 // FUNCIONES DE INSERCION EN CASILLA
-int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI A�ADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
+int insertarEnCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ANIADIO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 
 int eliminarDeCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // DEVUELVE 1 SI ELIMINO EL DATO, DEVUELVE 0 SI NO LO ENCONTRO
 int insertarSinDupCasilla(void **pl, unsigned *tamLista, void *d, unsigned tamDato); // INSERCION PARA LA GENERACION
@@ -88,14 +83,6 @@ int devolverMenorDistanciaEntreElementos(int posElem1, int posElem2, int cantida
 void acumularTipoElem(void *elemVoid, void *bufVoid);
 void escribirCasillaArchivo(void *casillaVoid, void *archVoid);
 
-/*
-void accionCasillaACadena(void *e1, void *voidBuffer);
-void convertirMapaACadenaVerticalSinIndice(void *e1, void *voidBuffer);
-void convertirMapaACadenaVerticalConIndice(void *e1, void *voidBuffer);
-void convertirMapaACadenaHorizontalSinIndice(void *e1, void *voidBuffer);
-void convertirMapaACadenaHorizontalConIndice(void *e1, void *voidBuffer);
-void corregirCadenadeMapaConIndice(char *buffer);
-*/
 void destruirCasilla(void **pl, void* contexto);
 
 #endif // CASILLA_H_
